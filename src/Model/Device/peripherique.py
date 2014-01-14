@@ -1,6 +1,7 @@
 # -*-coding:Utf-8 -*
 
 from mongoengine import *
+from historique import *
 
 
 class Peripherique(Document):
@@ -13,3 +14,4 @@ class Peripherique(Document):
     id_logique = IntField(required = True)
     id_physique = StringField(required = True)
     #historique = ReferenceField(Historique)
+    etat_courant = DynamicField()

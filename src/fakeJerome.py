@@ -11,9 +11,9 @@ def main () :
     print 'fakeJerome : concepteur de fakeTrames'
     while 1 : 
         print 'Que voulez vous balancer ? (tavu ?)\n'
-        print '1 : Capteur température \n'
+        print '1 : Capteur temperature \n'
         print '2 : Capteur contact'
-        print '3 : Capteur présence'
+        print '3 : Capteur presence'
         kloug = raw_input()
         print kloug
 

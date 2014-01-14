@@ -15,5 +15,5 @@ class Device(Document):
         
     id = ObjectIdField(required = True)
     physic_id = StringField(required = True)
-    historic = ReferenceField(Historique)
+    historic = ReferenceField(Historic)
     current_state = DynamicField()

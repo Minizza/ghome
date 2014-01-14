@@ -52,11 +52,11 @@ def peripherique_test():
 	for device in Device.objects:
 		device.delete()
 		
-	capteur1 = Sensor(id_physique = "12230EAF", current_state = "False")
-	
+	capteur1 = Sensor(physic_id = "12230EAF", current_state = BooleanField())
+	capteur1.current_state = False
 	capteur1.save()
 	
 	for device in Device.objects:
-		print device.id_physique, " ", current_state
+		print device.physic_id, " ", current_state
 	
 ########################################################################

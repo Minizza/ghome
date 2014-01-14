@@ -26,6 +26,13 @@ def main () :
         print '2 : Capteur contact'
         print '3 : Capteur presence'
         kloug = raw_input('A vous :')
-        case kloug :
+        if 1 in kloug :
+            balTemp()
+        elif 2 in kloug :
+            balCont()
+        elif 3 in kloug :
+            balPres()
+        else : 
+            print 'Haha petit malin !'
 
 main()    

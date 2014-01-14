@@ -1,0 +1,45 @@
+.DS_Store
+*.pyc
+*.o
+*.a
+*.xcworkspace
+
+#VIM backup files
+*~
+
+#JAVA
+*.class
+*.jar
+*.idea
+*.iml
+*.java.orig
+*/out
+
+#LaTeX files!
+*.log
+*.aux
+*.backup
+*.toc
+*.ind
+*.idx
+*.ilg
+*.blg
+*.out
+*.bbl
+*.dvi
+*.nav
+*.pyg
+*.snm
+*.lof
+*.glg
+*.glo
+*.gls
+*.acn
+*.acr
+*.alg
+*.ist
+*.synctex.gz
+
+
+#OpenOffice lock files
+.~lock.*.*#

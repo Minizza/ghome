@@ -1,30 +1,29 @@
 # -*- coding : utf-8 -*-
 
-from pants import Engine, Server, Stream
-
-class Echo(Stream):
-    def on_read(self, data):
-        self.write(data)
-    def balancer(self,data):
-        self.write(data)
+import socket
 
 
-server = Server(ConnectionClass=Echo)
 
-def balTemp ():
+server = socket.socket()
+
+
+def balTemp (c):
     data = 'A55A0B06000000080001B25E002A'
-    server.on_read(data)
+    c.send(data)
 
-def balCont ():
+def balCont (c):
     data = 'A55A0B07A830000F00053F440081'
-    server.on_read(data)
+    c.send(data)
 
-def balPres ():
+def balPres (c):
     data = 'A55A0B079DB8000D0004E59500F2'
-    server.on_read(data)
-
+    c.send(data)
+    
 def main () :
     print 'fakeJerome : concepteur de fakeTrames'
+    chan = server.bind(('', 1515))    
+    server.listen(100000)  
+    c,adrr = server.accept()      
     while 1 : 
         print 'Que voulez vous balancer ? (tavu ?)\n'
         print '1 : Capteur temperature'
@@ -33,11 +32,11 @@ def main () :
         kloug = raw_input('A vous :')
         test = int(kloug)
         if test == 1 :
-            balTemp()
+            balTemp(c)
         elif test == 2 :
-            balCont()
+            balCont(c)
         elif test == 3 :
-            balPres()
+            balPres(c)
         else : 
             print 'Haha petit malin !'
 

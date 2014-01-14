@@ -24,22 +24,22 @@ connect('test')
 ########################################################################
 def user_test():
 	#Deleting pre-existing users to clean the test database
-	for user in Utilisateur.objects:
+	for user in User.objects:
 		user.delete()
 
-	user1 = Utilisateur(name = "Dupont", password = "test", role = "Basic")
-	user2 = Utilisateur(name = "Martin", password = "pass", role = "Admin")
+	user1 = User(name = "Dupont", password = "test", role = "Basic")
+	user2 = User(name = "Martin", password = "pass", role = "Admin")
 
 	#Adding new users
 	user1.save()
 	user2.save() 
 
 	#Invalid user: name is missing (uncomment to test)
-	#user3 = Utilisateur(password = "f*ck", role = "Basic")	
+	#user3 = User(password = "f*ck", role = "Basic")	
 	#user3.save()
 		
 	#Printing users in Utilisateur base
-	for user in Utilisateur.objects:
+	for user in User.objects:
 		print user.id, " ", user.name, " ", user.password, " ", user.role
 ########################################################################
 
@@ -49,14 +49,14 @@ def user_test():
 ########################################################################
 def peripherique_test():
 	#Deleting pre-existing peripherique to clean the test database
-	for device in Peripherique.objects:
+	for device in Device.objects:
 		device.delete()
 		
-	capteur1 = Capteur(id_physique = "12230EAF", current_state = False)
+	capteur1 = Sensor(id_physique = "12230EAF", current_state = "False")
 	
 	capteur1.save()
 	
-	for device in Peripherique.objects:
+	for device in Device.objects:
 		print device.id_physique, " ", current_state
 	
 ########################################################################

@@ -13,5 +13,5 @@ class Peripherique(Document):
         
     id_logique = IntField(required = True)
     id_physique = StringField(required = True)
-    #historique = ReferenceField(Historique)
+    historique = ReferenceField(Historique)
     etat_courant = DynamicField()

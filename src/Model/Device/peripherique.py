@@ -11,6 +11,8 @@ class Peripherique(Document):
         - historique : l'historique des états du périphérique
         - etat_courant : l'état courant du périphérique"""
         
+    meta = {'allow_inheritance': True} #Autorise l'héritage de cette classe
+        
     id_logique = IntField(required = True)
     id_physique = StringField(required = True)
     historique = ReferenceField(Historique)

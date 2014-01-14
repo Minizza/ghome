@@ -16,7 +16,7 @@ from utilisateur import *
 
 from mongoengine import *
 
-connect('tumblelog')
+connect('test')
 
 
 ########################################################################
@@ -34,8 +34,19 @@ def user_test():
 	user1.save()
 	user2.save() 
 
+	#Invalid user: name is missing (uncomment to test)
+	#user3 = Utilisateur(mdp = "f*ck", role = "Basic")	
+	#user3.save()
+		
 	#Printing users in Utilisateur base
 	for user in Utilisateur.objects:
 		print user.id, " ", user.nom, " ", user.mdp, " ", user.role
-		
 ########################################################################
+
+
+########################################################################
+# Tests for Peripherique base
+########################################################################
+#def peripherique_test():
+	#Deleting pre-existing peripherique to clean the test database
+	

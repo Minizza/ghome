@@ -13,7 +13,7 @@ class Peripherique(Document):
         
     meta = {'allow_inheritance': True} #Autorise l'héritage de cette classe
         
-    id_logique = IntField(required = True)
+    id_logique = ObjectIdField(required = True)
     id_physique = StringField(required = True)
     historique = ReferenceField(Historique)
     etat_courant = DynamicField()

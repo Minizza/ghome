@@ -9,30 +9,34 @@ scale = 16 ## equals to hexadecimalœ
 num_of_bits = len(my_hexdata)*4
 print(bin(int(my_hexdata, scale))[2:].zfill(num_of_bits))
 
-
+class trame :
+    def __init__ (self,receivedData) :
+        self.sep = receivedData[:4]
+        self.lenght = receivedData[4:6]
+        self.rOrg = receivedData[6:8]
+        self.data1 = receivedData[8:10]
+        self.data2 = receivedData[10:12]
+        self.data3 = receivedData[12:14]
+        self.data4 = receivedData[14:16]
+        self.ident = receivedData[16:24]
+        self.flag = receivedData[24:26]
+        self.checkSum = receivedData[26:]
 
 
 #Ici on reçoit la trame 
 receivedData = "A55A0B05000000000021CBE320FF"
 
 #Ici, on traite la trame (slicing)
-sep = receivedData[:4]
-lenght = receivedData[4:6]
-rOrg = receivedData[6:8]
-data1 = receivedData[8:10]
-data2 = receivedData[10:12]
-data3 = receivedData[12:14]
-data4 = receivedData[14:16]
-ident = receivedData[16:24]
-flag = receivedData[24:26]
-checkSum = receivedData[26:]
-print sep
-print lenght
-print rOrg
-print data1
-print data2
-print data3
-print data4
-print ident
-print flag
-print checkSum
+tram1 = trame(receivedData)
+print tram1.sep
+print tram1.lenght
+print tram1.rOrg
+print tram1.data1
+print tram1.data2
+print tram1.data3
+print tram1.data4
+print tram1.ident
+print tram1.flag
+print tram1.checkSum
+print tram1
+

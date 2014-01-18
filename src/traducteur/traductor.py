@@ -25,10 +25,11 @@ class trame :
         self.checkSum = receivedData[26:]
     
     def nameIt (self) :
-        name =''
-        name.append(self.ident)
-        name.append(' is a ')
-        name.append(self.rOrg) 
+        name = ''
+        name += self.ident
+        name += ' is a '
+        name += self.rOrg 
+        print name
 
 
 #Ici on reçoit la trame 
@@ -54,8 +55,9 @@ def main () :
     soc = socket.socket()
     soc.connect(('',1515))
     while 1 :
-        
-        tram2 = trame(
+        message = soc.recv(1024)
+        tram2 = trame(message)
+        tram2.nameIt()
 
 
 main()

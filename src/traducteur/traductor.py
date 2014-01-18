@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import socket
+
 #st="A55A0B06000000080001B25E002A"
 #st="0"
 #print(' '.join(format(x, 'b') for x in bytearray(st)))
@@ -21,22 +23,40 @@ class trame :
         self.ident = receivedData[16:24]
         self.flag = receivedData[24:26]
         self.checkSum = receivedData[26:]
+    
+    def nameIt (self) :
+        name =''
+        name.append(self.ident)
+        name.append(' is a ')
+        name.append(self.rOrg) 
 
 
 #Ici on reçoit la trame 
 receivedData = "A55A0B05000000000021CBE320FF"
 
 #Ici, on traite la trame (slicing)
-tram1 = trame(receivedData)
-print tram1.sep
-print tram1.lenght
-print tram1.rOrg
-print tram1.data1
-print tram1.data2
-print tram1.data3
-print tram1.data4
-print tram1.ident
-print tram1.flag
-print tram1.checkSum
-print tram1
+def oldFcnt ():
+    tram1 = trame(receivedData)
+    print tram1.sep
+    print tram1.lenght
+    print tram1.rOrg
+    print tram1.data1
+    print tram1.data2
+    print tram1.data3
+    print tram1.data4
+    print tram1.ident
+    print tram1.flag
+    print tram1.checkSum
+    print tram1
+
+
+def main () :
+    soc = socket.socket()
+    soc.connect(('',1515))
+    while 1 :
+        
+        tram2 = trame(
+
+
+main()
 

@@ -2,7 +2,10 @@
 
 import socket
 
-
+"""
+fakeJerome est un simple support d'envoi de fausses trames pour tester
+sans avoir de capteur sous la main
+"""
 
 server = socket.socket()
 

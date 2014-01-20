@@ -22,7 +22,7 @@ def balPres (c):
 def main () :
     print 'fakeJerome : concepteur de fakeTrames'
     chan = server.bind(('', 1515))    
-    server.listen(100000)  
+    server.listen(10000)  
     c,adrr = server.accept()      
     while 1 : 
         print 'Que voulez vous balancer ? (tavu ?)\n'

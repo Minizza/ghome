@@ -7,7 +7,7 @@
 import logging
  
 from logging.handlers import RotatingFileHandler
-def configure (consoleMode=logging.WARN):
+def configure ():
 	# création de l'objet logger qui va nous servir à écrire dans les logs
 	logger = logging.getLogger()
 	# on met le niveau du logger à DEBUG, comme ça il écrit tout
@@ -34,7 +34,7 @@ def configure (consoleMode=logging.WARN):
 	steam_handler = logging.StreamHandler()
 
 	#niveau de début
-	steam_handler.setLevel(consoleMode)
+	steam_handler.setLevel(logging.Debug)
 	logger.addHandler(steam_handler)
 
 	return logger

@@ -49,8 +49,8 @@ class trame :
     
 
 if __name__ == '__main__':
-	soc = socket.socket()
-    soc.connect(('',1515))
+    soc = socket.socket()
+    soc.connect(('134.214.106.23',5000))
     while 1 :
         message = soc.recv(1024)
         tram2 = trame(message)

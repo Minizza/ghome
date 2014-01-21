@@ -46,14 +46,14 @@ class trame :
         name += self.rOrg 
         print name
 
-def main () :
-    soc = socket.socket()
+    
+
+if __name__ == '__main__':
+	soc = socket.socket()
     soc.connect(('',1515))
     while 1 :
         message = soc.recv(1024)
         tram2 = trame(message)
         tram2.nameIt()
 
-
-main()
 

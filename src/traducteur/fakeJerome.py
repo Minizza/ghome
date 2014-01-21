@@ -38,7 +38,7 @@ def auto () :
         elif test == 3 :
             balPres(c)
         else : 
-            raise AttributeError
+            raise Exception("random out of bounds")
         time.sleep(5)
 
 def manual () :

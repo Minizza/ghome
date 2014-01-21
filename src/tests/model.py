@@ -59,7 +59,7 @@ def user_test():
 # Tests for Device base
 ########################################################################
 def device_test():
-	#Deleting pre-existing peripherique to clean the test database
+	#Deleting pre-existing devices to clean the test database
 	ghomedevice.Device.drop_collection()
 		
 	capteur1 = sensor.Sensor(physic_id = "12230EAF", name = "CAPTEUR1_CUISINE", current_state = 19)
@@ -81,9 +81,18 @@ def device_test():
 	capteur2 = sensor.Sensor(physic_id = "AEFF4242", name = "CAPTEUR2_CUISINE", current_state = 22, historic = historic1)
 	capteur2.save()
 	
+	capteur2.addState(datetime.datetime.now(), 27)
+
 	for device in ghomedevice.Device.objects:
 		print device.physic_id, " ", device.name, " ", device.current_state
 		if device.historic:
-			print device.historic.date, " ", device.historic.state
-	
+			print device.historic.date, " ", device.historic.state	
 ########################################################################
+
+
+########################################################################
+# Tests for Draw base
+########################################################################
+def draw_test():
+	#Deleting pre-existing draws to clean the test database
+	draw.Draw.drop_collection()	

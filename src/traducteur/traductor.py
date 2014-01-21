@@ -1,7 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""Socket very useful to connect to every sh*t in da world"""
 import socket
+
+"""I want da base"""
+import sys
+path = "../Model/Device/"
+sys.path.append(path)
+
+from device import *
+from sensor import *
+from actuator import *
+from historic import *
+
+path = "../Model/User/"
+sys.path.append(path)
+
+from user import *
+
+from mongoengine import *
+
+connect('test')
+
 
 class trame :
     """
@@ -36,6 +57,26 @@ class trame :
         print name
 
     
+
+
+class traductor :
+    """
+
+
+    """
+
+    def __init__ (self) :
+        for device in Device.objects:
+            self.identSet.add(device.physic_id)
+
+    def connect (self, addr, port) :
+        soc = socket.socket()
+        soc.connect((addr,port))
+        while 1 :
+            message = soc.recv(1024)
+            usedTrame = trame(message)
+
+
 
 if __name__ == '__main__':
     soc = socket.socket()

@@ -49,7 +49,7 @@ class trame :
     
 
 if __name__ == '__main__':
-	soc = socket.socket()
+    soc = socket.socket()
     soc.connect(('',1515))
     while 1 :
         message = soc.recv(1024)

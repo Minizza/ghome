@@ -3,23 +3,11 @@
 
 import socket
 
-"""
-#st="A55A0B06000000080001B25E002A"
-#st="0"
-#print(' '.join(format(x, 'b') for x in bytearray(st)))
-my_hexdata = "A55A0B05000000000021CBE320FF"
-scale = 16 ## equals to hexadecimalœ
-num_of_bits = len(my_hexdata)*4
-print(bin(int(my_hexdata, scale))[2:].zfill(num_of_bits))
-"""
-
-
-
 class trame :
     """
-        La classe trame regroupe toutes les informations qui peuvent être récupérées sur une
-            trame, à savoir : 
-                - sep, le  séparateur de trames
+        La classe trame regroupe toutes les informations qui peuvent être
+            récupérées sur une trame, à savoir :
+                - sep, le  séparateur de trames should be "A55A"
                 - lenght, la longueur des infos d'une trame
                 - rOrg, le type de trame
                 - dataX, le byte de data X
@@ -27,6 +15,7 @@ class trame :
                 - flag , ...
                 - checkSum, ...
     """
+    
     def __init__ (self,receivedData) :
         self.sep = receivedData[:4]
         self.lenght = receivedData[4:6]
@@ -55,5 +44,3 @@ if __name__ == '__main__':
         message = soc.recv(1024)
         tram2 = trame(message)
         tram2.nameIt()
-
-

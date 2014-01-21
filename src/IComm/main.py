@@ -11,8 +11,11 @@ def hello_world():
 	
 @app.route('/connection')
 def connection():
-    monTexte = 'Connection'
-    return render_template('connection.html', helloworld=monTexte)
+    return render_template('connection.html')
+	
+@app.route('/connection')
+def manageConnection():
+    return render_template('connection.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

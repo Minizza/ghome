@@ -2,6 +2,7 @@
 
 import socket
 import time
+import atexit
 from random import randrange
 """
 fakeJerome est un simple support d'envoi de fausses trames pour tester
@@ -66,11 +67,16 @@ def manual () :
         else : 
             print 'Haha petit malin !'
 
+def servClose():
+	print "le serveur meurt !"
+	server.close()
+
+atexit.register(servClose)
 
 if __name__ == '__main__':
-	try:
-		#manual()
-		auto() 
-	finally:
-		print "le serveur meurt !"
-		server.close()
+	"Choose ONE mode"
+	manual()
+	#auto() 
+	print "le serveur meurt !"
+	server.close()
+

@@ -4,29 +4,14 @@ from mongoengine import *
 
 import sys
 import datetime
-
-path = "../Model/Device/"
-if path not in sys.path:
-	sys.path.append(path)
-
-import device as ghomedevice
-import sensor
-import actuator
-import historic
-
-path = "../Model/Draw/"
-if path not in sys.path:
-	sys.path.append(path)
-
-import draw
-import form
-	
-path = "../Model/Place"
-if path not in sys.path:
-	sys.path.append(path)
-
-import place
-import ghomeuser
+import Model.Device.device as ghomedevice
+import Model.Device.sensor as sensor
+import Model.Device.actuator as actuator
+import Model.Device.historic as historic
+import Model.Draw.draw as draw 
+import Model.Draw.form as form
+import Model.Place.place as place
+import Model.Place.ghomeuser as ghomeuser
 
 connect('test')
 

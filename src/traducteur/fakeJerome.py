@@ -31,7 +31,7 @@ def auto () :
     print 'fakeJerome : concepteur de fakeTrames'
     print 'Auto mode : send random trames every 5s'
     chan = server.bind(('', 1515))    
-    server.listen(10000)  
+    server.listen(5)  
     c,adrr = server.accept()      
     while 1 : 
         test = randrange(1,3)
@@ -77,6 +77,3 @@ if __name__ == '__main__':
 	"Choose ONE mode"
 	manual()
 	#auto() 
-	print "le serveur meurt !"
-	server.close()
-

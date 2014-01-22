@@ -3,7 +3,8 @@
  
 
  #piqué sur sam & max pour les détails voir http://sametmax.com/ecrire-des-logs-
- #en-python/ import logging
+ #en-python/ 
+import logging
  
 from logging.handlers import RotatingFileHandler 
 def configure ():
@@ -34,7 +35,8 @@ def configure ():
 	# création d'un second handler qui va rediriger chaque écriture de log
 	# sur la console
 	steam_handler = logging.StreamHandler()
-
+	consolFormat = logging.Formatter('%(levelname)s :: %(message)s')
+	steam_handler.setFormatter(consolFormat)
 	#niveau de début
 	steam_handler.setLevel(logging.DEBUG)
 	logger.addHandler(steam_handler)

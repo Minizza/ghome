@@ -50,11 +50,7 @@ class trame :
         self.checkSum = receivedData[26:]
     
     def nameIt (self) :
-        name = ''
-        name += self.ident
-        name += ' is a '
-        name += self.rOrg 
-        print name
+        print "{} is a {} ".format(self.ident,self.rOrg)
 
     
 
@@ -66,6 +62,9 @@ class traductor :
     """
 
     def __init__ (self) :
+    	"""
+    	Load all the device in the base
+    	"""
         for device in Device.objects:
             self.identSet.add(device.physic_id)
 

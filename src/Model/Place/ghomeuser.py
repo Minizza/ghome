@@ -2,7 +2,8 @@
 
 from mongoengine import *
 
-class User(Document):
+
+class GHomeUser(Document):
 	"""Utilisateur de l'application
 		- id : l'id de l'utilisateur
 		- nom : nom de l'utilisateur

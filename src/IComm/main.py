@@ -14,5 +14,10 @@ def connection():
     monTexte = 'Connection'
     return render_template('connection.html', helloworld=monTexte)
 
+@app.route('/devices')
+def devices():
+    devices = 0 # Fetch les devices depuis la BD ici !
+    return render_template('devices.html', devices=devices)
+
 if __name__ == '__main__':
     app.run(debug=True)

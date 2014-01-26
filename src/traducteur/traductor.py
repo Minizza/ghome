@@ -66,15 +66,16 @@ class traductor :
     """
 
     def __init__ (self) :
+        self.soc = socket.socket()
         for device in Device.objects:
             self.identSet.add(device.physic_id)
 
     def connect (self, addr, port) :
-        soc = socket.socket()
-        soc.connect((addr,port))
-        while 1 :
-            message = soc.recv(1024)
-            usedTrame = trame(message)
+        self.soc.connect((addr,port))
+    
+    def receive () :
+        message = self.soc.recv(1024)
+        usedTrame = trame(message)
 
 
 

@@ -14,6 +14,20 @@ class Device(Document):
     meta = {'allow_inheritance': True} #Autorise l'héritage de cette classe
         
     id = ObjectIdField(required = True)
-    physic_id = StringField(required = True)
+    physic_id = StringField(required = True, unique = True)
+    name = StringField(required = True, unique = True)
     historic = ReferenceField(Historic)
     current_state = DynamicField()
+    coordX = IntField()
+    coordY = IntField()
+    coordZ = IntField()
+    
+    def setHistoric(self, historicValue):
+        historicValue.save()
+        self.historic = historicValue
+        self.save()
+    
+    def addState(self, stateDate, stateValue):
+        self.historic.date.append(stateDate)
+        self.historic.state.append(stateValue)
+        self.historic.save()

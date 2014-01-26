@@ -5,22 +5,19 @@
 import socket
 
 """I want da base"""
-import sys
-path = "../Model/Device/"
-sys.path.append(path)
+from Model.Device import device
+from Model.Device import sensor
+from Model.Device import actuator
+from Model.Device import historic
 
-from device import *
-from sensor import *
-from actuator import *
-from historic import *
-
-path = "../Model/User/"
-sys.path.append(path)
+"""I want da logger"""
+import logger.loggerConfig as myLog
 
 from user import *
-
 from mongoengine import *
 
+
+logger=myLog.configure()
 connect('test')
 
 
@@ -50,23 +47,23 @@ class trame :
         self.checkSum = receivedData[26:]
     
     def nameIt (self) :
-        name = ''
-        name += self.ident
-        name += ' is a '
-        name += self.rOrg 
-        print name
+        logger.info("{} is a {} ".format(self.ident,self.rOrg))
 
     
 
 
 class traductor :
     """
-
+    TODO écrire la doc
 
     """
 
     def __init__ (self) :
         self.soc = socket.socket()
+        
+	"""
+        Load all the device in the base
+        """
         for device in Device.objects:
             self.identSet.add(device.physic_id)
 
@@ -77,12 +74,27 @@ class traductor :
         message = self.soc.recv(1024)
         usedTrame = trame(message)
 
+    def checkTrame(self, trameReceived):
+        if (trameReceived.sep=="A55A"):
+            logger.info("Wrong separator, rejected")
+            return False
+        if (trameReceived):
+            "TODO faire les autres condition"
+
 
 
 if __name__ == '__main__':
     soc = socket.socket()
     soc.connect(('',1515))
-    while 1 :
-        message = soc.recv(1024)
-        tram2 = trame(message)
-        tram2.nameIt()
+    logger.info("Connection")
+    try:
+        while 1 :
+            message = soc.recv(1024)
+            if message:
+                tram2 = trame(message)
+                tram2.nameIt()
+    except socket.error:
+        logger.info("Déconnection du serveur")
+        soc.close()
+    finally:
+        soc.close()

@@ -1,18 +1,19 @@
-{% extends "base.html" %} 
-{% block title %}Connection{% endblock %} 
+{% extends "base.html" %}
+
+{% set active_page = "connection" %}
+
+{% block title %}Connection{% endblock %}
+
+{% block css %}<link href="static/css/connection.css" rel="stylesheet">{% endblock %} 
+
+<!-- Hide the menu (Redefine it blank) -->
+{% block menu %}{% endblock %}
+
 {% block content %}
-<div class="starter-template">
-	<h1>
-		{{helloworld}}
-	</h1>
-	<p class="lead">
-		Enter your username and your password
-	</p>
-</div>
-<div class="input-group">
-	<input type="text" class="form-control" placeholder="Username">
-</div>
-<div class="input-group">
-	<input type="text" class="form-control" placeholder="Password">
-</div>
+<form class="form-signin" role="form" method="post">
+	<h2 class="form-signin-heading">Please sign in</h2>
+	<input type="text" class="form-control" name="username" placeholder="Username" required autofocus>
+	<input type="password" class="form-control" name="password" placeholder="Password" required>
+	<button class="btn btn-lg btn-primary btn-block" type="submit">Se logguer</button>
+</form>
 {% endblock %}

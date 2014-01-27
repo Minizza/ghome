@@ -6,7 +6,18 @@
 			GHome - {% block title %}{% endblock %}
 		</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Bootstrap -->
 		<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Bootstrap FormHelpers -->
+		<link href="static/formhelpers/css/bootstrap-formhelpers.min.css" rel="stylesheet">
+
+		<!-- Base CSS -->
+		<link href="static/css/base.css" rel="stylesheet">
+
+		{% block css %}{% endblock %}
+
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js">
 			</script>
@@ -16,18 +27,27 @@
 		{% endblock %}
 	</head>
 	<body>
-		<div class="container">
-			{% block content %}
-			{% endblock %}
+
+		<!-- Menu -->
+		{% block menu %}
+			{% set active_page = active_page|default('index') -%}
+			{% include 'menu.html' %}
+		{% endblock %}
+
+		<div class="container wrapper">
+				{% block content %}{% endblock %}
 		</div>
-		<!-- /.container -->
+
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="static/js/jquery.js">
-		</script>
-		<!-- Include all compiled plugins (below), or include individual files as needed
-		-->
-		<script src="static/bootstrap/js/bootstrap.min.js">
-		</script>
+		<script src="static/js/jquery.js"></script>
+
+		<!-- Bootstrap javascript files -->
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+
+		<!-- Bootstrap FormHelpers javascript files -->
+		<script src="static/formhelpers/js/bootstrap-formhelpers.min.js"></script>
+
+		{% block js %}{% endblock %}
 	</body>
 
 </html>

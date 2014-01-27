@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    monTexte = 'Hello World'
-    return render_template('index.html', helloworld=monTexte)
+def index():
+    monTexte = "Ceci est la page d'accueil du site"
+    return render_template('index.html', data=monTexte)
 	
 @app.route('/connection')
 def connection():
     monTexte = 'Connection'
-    return render_template('connection.html', helloworld=monTexte)
+    return render_template('connection.html')
+
+@app.route('/connection',  methods=["POST"])
+def connection_post():
+	username = request.form['username']
+	password = request.form['password']
+	return "login : {}, password : {}".format(username, password)
 
 @app.route('/devices')
 def devices():

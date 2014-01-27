@@ -70,6 +70,8 @@ def device_test():
 	
 	historic2 = historic.Historic(date = dateField, state = stateField)
 	actuator1.setHistoric(historic2)
+	
+	capteur1.addState(datetime.datetime.now(), 19)
 
 	for device in ghomedevice.Device.objects:
 		print device.physic_id, " ", device.name, " ", device.current_state

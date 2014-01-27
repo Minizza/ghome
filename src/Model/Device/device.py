@@ -26,6 +26,10 @@ class Device(Document):
         historicValue.save()
         self.historic = historicValue
         self.save()
+        
+    def setCurrentState(self, state):
+        self.current_state = state
+        self.save()
     
     def addState(self, stateDate, stateValue):
         if not(self.historic):      #If the histic does not exist

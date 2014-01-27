@@ -27,11 +27,14 @@ def fakeJerome_test():
 	for device in Device.objects:
 		device.delete()
 		
-	capteur1 = Sensor(id_physique = "12230EAF", current_state = "False")
+	capteur1 = Sensor(physic_id = "12230EAF", name = "CAPTEUR1_CUISINE", current_state = 19)
 	
 	capteur1.save()
 	
 	for device in Device.objects:
-		print device.id_physique, " ", current_state
+		print device.physic_id, " ", device.current_state
 	
 ########################################################################
+
+if __name__== '__main__':
+	fakeJerome_test()

@@ -34,6 +34,9 @@ class ModelTest(unittest2.TestCase):
 		#Adding new users
 		user1.save()
 		user2.save() 
+		
+		user1.setPassword("changed,Modafucka")
+		user2.setName("Martine")
 
 		#Invalid user: name is missing (uncomment to test)
 		#user3 = ghomeuser.GHomeUser(password = "f*ck", role = "Basic")	
@@ -42,9 +45,9 @@ class ModelTest(unittest2.TestCase):
 		#Printing users in Utilisateur base
 		for user in ghomeuser.GHomeUser.objects:
 			if user.name == "Dupont":
-				self.assertEqual(user.password, "test")
+				self.assertEqual(user.password, "changed,Modafucka")
 				self.assertEqual(user.role, "Basic")
-			elif user.name == "Martin":
+			elif user.name == "Martine":
 				self.assertEqual(user.password, "pass")
 				self.assertEqual(user.role, "Admin")
 			else:

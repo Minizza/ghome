@@ -90,6 +90,10 @@ class ModelTest(unittest2.TestCase):
 		capteur2 = sensor.Sensor(physic_id = "AEFF4242", name = "CAPTEUR2_CUISINE", current_state = 22, historic = historic2)
 		capteur2.save()
 		capteur2.addState(datetime.datetime.now(), 27)
+		
+		actuator3 = actuator.Actuator(physic_id = "AEEFFA4", name = "ACTIONNEUR1_GARAGE", current_state = "CLOSED")
+		actuator3.save()
+		actuator3.update("OPEN")
 
 		#Print all devices' info'
 		for device in ghomedevice.Device.objects:
@@ -107,6 +111,11 @@ class ModelTest(unittest2.TestCase):
 				self.assertEqual(device.name, "CAPTEUR2_CUISINE")
 				self.assertEqual(device.current_state, 22)
 				self.assertEqual(device.historic.state, [25, 22, 27])
+				
+			elif device.physic_id == "AEEFFA4":
+				self.assertEqual(device.name, "ACTIONNEUR1_GARAGE")
+				self.assertEqual(device.current_state, "OPEN")
+				self.assertEqual(device.historic.state, ["CLOSED"])
 				
 			else:
 				print "Physic id: ", device.physic_id

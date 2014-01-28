@@ -8,11 +8,16 @@ import datetime
 import unittest2
 
 import Model.Device.device as ghomedevice
+
 import Model.Device.sensor as sensor
 import Model.Device.actuator as actuator
+import Model.Device.temperature as temperature
+
 import Model.Device.historic as historic
+
 import Model.Draw.draw as draw 
 import Model.Draw.form as form
+
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
 
@@ -88,8 +93,8 @@ class ModelTest(unittest2.TestCase):
 		historic2 = historic.Historic(date = dateField, state = stateField)
 		historic2.save()
 		
-		#capteur2: historic at creation, use addState()
-		capteur2 = sensor.Sensor(physic_id = "AEFF4242", name = "CAPTEUR2_CUISINE", current_state = 22, historic = historic2)
+		#capteur2: temperature type, historic at creation, use addState()
+		capteur2 = temperature.Temperature(physic_id = "AEFF4242", name = "CAPTEUR2_CUISINE", current_state = 22, historic = historic2)
 		capteur2.save()
 		capteur2.addState(datetime.datetime.now(), 27)
 		

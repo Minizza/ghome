@@ -93,23 +93,23 @@ class traductor :
         return sum[(len(sum)-2):]
 
     def checkTrame(self):
-        if (self.trameUsed.sep=="A55A"):
+        if ("A55A" not in self.trameUsed.sep):
             logger.info("Wrong separator, rejected")
             return False
         if (self.doChecksum!=self.trameUsed.checkSum):     
-        	"Mauvais checkSum"
+        	#Mauvais checkSum
             logger.info("Wrong checksum, rejected")
-        if (self.trameUsed.ident in identSet):
+        if (self.trameUsed.ident in self.identSet):
             #Recuperer le capteur en bdd
-            sensorUsed = Sensor.objects(physic_id=self.trameUsed.ident)
+            sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]
             #Identifier le type de trame && Traiter les data de la trame
             newData = '' #la nouvelle data a entrer en base, type dynamique
-            if (sensorUsed.type==Switch):
+            if (sensorUsed.__class__.__name__=="Switch"):
                 if (self.trameUsed.data3=='09'):
                     newData = 'True'
                 else :
                     newData = 'False'
-            elif (sensorUsed.type==Temperature):
+            elif (sensorUsed.__class__.__name__=="Temperature"):
                 print okok
             else :
                 print ko

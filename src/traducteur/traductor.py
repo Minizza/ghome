@@ -38,10 +38,10 @@ class trame :
         self.sep = receivedData[:4]
         self.lenght = receivedData[4:6]
         self.rOrg = receivedData[6:8]
-        self.data1 = receivedData[8:10]
-        self.data2 = receivedData[10:12]
-        self.data3 = receivedData[12:14]
-        self.data4 = receivedData[14:16]
+        self.data0 = receivedData[8:10]
+        self.data1 = receivedData[10:12]
+        self.data2 = receivedData[12:14]
+        self.data3 = receivedData[14:16]
         self.ident = receivedData[16:24]
         self.flag = receivedData[24:26]
         self.checkSum = receivedData[26:]
@@ -60,28 +60,39 @@ class traductor :
 
     def __init__ (self) :
         self.soc = socket.socket()
+        self.trameUsed = ''
         
-	"""
+	    """
         Load all the device in the base
         """
-        for device in Device.objects:
+        for sensor in Sensor.objects:
             self.identSet.add(device.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
     
-    def receive () :
+    def receive (self) :
         message = self.soc.recv(1024)
-        usedTrame = trame(message)
+        if message:
+            self.trameUsed = trame(message)
 
-    def checkTrame(self, trameReceived):
-        if (trameReceived.sep=="A55A"):
+    def checkTrame(self):
+        if (self.trameUsed.sep=="A55A"):
             logger.info("Wrong separator, rejected")
             return False
         if (false):     "Mauvais checkSum"
             "TODO  traiter la condition"
-        if (trameReceived.ident in identSet):
+        if (self.trameUsed.ident in identSet):
+            "Recuperer le capteur en bdd"
+            sensorUsed = Sensor.objects(physic_id=self.trameUsed.ident)
             "Identifier le type de trame"
+            if (sensorUsed.type):
+                print ok 
+            elif (sensorUsed.type):
+                print okok
+            else :
+                print ko
+            
             "Traiter les data de la trame"
             "Update de la trame au niveau de la base"
 

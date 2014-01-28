@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    monTexte = "Ceci est la page d'accueil du site"
+    monTexte = "Website's Homepage"
     return render_template('index.html', data=monTexte)
 	
 @app.route('/connection')

@@ -14,3 +14,15 @@ class GHomeUser(Document):
 	name = StringField(max_length = 20, required = True) # Taille max : 20 caractères
 	password = StringField(max_length = 20, required = True) # Taille max : 20 caractères
 	role = StringField(required = True)
+	
+	def setName(self, aName):
+		self.name = aName
+		self.save()
+		
+	def setPassword(self, aPassword):
+		self.password = aPassword
+		self.save()
+		
+	def setRole(self, aRole):
+		self.role = aRole
+		self.save()

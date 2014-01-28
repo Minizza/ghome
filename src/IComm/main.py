@@ -2,8 +2,13 @@
 # -*- encoding: utf-8 -*-
 
 from mongoengine import *
+
 import Model.Place.ghomeuser as ghomeuser
+import Model.Device.device as ghomedevice
+import tests.base as testdata
+
 from flask import Flask, render_template, request
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -37,7 +42,8 @@ def connection_post():
 
 @app.route('/devices')
 def devices():
-    devices = 0 # Fetch les devices depuis la BD ici !
+    connect('test')
+    devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
     return render_template('devices.html', devices=devices)
 
 if __name__ == '__main__':

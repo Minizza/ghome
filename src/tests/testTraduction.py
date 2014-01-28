@@ -37,7 +37,7 @@ def send_trame():
 		chan = server.bind(('', 1515))    
 		server.listen(5)  
 		c,adrr = server.accept()
-		c.send('A55A0B06000000090001B25E002')
+		c.send('A55A0B06000000090001B25E002B')
 
 thread.start_new_thread(send_trame,())
 
@@ -54,8 +54,8 @@ class ModelTest(unittest2.TestCase):
 		
 		capteur1.save()
 
-		tram = trame('A55A0B06000000080001B25E002')
-		capteur = Switch(physic_id = tram.ident, name = "INTERRUPTEUR_PLAQUE", current_state = 'False')
+		tram = trame('A55A0B06000000080001B25E002A')
+		capteur = Switch(physic_id = tram.ident, name = "INTERRUPTEUR_PLAQUE", current_state = False)
 		capteur.save()
 
 		for device in Device.objects:
@@ -67,6 +67,7 @@ class ModelTest(unittest2.TestCase):
 		tradMeThis.checkTrame()
 
 		comparedCapt = Sensor.objects(physic_id=tram.ident)[0]
+		print comparedCapt.current_state
 		self.assertTrue(comparedCapt.current_state)
 
 		for device in Device.objects:

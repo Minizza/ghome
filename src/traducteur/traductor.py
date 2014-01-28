@@ -38,7 +38,7 @@ class trame :
     
     def __init__ (self,receivedData) :
         self.sep = receivedData[:4]
-        self.lenght = receivedData[4:6]
+        self.length = receivedData[4:6]
         self.rOrg = receivedData[6:8]
         self.data0 = receivedData[8:10]
         self.data1 = receivedData[10:12]
@@ -99,7 +99,7 @@ class traductor :
         if (self.doChecksum!=self.trameUsed.checkSum):     
         	#Mauvais checkSum
             logger.info("Wrong checksum, expected : {}, rejected".format(self.doChecksum()))
-            return false
+            return False
         if (self.trameUsed.ident in self.identSet):
             #Recuperer le capteur en bdd
             sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]
@@ -107,9 +107,9 @@ class traductor :
             newData = '' #la nouvelle data a entrer en base, type dynamique
             if (sensorUsed.__class__.__name__=="Switch"):
                 if (self.trameUsed.data3=='09'):
-                    newData = 'True'
+                    newData = True
                 else :
-                    newData = 'False'
+                    newData = False
             elif (sensorUsed.__class__.__name__=="Temperature"):
                 print okok
             else :

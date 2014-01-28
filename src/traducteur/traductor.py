@@ -78,8 +78,12 @@ class traductor :
         if (trameReceived.sep=="A55A"):
             logger.info("Wrong separator, rejected")
             return False
-        if (trameReceived):
-            "TODO faire les autres condition"
+        if (false):     "Mauvais checkSum"
+            "TODO  traiter la condition"
+        if (trameReceived.ident in identSet):
+            "Identifier le type de trame"
+            "Traiter les data de la trame"
+            "Update de la trame au niveau de la base"
 
 
 

@@ -8,11 +8,16 @@ import datetime
 import unittest2
 
 import Model.Device.device as ghomedevice
+
 import Model.Device.sensor as sensor
 import Model.Device.actuator as actuator
+import Model.Device.temperature as temperature
+
 import Model.Device.historic as historic
+
 import Model.Draw.draw as draw 
 import Model.Draw.form as form
+
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
 
@@ -41,6 +46,8 @@ class ModelTest(unittest2.TestCase):
 		#Invalid user: name is missing (uncomment to test)
 		#user3 = ghomeuser.GHomeUser(password = "f*ck", role = "Basic")	
 		#user3.save()
+			
+		self.assertEqual(ghomeuser.GHomeUser.objects.count(), 2)	
 			
 		#Printing users in Utilisateur base
 		for user in ghomeuser.GHomeUser.objects:
@@ -86,14 +93,16 @@ class ModelTest(unittest2.TestCase):
 		historic2 = historic.Historic(date = dateField, state = stateField)
 		historic2.save()
 		
-		#capteur2: historic at creation, use addState()
-		capteur2 = sensor.Sensor(physic_id = "AEFF4242", name = "CAPTEUR2_CUISINE", current_state = 22, historic = historic2)
+		#capteur2: temperature type, historic at creation, use addState()
+		capteur2 = temperature.Temperature(physic_id = "AEFF4242", name = "CAPTEUR2_CUISINE", current_state = 22, historic = historic2)
 		capteur2.save()
 		capteur2.addState(datetime.datetime.now(), 27)
 		
 		actuator3 = actuator.Actuator(physic_id = "AEEFFA4", name = "ACTIONNEUR1_GARAGE", current_state = "CLOSED")
 		actuator3.save()
 		actuator3.update("OPEN")
+		
+		self.assertEqual(ghomedevice.Device.objects.count(), 4)
 
 		#Print all devices' info'
 		for device in ghomedevice.Device.objects:
@@ -130,7 +139,7 @@ class ModelTest(unittest2.TestCase):
 		#Deleting pre-existing draws to clean the test database
 		draw.Draw.drop_collection()	
 		place.Place.drop_collection()
-		form.Form.drop_collection()
+		form.Form.drop_collection()		
 		
 		form1 = form.Form(coordX = [0, 10], coordY = [0, 23], coordZ = 3)
 		form1.save()
@@ -138,7 +147,7 @@ class ModelTest(unittest2.TestCase):
 		homeDraw = draw.Draw(form = [form1])
 		homeDraw.save()
 		
-		home = place.Place(name = "HOME", draw = homeDraw, maxX = 30, maxY = 30, maxZ = 6, users = ghomeuser.GHomeUser.objects, devices = ghomedevice.Device.objects)
+		home = place.Place(name = "HOME", draw = homeDraw, maxX = 30, maxY = 30, maxZ = 6, users = [], devices = ghomedevice.Device.objects)
 		
 		for aPlace in place.Place.objects:
 			if aPlace.name == "HOME":
@@ -146,8 +155,8 @@ class ModelTest(unittest2.TestCase):
 				self.assertEqual(maxY, 30)
 				self.assertEqual(maxZ, 30)
 				
-				"""for aUser in aPlace.users
-					print aUser.name"""
+				for aUser in aPlace.users:
+					print aUser.name
 			
 			else:
 				print aPlace.name

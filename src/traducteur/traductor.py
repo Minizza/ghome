@@ -80,16 +80,19 @@ class traductor :
     	"""
         Sum up all the bytes of the trame except sep and take the 2 last byte
         """
-        sum=hex(\
-            int(self.trameUsed.length,16)+\
-            int(self.trameUsed.rOrg,16)+\
-            int(self.trameUsed.data0,16)+\
-            int(self.trameUsed.data1,16)+\
-            int(self.trameUsed.data2,16)+\
-            int(self.trameUsed.data3,16)+\
-            int(self.trameUsed.ident,16)+\
-            int(self.trameUsed.flag,16)\
-            )
+        sum=0
+        sum+=int(self.length,16)
+        sum+=int(self.rOrg,16)
+        sum+=int(self.data0,16)
+        sum+=int(self.data1,16)
+        sum+=int(self.data2,16)
+        sum+=int(self.data3,16)
+        sum+=int(self.ident[:2],16)
+        sum+=int(self.ident[2:4],16)
+        sum+=int(self.ident[4:6],16)
+        sum+=int(self.ident[6:8],16)
+        sum+=int(self.flag,16)
+        sum=hex(sum)
         return sum[(len(sum)-2):]
 
     def checkTrame(self):

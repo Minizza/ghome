@@ -63,7 +63,6 @@ class traductor :
     def __init__ (self) :
         self.soc = socket.socket()
         self.trameUsed = ''
-        
 	    """
         Load all the device in the base
         """
@@ -78,12 +77,29 @@ class traductor :
         if message:
             self.trameUsed = trame(message)
 
+    def doChecksum(self):
+    	"""
+        Sum up all the bytes of the trame except sep and take the 2 last byte
+        """
+        sum=hex(\
+            int(self.trameUsed.length,16)+\
+            int(self.trameUsed.rOrg,16)+\
+            int(self.trameUsed.data0,16)+\
+            int(self.trameUsed.data1,16)+\
+            int(self.trameUsed.data2,16)+\
+            int(self.trameUsed.data3,16)+\
+            int(self.trameUsed.ident,16)+\
+            int(self.trameUsed.flag,16)\
+            )
+        return sum[(len(sum)-2):]
+
     def checkTrame(self):
         if (self.trameUsed.sep=="A55A"):
             logger.info("Wrong separator, rejected")
             return False
-        if (false):     "Mauvais checkSum"
-            "TODO  traiter la condition"
+        if (self.doChecksum!=self.trameUsed.checkSum):     
+        	"Mauvais checkSum"
+            logger.info("Wrong checksum, rejected")
         if (self.trameUsed.ident in identSet):
             "Recuperer le capteur en bdd"
             sensorUsed = Sensor.objects(physic_id=self.trameUsed.ident)

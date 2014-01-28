@@ -145,6 +145,9 @@ class ModelTest(unittest2.TestCase):
 				self.assertEqual(maxX, 30)
 				self.assertEqual(maxY, 30)
 				self.assertEqual(maxZ, 30)
+				
+				"""for aUser in aPlace.users
+					print aUser.name"""
 			
 			else:
 				print aPlace.name

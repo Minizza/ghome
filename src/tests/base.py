@@ -37,3 +37,4 @@ def user_test():
 	for user in ghomeuser.GHomeUser.objects:
 		print user.id, " ", user.name, " ", user.password, " ", user.role
 ########################################################################
+user_test()

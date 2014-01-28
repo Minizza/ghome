@@ -3,6 +3,8 @@
 from mongoengine import *
 from historic import *
 
+import datetime
+
 
 class Device(Document):
     """Classe mère pour les périphériques
@@ -38,3 +40,7 @@ class Device(Document):
             self.historic.date.append(stateDate)
             self.historic.state.append(stateValue)
         self.historic.save()
+        
+    def update(self, stateValue):
+        self.addState(datetime.datetime.now(), self.current_state)
+        self.setCurrentState(stateValue)

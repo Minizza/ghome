@@ -23,8 +23,8 @@ def user_test():
 	#Deleting pre-existing users to clean the test database
 	ghomeuser.GHomeUser.drop_collection()
 
-	user1 = ghomeuser.GHomeUser(name = "Dupont", password = "test", role = "Basic")
-	user2 = ghomeuser.GHomeUser(name = "Martin", password = "pass", role = "Admin")
+	user1 = ghomeuser.GHomeUser(name = "Dupont", password = "test", role = "")
+	user2 = ghomeuser.GHomeUser(name = "Martin", password = "pass", role = "admin")
 
 	#Adding new users
 	user1.save()

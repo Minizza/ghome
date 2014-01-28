@@ -4,6 +4,9 @@
 *.a
 *.xcworkspace
 
+#MongoDB database
+data/db/*
+
 #VIM backup files
 *~
 

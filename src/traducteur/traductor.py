@@ -7,6 +7,8 @@ import socket
 """I want da base"""
 from Model.Device import device
 from Model.Device import sensor
+from Model.Device import switch
+from Model.Device import temperature
 from Model.Device import actuator
 from Model.Device import historic
 
@@ -85,16 +87,19 @@ class traductor :
         if (self.trameUsed.ident in identSet):
             "Recuperer le capteur en bdd"
             sensorUsed = Sensor.objects(physic_id=self.trameUsed.ident)
-            "Identifier le type de trame"
-            if (sensorUsed.type):
-                print ok 
-            elif (sensorUsed.type):
+            "Identifier le type de trame && Traiter les data de la trame"
+            newData = '' #la nouvelle data a entrer en base, type dynamique
+            if (sensorUsed.type==Switch):
+                if (self.trameUsed.data3=='01'):
+                    newData = 'True'
+                else :
+                    newData = 'False'
+            elif (sensorUsed.type==Temperature):
                 print okok
             else :
                 print ko
-            
-            "Traiter les data de la trame"
             "Update de la trame au niveau de la base"
+            sensorUsed.update(newData)
 
 
 

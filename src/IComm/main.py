@@ -47,16 +47,14 @@ def connection():
 def connection_post():
 	username = request.form['username']
 	password = request.form['password']
-
-	session['role'] = 'admin'
 	
 	connect('test')
+	find = 0
 	for user in ghomeuser.GHomeUser.objects:
 		if user.name == username:
 			if user.password == password:
 				find = 1
-		else:
-			find = 0
+				session['role'] = user.role
 	
 	if find:
 		return render_template('index.html')

@@ -63,9 +63,7 @@ class traductor :
     def __init__ (self) :
         self.soc = socket.socket()
         self.trameUsed = ''
-	    """
-        Load all the device in the base
-        """
+        #Load all the device in the base
         for sensor in Sensor.objects:
             self.identSet.add(device.physic_id)
 

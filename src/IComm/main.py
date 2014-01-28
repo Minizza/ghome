@@ -3,6 +3,9 @@
 
 from functools import wraps
 from flask import Flask, render_template, request, session
+from mongoengine import *
+import Model.Place.ghomeuser as ghomeuser
+
 app = Flask(__name__)
 
 # Set secret key for session
@@ -37,15 +40,28 @@ def index():
 	
 @app.route('/connection')
 def connection():
-	monTexte = 'Connection'
-	return render_template('connection.html')
+    return render_template('connection.html')
+	
 
 @app.route('/connection', methods=["POST"])
 def connection_post():
 	username = request.form['username']
 	password = request.form['password']
-	session['role'] = 'admin'		
-	return "login : {}, password : {}".format(username, password)
+
+	session['role'] = 'admin'
+	
+	connect('test')
+	for user in ghomeuser.GHomeUser.objects:
+		if user.name == username:
+			if user.password == password:
+				find = 1
+		else:
+			find = 0
+	
+	if find:
+		return render_template('index.html')
+	else : 
+		return render_template('connection.html')
 
 @app.route('/devices')
 @requires_roles('admin')

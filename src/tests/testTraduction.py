@@ -14,7 +14,15 @@ sys.path.append(path)
 
 from user import *
 
+path = "../traducteur"
+sys.path.append(path)
+
+from traductor import *
+from fakeJerome import *
+
 from mongoengine import *
+
+
 
 connect('test')
 

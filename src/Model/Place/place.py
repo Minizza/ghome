@@ -4,18 +4,8 @@ from mongoengine import *
 
 import sys
 import ghomeuser
-
-path = "../Device/"
-if path not in sys.path:
-	sys.path.append(path)
-
-import device
-
-path = "../Draw/"
-if path not in sys.path:
-	sys.path.append(path)
-
-import draw
+import Model.Device.device as device
+import Model.Draw.draw as draw
 
 
 class Place(Document):

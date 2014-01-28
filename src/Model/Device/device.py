@@ -21,3 +21,13 @@ class Device(Document):
     coordX = IntField()
     coordY = IntField()
     coordZ = IntField()
+    
+    def setHistoric(self, historicValue):
+        historicValue.save()
+        self.historic = historicValue
+        self.save()
+    
+    def addState(self, stateDate, stateValue):
+        self.historic.date.append(stateDate)
+        self.historic.state.append(stateValue)
+        self.historic.save()

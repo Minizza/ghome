@@ -124,11 +124,32 @@ class ModelTest(unittest2.TestCase):
 
 
 	########################################################################
-	# Tests for Draw base
+	# Tests for Place base
 	########################################################################
-	def test_draw(self):
+	def test_place(self):
 		#Deleting pre-existing draws to clean the test database
 		draw.Draw.drop_collection()	
+		place.Place.drop_collection()
+		form.Form.drop_collection()
+		
+		form1 = form.Form(coordX = [0, 10], coordY = [0, 23], coordZ = 3)
+		form1.save()
+		
+		homeDraw = draw.Draw(form = [form1])
+		homeDraw.save()
+		
+		home = place.Place(name = "HOME", draw = homeDraw, maxX = 30, maxY = 30, maxZ = 6, users = ghomeuser.GHomeUser.objects, devices = ghomedevice.Device.objects)
+		
+		for aPlace in place.Place.objects:
+			if aPlace.name == "HOME":
+				self.assertEqual(maxX, 30)
+				self.assertEqual(maxY, 30)
+				self.assertEqual(maxZ, 30)
+			
+			else:
+				print aPlace.name
+				self.assertTrue(False)
+		
 		
 if __name__ == '__main__':
 	unittest2.main()

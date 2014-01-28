@@ -6,7 +6,7 @@ import socket
 
 """I want da base"""
 from Model.Device import device
-from Model.Device import sensor
+from Model.Device import sensor 
 from Model.Device import switch
 from Model.Device import temperature
 from Model.Device import actuator
@@ -63,12 +63,10 @@ class traductor :
     def __init__ (self) :
         self.soc = socket.socket()
         self.trameUsed = ''
-        
-	    """
-        Load all the device in the base
-        """
-        for sensor in Sensor.objects:
-            self.identSet.add(device.physic_id)
+        self.identSet = set()
+        #Load all the device in the base
+        for lsensor in sensor.Sensor.objects:
+            self.identSet.add(lsensor.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
@@ -82,15 +80,15 @@ class traductor :
         if (self.trameUsed.sep=="A55A"):
             logger.info("Wrong separator, rejected")
             return False
-        if (false):     "Mauvais checkSum"
-            "TODO  traiter la condition"
+        if (false):     #Mauvais checkSum
+            pass #TODO  traiter la condition
         if (self.trameUsed.ident in identSet):
-            "Recuperer le capteur en bdd"
+            #Recuperer le capteur en bdd
             sensorUsed = Sensor.objects(physic_id=self.trameUsed.ident)
-            "Identifier le type de trame && Traiter les data de la trame"
+            #Identifier le type de trame && Traiter les data de la trame
             newData = '' #la nouvelle data a entrer en base, type dynamique
             if (sensorUsed.type==Switch):
-                if (self.trameUsed.data3=='01'):
+                if (self.trameUsed.data3=='09'):
                     newData = 'True'
                 else :
                     newData = 'False'

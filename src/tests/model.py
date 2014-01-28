@@ -25,12 +25,20 @@ connect('test')
 
 class ModelTest(unittest2.TestCase):
 
+	@classmethod
+	def setUpClass(self):
+		ghomeuser.GHomeUser.drop_collection()
+		ghomedevice.Device.drop_collection()
+		draw.Draw.drop_collection()	
+		place.Place.drop_collection()
+		form.Form.drop_collection()
+
 	########################################################################
 	# Tests for User base
 	########################################################################
 	def test_user(self):
 		#Deleting pre-existing users to clean the test database
-		ghomeuser.GHomeUser.drop_collection()
+		#ghomeuser.GHomeUser.drop_collection()
 
 		#user1
 		user1 = ghomeuser.GHomeUser(name = "Dupont", password = "test", role = "Basic")
@@ -68,7 +76,7 @@ class ModelTest(unittest2.TestCase):
 	########################################################################
 	def test_device(self):
 		#Deleting pre-existing devices to clean the test database
-		ghomedevice.Device.drop_collection()
+		#ghomedevice.Device.drop_collection()
 		
 		#Setting a date field and a state field
 		dateField = [datetime.datetime.now(), datetime.datetime.now()]
@@ -137,9 +145,9 @@ class ModelTest(unittest2.TestCase):
 	########################################################################
 	def test_place(self):
 		#Deleting pre-existing draws to clean the test database
-		draw.Draw.drop_collection()	
-		place.Place.drop_collection()
-		form.Form.drop_collection()		
+		#draw.Draw.drop_collection()	
+		#place.Place.drop_collection()
+		#form.Form.drop_collection()		
 		
 		form1 = form.Form(coordX = [0, 10], coordY = [0, 23], coordZ = 3)
 		form1.save()

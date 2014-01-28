@@ -98,7 +98,8 @@ class traductor :
             return False
         if (self.doChecksum!=self.trameUsed.checkSum):     
         	#Mauvais checkSum
-            logger.info("Wrong checksum, rejected")
+            logger.info("Wrong checksum, expected : {}, rejected".format(self.doChecksum()))
+            return false
         if (self.trameUsed.ident in self.identSet):
             #Recuperer le capteur en bdd
             sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]

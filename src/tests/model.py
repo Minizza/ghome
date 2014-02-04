@@ -21,12 +21,13 @@ import Model.Draw.form as form
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
 
-connect('test')
 
 class ModelTest(unittest2.TestCase):
 
 	@classmethod
 	def setUpClass(self):
+		connect('test')
+
 		ghomeuser.GHomeUser.drop_collection()
 		ghomedevice.Device.drop_collection()
 		draw.Draw.drop_collection()	

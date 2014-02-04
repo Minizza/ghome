@@ -1,25 +1,36 @@
-{% extends "base.html" %}
-
-{% set active_page = "devices" %}
-
-{% block title %}Devices{% endblock %}
-
+{% extends "base.html" %} 
+{% set active_page = "devices" %} 
+{% block title %}Devices{% endblock %} 
 {% block content %}
-<div class="page-header">
-	<h1>Liste des périphériques</h1>
-</div>
+{% block css %}
+    <link href="static/css/devices.css" rel="stylesheet">
+{% endblock %}
 
-<ul>
-	{% for device in devices %}
-  		<li>{{ device.physic_id }}{{ device.name }}</li>
-	{% endfor %}
-</ul>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</p>
+<div class="page-header">
+    <h1>
+        Liste des périphériques
+    </h1>
+</div>
+<nav class="tabbable tabs-left">
+    <div class="row">
+        <div class="col-md-6 colonne_devices">
+            <ul class="nav nav-pills nav-stacked">
+                {% for device in devices %}
+                <li>
+                    <a href="#device_{{ loop.index }}" data-toggle="tab">{{ device.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="tab-content">
+                {% for device in devices %}
+                <div class="tab-pane" id="device_{{ loop.index }}">
+                    {{ device.physic_id }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</nav>
 {% endblock %}

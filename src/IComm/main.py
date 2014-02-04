@@ -83,6 +83,11 @@ def logout():
 def error(content="Une erreur est survenue.", type="", head="Erreur"):
     return render_template('error.html', head=head, type=type, content=content)
 
+
+@app.route('/launchGame')
+def launchGame():
+    return render_template('gameView.html')
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="127.0.0.1", debug=True, port=5000)
 

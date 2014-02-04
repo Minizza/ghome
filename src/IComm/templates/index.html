@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% set active_page = "index" %}
+
+{% block title %}Index{% endblock %}
+
+{% block css %}<link href="static/css/index.css" rel="stylesheet">{% endblock %} 
+
+{% block content %}
+<div class="jumbotron">
+	<h1>Welcome to GHOME</h1>
+	<p>
+		{{data}}
+	</p>
+</div>
+{% endblock %}

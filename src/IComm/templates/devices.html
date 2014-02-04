@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+{% set active_page = "devices" %} 
+{% block title %}Devices{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>
+        Liste des périphériques
+    </h1>
+</div>
+<div class="tabbable tabs-left">
+    <ul class="nav nav-tabs">
+        {% for device in devices %}
+        <li>
+            <a href="#{{ loop.index }}" data-toggle="tab">{{ device.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content">
+        {% for device in devices %}
+        <div class="tab-pane" id="{{ loop.index }}">
+            {{ device.physic_id }}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

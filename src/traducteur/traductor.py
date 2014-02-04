@@ -99,7 +99,7 @@ class traductor :
         if ("A55A" not in self.trameUsed.sep):
             logger.info("Wrong separator, rejected")
             return False
-        if (self.doChecksum()!=self.trameUsed.checkSum):     
+        if (self.doChecksum() not in self.trameUsed.checkSum):     
         	#Mauvais checkSum
             logger.info("Wrong checksum, expected : {}, rejected".format(self.doChecksum()))
             return False

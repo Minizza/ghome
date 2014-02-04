@@ -42,7 +42,7 @@ def set_current_user_role(role):
 @app.route('/')
 def index():
     monTexte = "Ceci est la page d'accueil du super site"
-    return render_template('index.html', data=monTexte)
+    return render_template('index.html', data=monTexte, notif="je suis sur l'index", notif_type="success")
     
 @app.route('/connection')
 def connection():

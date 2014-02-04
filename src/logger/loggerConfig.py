@@ -3,11 +3,14 @@
  
 
  #piqué sur sam & max pour les détails voir http://sametmax.com/ecrire-des-logs-
- #en-python/
+ #en-python/ 
 import logging
  
-from logging.handlers import RotatingFileHandler
-def configure (consoleMode=logging.WARN):
+from logging.handlers import RotatingFileHandler 
+def configure ():
+	"""
+	Configure the logging system to keep a trace of everything both in console and log file
+	"""
 	# création de l'objet logger qui va nous servir à écrire dans les logs
 	logger = logging.getLogger()
 	# on met le niveau du logger à DEBUG, comme ça il écrit tout
@@ -32,9 +35,10 @@ def configure (consoleMode=logging.WARN):
 	# création d'un second handler qui va rediriger chaque écriture de log
 	# sur la console
 	steam_handler = logging.StreamHandler()
-
+	consolFormat = logging.Formatter('%(levelname)s :: %(message)s')
+	steam_handler.setFormatter(consolFormat)
 	#niveau de début
-	steam_handler.setLevel(consoleMode)
+	steam_handler.setLevel(logging.DEBUG)
 	logger.addHandler(steam_handler)
 
 	return logger

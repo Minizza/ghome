@@ -47,8 +47,7 @@ class ModelTest(unittest2.TestCase):
 	########################################################################
 	def test_fakeJerome(self):
 		#Deleting pre-existing peripherique to clean the test database
-		for device in Device.objects:
-			device.delete()
+		Device.drop_collection()
 			
 		capteur1 = Sensor(physic_id = "12230EAF", name = "CAPTEUR1_CUISINE", current_state = 19)
 		

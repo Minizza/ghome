@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from functools import wraps
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from mongoengine import *
 
 import Model.Place.ghomeuser as ghomeuser
@@ -23,7 +23,7 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             if get_current_user_role() not in roles:
-                return error('privileges')
+                return error("Eh oh tu t'as pas les droits la","page inaccessible")
             return f(*args, **kwargs)
         return wrapped
     return wrapper
@@ -41,7 +41,7 @@ def set_current_user_role(role):
 
 @app.route('/')
 def index():
-    monTexte = "Ceci est la page d'accueil du site"
+    monTexte = "Ceci est la page d'accueil du super site"
     return render_template('index.html', data=monTexte)
     
 @app.route('/connection')
@@ -79,11 +79,9 @@ def logout():
     session.pop('role', None)
     return connection()
 
-@app.route('/error/<type>')
-def error(type):
-    if type == 'privileges':
-        return render_template('error_privileges.html')
-    return index()
+@app.route('/error')
+def error(content="Une erreur est survenue.", type="", head="Erreur"):
+    return render_template('error.html', head=head, type=type, content=content)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -24,7 +24,7 @@ connect('test')
 
 # Get a device current value using its name
 def getDeviceValue(device_name):
-    device = ghomedevice.Device.objects(name = device_name)
+    device = ghomedevice.Device.objects(name = device_name)[0]
     return device.current_state
 
 # Add a device to the database, using its device_id, device_name and device_type

@@ -8,6 +8,8 @@ from mongoengine import *
 import Model.Place.ghomeuser as ghomeuser
 
 import Model.Device.device as ghomedevice
+import Model.Device.sensor as ghomesensor
+import Model.Device.actuator as ghomeactuator
 import tests.base as testdata
 
 from flask import Flask, render_template, request
@@ -66,6 +68,14 @@ def connection_post():
         return render_template('index.html')
     else : 
         return render_template('connection.html')
+
+@app.route('/devices', methods=["POST"])
+@requires_roles('admin')
+def add_device():
+    connect('test')
+    new = ghomesensor.Sensor(physic_id="ihfd", name="toto")
+    new.save()
+    return devices()
 
 @app.route('/devices')
 @requires_roles('admin')

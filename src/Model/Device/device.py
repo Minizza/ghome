@@ -5,7 +5,6 @@ from historic import *
 
 import datetime
 
-
 class Device(Document):
     """Classe mère pour les périphériques
         - id : l'id du périphérique dans l'application

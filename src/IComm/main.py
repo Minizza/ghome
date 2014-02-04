@@ -85,6 +85,11 @@ def error(type):
         return render_template('error_privileges.html')
     return index()
 
+
+@app.route('/launchGame')
+def launchGame():
+    return render_template('gameView.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
 

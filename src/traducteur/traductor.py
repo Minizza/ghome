@@ -143,3 +143,4 @@ if __name__ == '__main__':
         soc.close()
     finally:
         soc.close()
+    soc.close()

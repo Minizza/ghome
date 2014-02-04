@@ -29,11 +29,19 @@ def balPres (c):
     print "Sending : {}".format(data)
     c.send(data)
 
+def jrmThread(conn,jeromeIn):
+    while 1:
+        tramesfromJerome = jeromeIn.recv(1024)
+        if tramesfromJerome:
+            print "recu de gérome : {}".format(tramesfromJerome)
+            conn.sendall(tramesfromJerome)
+
 def clientthread(conn,jeromeIn):
     #Sending message to connected client
     conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
      
     #infinite loop so that function do not terminate and thread do not end.
+
     while True:
          
         #Receiving from client
@@ -43,18 +51,13 @@ def clientthread(conn,jeromeIn):
             reply = data
             conn.sendall(reply)
 
-        tramesfromJerome = jeromeIn.recv(1024)
-        if tramesfromJerome:
-            print "recu de gérome : {}".format(tramesfromJerome)
-            conn.sendall(tramesfromJerome)
-
     #came out of loop
     conn.close()
 
 if __name__ == '__main__':
 
     OUT_HOST = ''   # Symbolic name meaning all available interfaces
-    OUT_PORT = 8888 # Arbitrary non-privileged port
+    OUT_PORT = 8887 # Arbitrary non-privileged port
 
     #Gérome !
     IN_HOST = '134.214.106.23'  
@@ -63,6 +66,7 @@ if __name__ == '__main__':
 
 
     passOut = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    passOut.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     print 'Socket created'
     #Bind socket to local host and port
     try:
@@ -89,3 +93,4 @@ if __name__ == '__main__':
          
         #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
         start_new_thread(clientthread ,(conn,passIn))
+        start_new_thread(jrmThread,(conn,passIn))

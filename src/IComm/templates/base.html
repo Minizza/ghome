@@ -35,7 +35,17 @@
 		{% endblock %}
 
 		<div class="container wrapper">
-				{% block content %}{% endblock %}
+			<!-- Notification -->
+			<!-- possible types : success, info, warning, danger -->
+			{% if notif_content %}
+				<div class="notif alert alert-{{'danger' if not notif_type else notif_type}} fade in">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					<strong>{{notif_title}}</strong> {{notif_content}}
+				</div>
+			{% endif %}
+
+			<!-- Content of page -->
+			{% block content %}{% endblock %}
 		</div>
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -88,7 +88,8 @@ def error(type):
 
 @app.route('/launchGame')
 def launchGame():
-    return render_template('gameView.html')
+    devices = ghomedevice.Device.objects
+    return render_template('gameView.html', devices=devices)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", debug=True, port=5000)

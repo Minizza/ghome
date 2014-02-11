@@ -58,6 +58,10 @@ def testTemperature():
     connect('test')
     devices = ghometemperature.Temperature.objects
     return render_template('testtemp.html', devices=devices)
+
+@app.route('/testplayer')
+def testplayer():
+    return render_template('testplayer.html')
     
 
 @app.route('/connection', methods=["POST"])

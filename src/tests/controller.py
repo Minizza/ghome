@@ -20,7 +20,6 @@ import Model.Device.temperature as temperature
 import Model.Device.historic as historic
 
 import Model.Draw.draw as draw 
-import Model.Draw.form as form
 
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
@@ -32,6 +31,9 @@ class ModelTest(unittest2.TestCase):
 	def setUpClass(self):
 		connect('test')
 		ghomedevice.Device.drop_collection()
+		historic.Historic.drop_collection()
+		place.Place.drop_collection()
+		draw.Draw.drop_collection()
 
 
 	def test(self):
@@ -58,6 +60,16 @@ class ModelTest(unittest2.TestCase):
 
 		controller.deleteDevice(device_name = "SWITCH1_ENTREE")
 		self.assertEqual(ghomedevice.Device.objects.count(), 1)
+
+		draw1 = draw.Draw()
+		draw1.addForm('Rubiks_cube.svg')
+
+		place1 = place.Place(name = "HOME", draw = draw1)
+		place1.save()
+
+		fo = open('test.svg', 'w')
+		fo.write(controller.getForm(place_name = "HOME").read())
+		fo.close()
 
 
 if __name__ == '__main__':

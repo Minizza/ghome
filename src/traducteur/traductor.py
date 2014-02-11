@@ -134,7 +134,7 @@ class traductor :
                 newData = self.translateTemp(self.trameUsed)
                 logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
             else :
-                logger.info("Bad temperature")
+                logger.info("Other Captor (not handle (YET !) )")
             "Update de la trame au niveau de la base"
             sensorUsed.update(newData)
             

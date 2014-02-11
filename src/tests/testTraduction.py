@@ -37,7 +37,7 @@ def send_trameDoor():
     print "Demarrage du fauxServeur"
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    chan = server.bind(('', 1515))    
+    server.bind(('', 1515))    
     server.listen(5)
     c,adrr = server.accept()
     print "         envoie de trame"
@@ -47,7 +47,7 @@ def send_trameTemp():
     print "Demarrage du fauxServeur"
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    chan = server.bind(('', 1515))    
+    server.bind(('', 1515))    
     server.listen(5)
     c,adrr = server.accept()
     print "         envoie de trame : A55A0B07000078080089338200D0"

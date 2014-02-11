@@ -5,6 +5,8 @@ from functools import wraps
 from flask import Flask, render_template, request, session, redirect
 from mongoengine import *
 
+import json
+
 import Model.Place.ghomeuser as ghomeuser
 
 import Model.Device.device as ghomedevice
@@ -97,6 +99,9 @@ def error(content="Une erreur est survenue.", type="", head="Erreur"):
 @app.route('/launchGame')
 def launchGame():
     devices = ghomedevice.Device.objects
+    aFile = open('templates/game.json','r+')
+    for device in devices :
+        json.dump(device.name,aFile)
     return render_template('gameView.html', devices=devices)
 
 if __name__ == '__main__':

@@ -61,11 +61,13 @@ class ModelTest(unittest2.TestCase):
 		controller.deleteDevice(device_name = "SWITCH1_ENTREE")
 		self.assertEqual(ghomedevice.Device.objects.count(), 1)
 
-		draw1 = draw.Draw()
-		draw1.addForm('Rubiks_cube.svg')
 
-		place1 = place.Place(name = "HOME", draw = draw1)
+
+
+		place1 = place.Place(name = "HOME")
 		place1.save()
+
+		controller.saveForm(place_name = "HOME", file_name = "Rubiks_cube.svg")
 
 		fo = open('test.svg', 'w')
 		fo.write(controller.getForm(place_name = "HOME").read())

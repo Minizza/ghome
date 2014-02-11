@@ -14,8 +14,7 @@ import Model.Device.switch as switch
 
 import Model.Device.historic as historic
 
-import Model.Draw.draw as draw 
-import Model.Draw.form as form
+import Model.Draw.draw as draw
 
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
@@ -45,10 +44,17 @@ def addDevice(device_id, device_name, device_type):
     newDevice.save()
     return True
 
+# Delete a device, using its device_name
 def deleteDevice(device_name):
     device = getDevice(device_name = device_name)
     device.deleteDevice()
 
+# Update a device, using its device_name and the new state that has to be put in DB
 def updateDevice(device_name, state):
     device = getDevice(device_name = device_name)
     device.update(stateValue = state)
+
+# Get the form of the Place (using its place_name) which is in the list_position on the form list (default is first position)
+def getForm(place_name, list_position = 0):
+    default_place = place.Place.objects(name = place_name)[0]
+    return default_place.draw.form[list_position]

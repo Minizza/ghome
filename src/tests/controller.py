@@ -32,6 +32,7 @@ class ModelTest(unittest2.TestCase):
 	def setUpClass(self):
 		connect('test')
 		ghomedevice.Device.drop_collection()
+		historic.Historic.drop_collection()
 
 
 	def test(self):

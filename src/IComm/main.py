@@ -10,6 +10,7 @@ import Model.Place.ghomeuser as ghomeuser
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
+import Model.Device.temperature as ghometemperature
 import tests.base as testdata
 
 from flask import Flask, render_template, request

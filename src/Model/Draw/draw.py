@@ -21,5 +21,4 @@ class Draw(Document):
         else:
             self.form.append(f)
         self.save() 
-
         to_read.close()

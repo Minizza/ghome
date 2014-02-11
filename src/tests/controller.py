@@ -56,6 +56,9 @@ class ModelTest(unittest2.TestCase):
 
 		self.assertEqual(controller.getDeviceValue("SWITCH1_ENTREE"), True)
 
+		controller.deleteDevice(device_name = "SWITCH1_ENTREE")
+		self.assertEqual(ghomedevice.Device.objects.count(), 1)
+
 
 if __name__ == '__main__':
 	unittest2.main()

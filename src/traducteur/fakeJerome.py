@@ -9,7 +9,8 @@ fakeJerome est un simple support d'envoi de fausses trames pour tester
 sans avoir de capteur sous la main
 """
 
-server = socket.socket()
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
 def balTemp (c):

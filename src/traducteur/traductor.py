@@ -4,7 +4,7 @@
 """Socket very useful to connect to every sh*t in da world"""
 import socket
 
-"""I want da base"""
+"""I want da model"""
 from Model.Device import device
 from Model.Device import sensor 
 from Model.Device import switch
@@ -40,16 +40,19 @@ class trame :
         self.sep = receivedData[:4]
         self.length = receivedData[4:6]
         self.rOrg = receivedData[6:8]
-        self.data0 = receivedData[8:10]
-        self.data1 = receivedData[10:12]
-        self.data2 = receivedData[12:14]
-        self.data3 = receivedData[14:16]
+        self.data3 = receivedData[8:10]
+        self.data2 = receivedData[10:12]
+        self.data1 = receivedData[12:14]
+        self.data0 = receivedData[14:16]
         self.ident = receivedData[16:24]
         self.flag = receivedData[24:26]
         self.checkSum = receivedData[26:]
     
     def nameIt (self) :
         logger.info("{} is a {} ".format(self.ident,self.rOrg))
+
+    def rawView(self):
+        return self.sep + self.length+self.rOrg+" "+self.data3+self.data2+self.data1+self.data0+" "+self.ident+" "+self.flag+self.checkSum
 
     
 
@@ -95,16 +98,17 @@ class traductor :
         sum=hex(sum)
         return sum[(len(sum)-2):].upper()
 
-    def translateTemp(trameUsed):
+    def translateTemp(self,trameUsed):
         """
-        return the temperature (range 0-40 c) from data byte 1 
+        return the temperature (range 0-40 c) from data byte 2 
         """
         rowTemp=int(trameUsed.data1,16)
-        temp = rowTemp*40/255
+        temp = rowTemp*40/255.0
         return temp
 
 
     def checkTrame(self):
+        logger.info("Trame used : {}".format(self.trameUsed.rawView()))
         if ("A55A" not in self.trameUsed.sep):
             logger.info("Wrong separator, rejected")
             return False
@@ -118,17 +122,19 @@ class traductor :
             #Identifier le type de trame && Traiter les data de la trame
             newData = '' #la nouvelle data a entrer en base, type dynamique
             if (sensorUsed.__class__.__name__=="Switch"):
-                if (self.trameUsed.data3=='09'):
+                if (self.trameUsed.data0=='09'):
                     logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
                     newData = True
-                else :
+                elif (self.trameUsed.data0=='08'):
                     logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
                     newData = False
+                else:
+                    logger.info("Strange state : ".format(self.trameUsed.data2))
             elif (sensorUsed.__class__.__name__=="Temperature"):
                 newData = self.translateTemp(self.trameUsed)
                 logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
             else :
-                print ko
+                logger.info("Bad temperature")
             "Update de la trame au niveau de la base"
             sensorUsed.update(newData)
             

@@ -45,6 +45,10 @@ def addDevice(device_id, device_name, device_type):
     newDevice.save()
     return True
 
+def deleteDevice(device_name):
+    device = getDevice(device_name = device_name)
+    device.deleteDevice()
+
 def updateDevice(device_name, state):
     device = getDevice(device_name = device_name)
     device.update(stateValue = state)

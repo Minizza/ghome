@@ -76,31 +76,40 @@ class traductor :
         if message:
             self.trameUsed = trame(message)
 
-    def doChecksum(self):
-    	"""
+    def doChecksum(self,trameUsed):
+        """
         Sum up all the bytes of the trame except sep and take the 2 last byte
         """
         sum=0
-        sum+=int(self.trameUsed.length,16)
-        sum+=int(self.trameUsed.rOrg,16)
-        sum+=int(self.trameUsed.data0,16)
-        sum+=int(self.trameUsed.data1,16)
-        sum+=int(self.trameUsed.data2,16)
-        sum+=int(self.trameUsed.data3,16)
-        sum+=int(self.trameUsed.ident[:2],16)
-        sum+=int(self.trameUsed.ident[2:4],16)
-        sum+=int(self.trameUsed.ident[4:6],16)
-        sum+=int(self.trameUsed.ident[6:8],16)
-        sum+=int(self.trameUsed.flag,16)
+        sum+=int(trameUsed.length,16)
+        sum+=int(trameUsed.rOrg,16)
+        sum+=int(trameUsed.data0,16)
+        sum+=int(trameUsed.data1,16)
+        sum+=int(trameUsed.data2,16)
+        sum+=int(trameUsed.data3,16)
+        sum+=int(trameUsed.ident[:2],16)
+        sum+=int(trameUsed.ident[2:4],16)
+        sum+=int(trameUsed.ident[4:6],16)
+        sum+=int(trameUsed.ident[6:8],16)
+        sum+=int(trameUsed.flag,16)
         sum=hex(sum)
         return sum[(len(sum)-2):].upper()
+
+    def translateTemp(trameUsed):
+        """
+        return the temperature (range 0-40 c) from data byte 1 
+        """
+        rowTemp=int(trameUsed.data1,16)
+        temp = rowTemp*40/255
+        return temp
+
 
     def checkTrame(self):
         if ("A55A" not in self.trameUsed.sep):
             logger.info("Wrong separator, rejected")
             return False
-        if (self.doChecksum() not in self.trameUsed.checkSum):     
-        	#Mauvais checkSum
+        if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
+            #Mauvais checkSum
             logger.info("Wrong checksum, expected : {}, rejected".format(self.doChecksum()))
             return False
         if (self.trameUsed.ident in self.identSet):
@@ -110,11 +119,14 @@ class traductor :
             newData = '' #la nouvelle data a entrer en base, type dynamique
             if (sensorUsed.__class__.__name__=="Switch"):
                 if (self.trameUsed.data3=='09'):
+                    logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
                     newData = True
                 else :
+                    logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
                     newData = False
             elif (sensorUsed.__class__.__name__=="Temperature"):
-                print okok
+                newData = self.translateTemp(self.trameUsed)
+                logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
             else :
                 print ko
             "Update de la trame au niveau de la base"

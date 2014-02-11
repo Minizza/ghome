@@ -12,6 +12,8 @@ import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
 import tests.base as testdata
 
+import forms.NewDeviceForm as forms
+
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -75,20 +77,19 @@ def connection_post():
     else : 
         return render_template('connection.html')
 
-@app.route('/devices', methods=["POST"])
-@requires_roles('admin')
-def add_device():
-    connect('test')
-    new = ghomesensor.Sensor(physic_id="ihfd", name="toto")
-    new.save()
-    return devices()
-
-@app.route('/devices')
+@app.route('/devices', methods=["GET", "POST"])
 @requires_roles('admin')
 def devices():
     connect('test')
-    devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
-    return render_template('devices.html', devices=devices)
+    newForm = forms.NewDeviceForm()
+    if newForm.validate_on_submit():
+        connect('test')
+        new = ghomesensor.Sensor(physic_id=newForm.physic_id.data, name=newForm.name.data)
+        new.save()
+        return redirect('/devices')
+    else:
+        devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
+        return render_template('devices.html', devices=devices, form=newForm)
 
 @app.route('/logout')
 def logout():

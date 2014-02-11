@@ -29,16 +29,18 @@
             <div class="tab-content">
                 {% for device in devices %}
                 <div class="tab-pane" id="device_{{ loop.index }}">
-                    {{ device.physic_id }}
+                    <div class="attributes_list">
+                    <div class="attribute"><span class="attr_label">Id physique</span><span class="attr_value">{{ device.physic_id }}</span></div>
+                    <div class="attribute"><span class="attr_label">Nom</span><span class="attr_value">{{ device.name }}</span></div>
+                    </div>
                 </div>
                 {% endfor %}
                 <div class="tab-pane" id="device_new">
-                    <form class="navbar-form navbar-left" method="POST">
-                      <div class="form-group">
-                        <input type="text" name="new_physical_id" class="form-control" placeholder="id physique">
-                        <input type="text" name="new_name" class="form-control" placeholder="nom">
-                      </div>
-                      <button type="submit" class="btn btn-default">Ajouter</button>
+                    <form method="POST" action="/devices">
+                        {{ form.csrf_token }}
+                        {{ form.physic_id.label }} {{ form.physic_id(size=20) }}<br/>
+                        {{ form.name.label }} {{ form.name(size=20) }}<br/>
+                        <input type="submit" value="Valider">
                     </form>
                 </div>
             </div>

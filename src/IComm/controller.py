@@ -22,9 +22,13 @@ import Model.Place.ghomeuser as ghomeuser
 
 connect('test')
 
+def getDevice(device_name):
+    device = ghomedevice.Device.objects(name = device_name)[0]
+    return device
+
 # Get a device current value using its name
 def getDeviceValue(device_name):
-    device = ghomedevice.Device.objects(name = device_name)[0]
+    device = getDevice(device_name = device_name)
     return device.current_state
 
 # Add a device to the database, using its device_id, device_name and device_type
@@ -33,8 +37,18 @@ def addDevice(device_id, device_name, device_type):
         newDevice = switch.Switch(physic_id = device_id, name = device_name)    
     elif device_type.lower() == "temperature":
         newDevice = temperature.Temperature(physic_id = device_id, name = device_name)
+    elif device_type.lower() == "actuator":
+        newDevice = actuator.Actuator(physic_id = device_id, name = device_name)
     else:
         return False
 
     newDevice.save()
     return True
+
+def deleteDevice(device_name):
+    device = getDevice(device_name = device_name)
+    device.deleteDevice()
+
+def updateDevice(device_name, state):
+    device = getDevice(device_name = device_name)
+    device.update(stateValue = state)

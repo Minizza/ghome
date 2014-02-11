@@ -5,11 +5,14 @@ from functools import wraps
 from flask import Flask, render_template, request, session, redirect
 from mongoengine import *
 
+import json
+
 import Model.Place.ghomeuser as ghomeuser
 
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
+import Model.Device.temperature as ghometemperature
 import tests.base as testdata
 
 import forms.NewDeviceForm as forms
@@ -50,7 +53,7 @@ def index():
     
 @app.route('/connection')
 def connection():
-    return render_template('connection.html')
+    return render_template('connection.html', message="Please enter your login and your password")
 	
 @app.route('/testtemp')
 def testTemperature():
@@ -75,7 +78,7 @@ def connection_post():
     if find:
         return render_template('index.html')
     else : 
-        return render_template('connection.html')
+        return render_template('connection.html', message = "Wrong login or password, please try again.")
 
 @app.route('/devices', methods=["GET", "POST"])
 @requires_roles('admin')
@@ -103,7 +106,11 @@ def error(content="Une erreur est survenue.", type="", head="Erreur"):
 
 @app.route('/launchGame')
 def launchGame():
-    return render_template('gameView.html')
+    devices = ghomedevice.Device.objects
+    aFile = open('templates/game.json','r+')
+    for device in devices :
+        json.dump(device.name,aFile)
+    return render_template('gameView.html', devices=devices)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", debug=True, port=5000)

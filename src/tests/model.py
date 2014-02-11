@@ -29,6 +29,7 @@ class ModelTest(unittest2.TestCase):
 		connect('test')
 
 		ghomeuser.GHomeUser.drop_collection()
+		historic.Historic.drop_collection()
 		ghomedevice.Device.drop_collection()
 		draw.Draw.drop_collection()	
 		place.Place.drop_collection()
@@ -138,6 +139,10 @@ class ModelTest(unittest2.TestCase):
 			else:
 				print "Physic id: ", device.physic_id
 				self.assertTrue(False)
+
+		capteur1.deleteDevice()
+		self.assertEqual(ghomedevice.Device.objects.count(), 3)
+		self.assertEqual(historic.Historic.objects.count(), 3)
 	########################################################################
 
 

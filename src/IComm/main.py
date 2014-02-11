@@ -12,6 +12,7 @@ import Model.Place.ghomeuser as ghomeuser
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
+import Model.Device.temperature as ghometemperature
 import tests.base as testdata
 
 from flask import Flask, render_template, request
@@ -50,7 +51,7 @@ def index():
     
 @app.route('/connection')
 def connection():
-    return render_template('connection.html')
+    return render_template('connection.html', message="Please enter your login and your password")
 	
 @app.route('/testtemp')
 def testTemperature():
@@ -75,7 +76,7 @@ def connection_post():
     if find:
         return render_template('index.html')
     else : 
-        return render_template('connection.html')
+        return render_template('connection.html', message = "Wrong login or password, please try again.")
 
 @app.route('/devices', methods=["POST"])
 @requires_roles('admin')

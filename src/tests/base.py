@@ -7,6 +7,7 @@ import datetime
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as sensor
 import Model.Device.actuator as actuator
+import Model.Device.temperature as temperature
 import Model.Device.historic as historic
 import Model.Draw.draw as draw 
 import Model.Draw.form as form
@@ -50,10 +51,13 @@ def device_test():
 
 	device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde", coordX = 300, coordY = 400)
 	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 25, coordY = 550)
+	device3 = temperature.Temperature(physic_id = "AZ3RT1UI0P", name = "Capteur température n°1", current_state = "15")
+
 
 	#Adding new users
 	device1.save()
-	device2.save() 
+	device2.save()
+	device3.save()
 
 	#Printing users in Utilisateur base
 	for device in ghomedevice.Device.objects:

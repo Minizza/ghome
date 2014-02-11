@@ -48,8 +48,8 @@ def device_test():
 	#Deleting pre-existing users to clean the test database
 	ghomedevice.Device.drop_collection()
 
-	device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde")
-	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse")
+	device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde", coordX = 300, coordY = 400)
+	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 25, coordY = 550)
 
 	#Adding new users
 	device1.save()

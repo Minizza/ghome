@@ -2,7 +2,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
-    
+var player
 
 function updateData ()
 {
@@ -10,9 +10,8 @@ function updateData ()
                 dataType: "json",
                 url:"/launchGame", 
                 type:"POST", 
-                mimeType : "application/json"
-                success : function (data) 
-                            {}
+                mimeType : "application/json",
+                success : function (data) {}
             });
 }
 
@@ -26,6 +25,9 @@ function GameState ()
 
         var x;
         var y; 
+
+        updateData();
+
         for (var i=0; i<2; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
@@ -46,6 +48,12 @@ function GameState ()
             enemies[i].x = x;
             enemies[i].y = y;
         }
+
+		player = new jaws.Sprite({ image:"../static/medias/player.png" });
+	    var playerSpeed = 4;
+		player.x = 300;
+	    player.y = 250;
+                    
     }   
 	
     this.update = function() { 
@@ -56,6 +64,7 @@ function GameState ()
             enemies[i].x += Math.floor((Math.random()*3)-1);
             enemies[i].y += Math.floor((Math.random()*3)-1);
         }
+        
     }
             
 	this.draw = function() { 
@@ -69,6 +78,8 @@ function GameState ()
             allies[i].draw();
             enemies[i].draw();
         }
+		
+		player.draw();
     }
 }
      
@@ -76,5 +87,6 @@ window.onload = function() {
     jaws.assets.add("../static/medias/capteur.png");
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
+	
     jaws.start(GameState);
 };

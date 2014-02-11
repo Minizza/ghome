@@ -10,6 +10,7 @@ import Model.Place.ghomeuser as ghomeuser
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
+import Model.Device.temperature as ghometemperature
 import tests.base as testdata
 
 from flask import Flask, render_template, request
@@ -49,6 +50,12 @@ def index():
 @app.route('/connection')
 def connection():
     return render_template('connection.html')
+	
+@app.route('/testtemp')
+def testTemperature():
+    connect('test')
+    devices = ghometemperature.Temperature.objects
+    return render_template('testtemp.html', devices=devices)
     
 
 @app.route('/connection', methods=["POST"])

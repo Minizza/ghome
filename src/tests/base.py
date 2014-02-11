@@ -10,7 +10,7 @@ import Model.Device.actuator as actuator
 import Model.Device.temperature as temperature
 import Model.Device.historic as historic
 import Model.Draw.draw as draw 
-import Model.Draw.form as form
+#import Model.Draw.form as form
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
 

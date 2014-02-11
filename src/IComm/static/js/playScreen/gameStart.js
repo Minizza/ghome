@@ -50,7 +50,6 @@ function GameState ()
         }
 
 		player = new jaws.Sprite({ image:"../static/medias/player.png" });
-	    var playerSpeed = 4;
 		player.x = 300;
 	    player.y = 250;
                     
@@ -64,6 +63,19 @@ function GameState ()
             enemies[i].x += Math.floor((Math.random()*3)-1);
             enemies[i].y += Math.floor((Math.random()*3)-1);
         }
+		
+		if (jaws.pressed("left")) {
+	      player.x -= 3;
+	    }
+	    if (jaws.pressed("right")) {
+	      player.x += 3;
+	    }
+		if (jaws.pressed("up")) {
+	      player.y -= 3;
+	    }
+	    if (jaws.pressed("down")) {
+	      player.y += 3;
+	    }
         
     }
             

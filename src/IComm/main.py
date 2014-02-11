@@ -105,11 +105,20 @@ def error(content="Une erreur est survenue.", type="", head="Erreur"):
 
 @app.route('/launchGame')
 def launchGame():
+    return render_template('gameView.html')
+
+@app.route('/launchGame', methods=["POST"])
+def gameSetQuery():
     devices = ghomedevice.Device.objects
-    aFile = open('templates/game.json','r+')
+    data = "["
     for device in devices :
-        json.dump(device.name,aFile)
-    return render_template('gameView.html', devices=devices)
+        data+="{"
+
+        data+="},"
+    data = data[:len(data)-1]
+    print data
+    data +="]"
+    return json.dumps(data)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", debug=True, port=5000)

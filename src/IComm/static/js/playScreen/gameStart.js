@@ -4,6 +4,20 @@ var allies = new Array ();
 var enemies = new Array ();
     
 
+function updateData ()
+{
+    $.ajax({    
+                dataType: "json",
+                url:"/launchGame", 
+                type:"POST", 
+                mimeType : "application/json"
+                success : function (data) 
+                            {}
+            });
+}
+
+
+
 function GameState ()
 {
             
@@ -40,13 +54,7 @@ function GameState ()
                 }   
             this.update = function() 
                 { 
-                    for ( var i=0 ; i < allies.length ; i++)
-                    {
-                        allies[i].x += Math.floor((Math.random()*3)-1);
-                        allies[i].y += Math.floor((Math.random()*3)-1);
-                        enemies[i].x += Math.floor((Math.random()*3)-1);
-                        enemies[i].y += Math.floor((Math.random()*3)-1);
-                    }
+                    
                 }
             this.draw = function() 
                 { 

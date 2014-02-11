@@ -16,7 +16,6 @@ import Model.Device.temperature as temperature
 import Model.Device.historic as historic
 
 import Model.Draw.draw as draw 
-import Model.Draw.form as form
 
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
@@ -33,7 +32,6 @@ class ModelTest(unittest2.TestCase):
 		ghomedevice.Device.drop_collection()
 		draw.Draw.drop_collection()	
 		place.Place.drop_collection()
-		form.Form.drop_collection()
 
 	########################################################################
 	# Tests for User base
@@ -155,20 +153,26 @@ class ModelTest(unittest2.TestCase):
 		#place.Place.drop_collection()
 		#form.Form.drop_collection()		
 		
-		form1 = form.Form(coordX = [0, 10], coordY = [0, 23], coordZ = 3)
-		form1.save()
-		
-		homeDraw = draw.Draw(form = [form1])
+		homeDraw = draw.Draw()
 		homeDraw.save()
+
+		homeDraw.addForm("Rubiks_cube.svg")
+		homeDraw.addForm("Rubiks_cube.svg")
 		
 		home = place.Place(name = "HOME", draw = homeDraw, maxX = 30, maxY = 30, maxZ = 6, users = [], devices = ghomedevice.Device.objects)
+		home.save()
 		
 		for aPlace in place.Place.objects:
 			if aPlace.name == "HOME":
-				self.assertEqual(maxX, 30)
-				self.assertEqual(maxY, 30)
-				self.assertEqual(maxZ, 30)
+				self.assertEqual(aPlace.maxX, 30)
+				self.assertEqual(aPlace.maxY, 30)
+				self.assertEqual(aPlace.maxZ, 6)
+				self.assertEqual(len(aPlace.draw.form), 2)
 				
+				"""fo = open('test', 'w')
+				fo.write(aPlace.draw.form[0].read())
+				fo.close()"""
+
 				for aUser in aPlace.users:
 					print aUser.name
 			

@@ -14,7 +14,7 @@ import Model.Device.switch as switch
 
 import Model.Device.historic as historic
 
-import Model.Draw.draw as draw 
+import Model.Draw.draw as draw
 
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
@@ -51,3 +51,7 @@ def deleteDevice(device_name):
 def updateDevice(device_name, state):
     device = getDevice(device_name = device_name)
     device.update(stateValue = state)
+
+def getForm(place_name, list_position = 0):
+    default_place = place.Place.objects(name = place_name)[0]
+    return default_place.draw.form[list_position]

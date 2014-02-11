@@ -50,9 +50,14 @@ class ModelTest(unittest2.TestCase):
 
 		controller.addDevice(device_id = "AE2R44", device_name = "SWITCH1_ENTREE", device_type = "SWITCH")
 		device_switch = ghomedevice.Device.objects(physic_id = "AE2R44")[0]
-		device_switch.update(True)
+		#device_switch.update(True)
+
+		controller.updateDevice(device_name = "SWITCH1_ENTREE", state = True)
 
 		self.assertEqual(controller.getDeviceValue("SWITCH1_ENTREE"), True)
+
+		controller.deleteDevice(device_name = "SWITCH1_ENTREE")
+		self.assertEqual(ghomedevice.Device.objects.count(), 1)
 
 
 if __name__ == '__main__':

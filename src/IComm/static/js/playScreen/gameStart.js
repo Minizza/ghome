@@ -10,9 +10,8 @@ function updateData ()
                 dataType: "json",
                 url:"/launchGame", 
                 type:"POST", 
-                mimeType : "application/json"
-                success : function (data) 
-                            {}
+                mimeType : "application/json",
+                success : function (data) {}
             });
 }
 
@@ -26,6 +25,9 @@ function GameState ()
 
         var x;
         var y; 
+
+        updateData();
+
         for (var i=0; i<2; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
@@ -56,6 +58,7 @@ function GameState ()
             enemies[i].x += Math.floor((Math.random()*3)-1);
             enemies[i].y += Math.floor((Math.random()*3)-1);
         }
+        
     }
             
 	this.draw = function() { 

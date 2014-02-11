@@ -111,13 +111,14 @@ def launchGame():
 @app.route('/launchGame', methods=["POST"])
 def gameSetQuery():
     devices = ghomedevice.Device.objects
-    data = "["
+    data = '['
     for device in devices :
-        data+="{"
-
-        data+="},"
+        data+='{'
+        data+='"id" : '+str(device.id)+','
+        data+='"coordX" : '+str(device.coordX)+','
+        data+='"coordY" : '+str(device.coordY)
+        data+='},'
     data = data[:len(data)-1]
-    print data
     data +="]"
     return json.dumps(data)
 

@@ -76,6 +76,23 @@ function GameState ()
 	    if (jaws.pressed("down")) {
 	      player.y += 3;
 	    }
+		
+		if (player.x < 35)
+	    {
+			player.x = 35;
+	    }
+		if (player.x > 610)
+	    {
+			player.x = 610;
+	    }
+		if (player.y < 40)
+	    {
+			player.y = 40;
+	    }
+		if (player.y > 545)
+	    {
+			player.y = 545;
+	    }
         
     }
             

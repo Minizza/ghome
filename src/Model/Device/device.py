@@ -39,6 +39,11 @@ class Device(Document):
             self.historic.date.append(stateDate)
             self.historic.state.append(stateValue)
         self.historic.save()
+
+    def deleteDevice(self):
+        if (self.historic):
+            self.historic.delete()
+        self.delete()
         
     def update(self, stateValue):
         self.addState(datetime.datetime.now(), self.current_state)

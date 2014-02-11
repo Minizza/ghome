@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% set active_page = "index" %}
+
+{% block title %}Index{% endblock %}
+
+{% block css %}<link href="static/css/testtemp.css" rel="stylesheet">{% endblock %} 
+
+{% block content %}
+<div class="page-header">
+    <h1>
+        Liste des périphériques
+    </h1>
+</div>
+<nav class="tabbable tabs-left">
+	
+    <div class="row">
+        <div class="col-md-6 colonne_devices">
+			<ul class="nav">
+                {% for device in devices %}
+                {{ device.name }}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="tab-content">			
+                {% for device in devices %}
+                    {{ device.current_state }}°
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+
+
+{% block js %}
+
+<script src="static/js/easter_eggs/jeromecmoi.js"></script>
+
+{% endblock %}

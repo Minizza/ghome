@@ -13,6 +13,8 @@ import Model.Device.device as ghomedevice
 import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
 import Model.Device.temperature as ghometemperature
+import Model.Device.DeviceFactory as factories
+
 import tests.base as testdata
 
 import forms.NewDeviceForm as forms
@@ -90,12 +92,13 @@ def devices():
     connect('test')
     newForm = forms.NewDeviceForm()
     if newForm.validate_on_submit():
-        connect('test')
-        new = ghomesensor.Sensor(physic_id=newForm.physic_id.data, name=newForm.name.data)
+        new = factories.DeviceFactory.newDevice(newForm.device_type.data, newForm.physic_id.data, newForm.name.data)
         new.save()
         return redirect('/devices')
     else:
         devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
+        for device in devices:
+            device.type = type(device).__name__
         return render_template('devices.html', devices=devices, form=newForm)
 
 @app.route('/logout')

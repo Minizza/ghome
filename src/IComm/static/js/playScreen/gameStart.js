@@ -1,39 +1,85 @@
+var bddDevices = new Array ();
 var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
-var player
+var player;
 
-function updateData ()
+
+
+function initData (callback)
 {
     $.ajax({    
-                dataType: "json",
-                url:"/launchGame", 
-                type:"POST", 
-                mimeType : "application/json",
-                success : function (data) {}
+                dataType: 'json',
+                url:'/launchGame', 
+                type:'POST', 
+                async :'false',
+                success : function (data) {
+                    data = JSON.parse(data);
+                    for (var i=0; i<data.length; i++)
+                    {
+                        var aDevice = new Object ();
+                        aDevice.ident = data[i].ident;
+                        aDevice.coordX = parseInt(data[i].coordX);
+                        aDevice.coordY = parseInt(data[i].coordY);
+                        bddDevices.push(aDevice);
+                    }
+                        callback ();    
+                    
+                }
             });
+    
+}
+
+
+function updateData (callback)
+{
+    $.ajax({    
+                dataType: 'json',
+                url:'/launchGame', 
+                type:'POST', 
+                async :'false',
+                success : function (data) {
+                    data = JSON.parse(data);
+                    for (var i=0; i<data.length; i++)
+                    {
+                        var aDevice = new Object ();
+                        aDevice.ident = data[i].ident;
+                        aDevice.coordX = parseInt(data[i].coordX);
+                        aDevice.coordY = parseInt(data[i].coordY);
+                        bddDevices.push(aDevice);
+                    }
+                        callback ();    
+                    
+                }
+            });
+    
 }
 
 
 
-function GameState ()
+function GameStart ()
 {
             
 
     this.setup = function() { 
-
         var x;
         var y; 
 
-        updateData();
-
-        for (var i=0; i<2; i++) {
+        for (var i=0; i<bddDevices.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
             capteurs[i] = new jaws.Sprite({image:"../static/medias/capteur.png"});
-            capteurs[i].x = x;
-            capteurs[i].y = y;
+            capteurs[i].x = bddDevices[i].coordX;
+            capteurs[i].y = bddDevices[i].coordY;
+        }
+
+        for (var i=0 ; i < 4 ; i++) {
+            actionneurs[i] = new jaws.Sprite({image:"../static/medias/actionneur.png"});
+            x = Math.floor((Math.random()*(610-35))+35);
+            y = Math.floor((Math.random()*(545-40))+40);
+            actionneurs[i].x = x;
+            actionneurs[i].y = y;
         }
 
         for (var i=0 ; i < 5 ; i++) {
@@ -49,7 +95,7 @@ function GameState ()
             enemies[i].y = y;
         }
 
-		player = new jaws.Sprite({ image:"../static/medias/player.png" });
+		player = new jaws.Sprite({ image:"../static/medias/allies.png" });
 	    var playerSpeed = 4;
 		player.x = 300;
 	    player.y = 250;
@@ -73,7 +119,10 @@ function GameState ()
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
         }
-                    
+                   
+        for (var i=0 ; i < actionneurs.length ; i++) {
+            actionneurs[i].draw();
+        } 
 		for (var i=0 ; i < allies.length ; i++) {
             allies[i].draw();
             enemies[i].draw();
@@ -85,8 +134,8 @@ function GameState ()
      
 window.onload = function() {
     jaws.assets.add("../static/medias/capteur.png");
+    jaws.assets.add("../static/medias/actionneur.png");
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
-	
-    jaws.start(GameState);
+    initData(jaws.start(GameStart));
 };

@@ -118,12 +118,12 @@ def gameSetQuery():
     data = '['
     for device in devices :
         data+='{'
-        data+='"id" : '+str(device.id)+','
-        data+='"coordX" : '+str(device.coordX)+','
-        data+='"coordY" : '+str(device.coordY)
+        data+='"ident" : '+'"'+str(device.id)+'"'+','
+        data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
+        data+='"coordY" : '+'"'+str(device.coordY)+'"'
         data+='},'
     data = data[:len(data)-1]
-    data +="]"
+    data +=']'
     return json.dumps(data)
 
 if __name__ == '__main__':

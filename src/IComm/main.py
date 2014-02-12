@@ -121,6 +121,7 @@ def gameSetQuery():
     data = '['
     for device in devices :
         data+='{'
+        data+='"type" : '+'"'+str(device.__class__.__name__)+'"'+','
         data+='"ident" : '+'"'+str(device.id)+'"'+','
         data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
         data+='"coordY" : '+'"'+str(device.coordY)+'"'

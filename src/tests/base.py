@@ -8,6 +8,7 @@ import Model.Device.device as ghomedevice
 import Model.Device.sensor as sensor
 import Model.Device.actuator as actuator
 import Model.Device.temperature as temperature
+import Model.Device.switch as switch
 import Model.Device.historic as historic
 import Model.Draw.draw as draw 
 #import Model.Draw.form as form
@@ -50,14 +51,31 @@ def device_test():
 	ghomedevice.Device.drop_collection()
 
 	device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde", coordX = 300, coordY = 400)
-	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 25, coordY = 550)
-	device3 = temperature.Temperature(physic_id = "AZ3RT1UI0P", name = "Capteur température n°1", current_state = "15", coordX = 500, coordY = 200)
 
+	#list of actuators
+	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 65, coordY = 530)
+
+	#list of temperature sensors
+	device3 = temperature.Temperature(physic_id = "AZ3RT1UI0P", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
+	device4 = temperature.Temperature(physic_id = "A23RG45I07", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
+
+	#list of switch sensors
+	device5 = switch.Switch(physic_id = "AJI24MF5", name = "Plaque pression couloir", current_state = "False", coordX = 300, coordY = 400)
+	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "False", coordX = 400, coordY = 300)
+	device7 = switch.Switch(physic_id = "A457GT6D", name = "Détecteur présence bureau", current_state = "False", coordX = 100, coordY = 400)
+	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "False", coordX = 400, coordY = 100)
+	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)
 
 	#Adding new users
 	device1.save()
 	device2.save()
 	device3.save()
+	device4.save()
+	device5.save()
+	device6.save()
+	device7.save()
+	device8.save()
+	device9.save()
 
 	#Printing users in Utilisateur base
 	for device in ghomedevice.Device.objects:

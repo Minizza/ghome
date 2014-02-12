@@ -1,4 +1,5 @@
-var bddDevices = new Array ();
+var bddCapteurs = new Array ();
+var bddActionneurs = new Array ();
 var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
@@ -18,11 +19,28 @@ function initData (callback)
                     data = JSON.parse(data);
                     for (var i=0; i<data.length; i++)
                     {
+                        console.log(data[i].type);
                         var aDevice = new Object ();
                         aDevice.ident = data[i].ident;
                         aDevice.coordX = parseInt(data[i].coordX);
                         aDevice.coordY = parseInt(data[i].coordY);
-                        bddDevices.push(aDevice);
+                        if (data[i].type == "Actuator")
+                        {
+                            bddActionneurs.push(aDevice);
+                        }
+                        else if (data[i].type == "Temperature")
+                        {
+                            bddCapteurs.push(aDevice);    
+                        }
+                        else if (data[i].type == "Switch")
+                        {
+                            bddCapteurs.push(aDevice);
+                        }
+                        else 
+                        {
+
+                        }
+                        
                     }
                         callback ();    
                     
@@ -47,7 +65,7 @@ function updateData (callback)
                         aDevice.ident = data[i].ident;
                         aDevice.coordX = parseInt(data[i].coordX);
                         aDevice.coordY = parseInt(data[i].coordY);
-                        bddDevices.push(aDevice);
+                        bddCapteurs.push(aDevice);
                     }
                         callback ();    
                     
@@ -66,20 +84,18 @@ function GameStart ()
         var x;
         var y; 
 
-        for (var i=0; i<bddDevices.length; i++) {
+        for (var i=0; i<bddCapteurs.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
             capteurs[i] = new jaws.Sprite({image:"../static/medias/capteur.png"});
-            capteurs[i].x = bddDevices[i].coordX;
-            capteurs[i].y = bddDevices[i].coordY;
+            capteurs[i].x = bddCapteurs[i].coordX;
+            capteurs[i].y = bddCapteurs[i].coordY;
         }
 
-        for (var i=0 ; i < 4 ; i++) {
+        for (var i=0 ; i < bddActionneurs.length ; i++) {
             actionneurs[i] = new jaws.Sprite({image:"../static/medias/actionneur.png"});
-            x = Math.floor((Math.random()*(610-35))+35);
-            y = Math.floor((Math.random()*(545-40))+40);
-            actionneurs[i].x = x;
-            actionneurs[i].y = y;
+            actionneurs[i].x = bddActionneurs[i].coordX;
+            actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
         for (var i=0 ; i < 5 ; i++) {

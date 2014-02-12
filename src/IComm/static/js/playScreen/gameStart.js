@@ -94,8 +94,8 @@ function GameStart ()
             enemies[i].x = x;
             enemies[i].y = y;
         }
-        
-		player = new jaws.Sprite({ image:"../static/medias/allies.png" });
+
+		player = new jaws.Sprite({ image:"../static/medias/player.png" });
 	    var playerSpeed = 4;
 		player.x = 300;
 	    player.y = 250;
@@ -104,12 +104,6 @@ function GameStart ()
 	
     this.update = function() { 
                     
-		for ( var i=0 ; i < allies.length ; i++) {
-            allies[i].x += Math.floor((Math.random()*3)-1);
-            allies[i].y += Math.floor((Math.random()*3)-1);
-            enemies[i].x += Math.floor((Math.random()*3)-1);
-            enemies[i].y += Math.floor((Math.random()*3)-1);
-        }
 		
 		if (jaws.pressed("left")) {
 	      player.x -= 3;
@@ -167,5 +161,6 @@ window.onload = function() {
     jaws.assets.add("../static/medias/actionneur.png");
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
+    jaws.assets.add("../static/medias/player.png");
     initData(jaws.start(GameStart));
 };

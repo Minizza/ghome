@@ -1,5 +1,7 @@
 var bddCapteurs = new Array ();
 var bddActionneurs = new Array ();
+var bddAllies = new Array ();
+var bddEnemies = new Array ();
 var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
@@ -36,8 +38,17 @@ function initData (callback)
                         {
                             bddCapteurs.push(aDevice);
                         }
-                        else 
+                        else if (data[i].type == "Sensor")
                         {
+
+                            if (parseInt(data[i].state) == 1)
+                            {
+                                bddAllies.push(aDevice);
+                            }
+                            else if (parseInt(data[i].state) == 2)
+                            {
+                                bddEnemies.push(aDevice);
+                            }
 
                         }
                         
@@ -98,17 +109,13 @@ function GameStart ()
             actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
-        for (var i=0 ; i < 5 ; i++) {
+        for (var i=0 ; i < bddAllies.length ; i++) {
             allies[i] = new jaws.Sprite({image:"../static/medias/allies.png"});
-            x = Math.floor((Math.random()*(610-35))+35);
-            y = Math.floor((Math.random()*(545-40))+40);
-            allies[i].x = x;
-            allies[i].y = y;
+            allies[i].x = bddAllies[i].coordX;
+            allies[i].y = bddAllies[i].coordY;
             enemies[i] = new jaws.Sprite({image:"../static/medias/enemies.png"});
-            x = Math.floor((Math.random()*(610-35))+35);
-            y = Math.floor((Math.random()*(545-40))+40);
-            enemies[i].x = x;
-            enemies[i].y = y;
+            enemies[i].x = bddEnemies[i].coordX;
+            enemies[i].y = bddEnemies[i].coordY;
         }
 
 		player = new jaws.Sprite({ image:"../static/medias/player.png" });

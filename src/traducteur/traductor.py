@@ -11,6 +11,7 @@ from Model.Device import switch
 from Model.Device import temperature
 from Model.Device import actuator
 from Model.Device import historic
+from traductor.trame import trame
 
 """I want da logger"""
 import logger.loggerConfig as myLog
@@ -21,40 +22,7 @@ from mongoengine import *
 
 logger=myLog.configure()
 connect('test')
-
-
-class trame :
-    """
-        La classe trame regroupe toutes les informations qui peuvent être
-            récupérées sur une trame, à savoir :
-                - sep, le  séparateur de trames should be "A55A"
-                - lenght, la longueur des infos d'une trame
-                - rOrg, le type de trame
-                - dataX, le byte de data X
-                - ident, l'identifiant physique du capteur
-                - flag , ...
-                - checkSum, ...
-    """
-    
-    def __init__ (self,receivedData) :
-        self.sep = receivedData[:4]
-        self.length = receivedData[4:6]
-        self.rOrg = receivedData[6:8]
-        self.data3 = receivedData[8:10]
-        self.data2 = receivedData[10:12]
-        self.data1 = receivedData[12:14]
-        self.data0 = receivedData[14:16]
-        self.ident = receivedData[16:24]
-        self.flag = receivedData[24:26]
-        self.checkSum = receivedData[26:]
-    
-    def nameIt (self) :
-        logger.info("{} is a {} ".format(self.ident,self.rOrg))
-
-    def rawView(self):
-        return self.sep + self.length+self.rOrg+" "+self.data3+self.data2+self.data1+self.data0+" "+self.ident+" "+self.flag+self.checkSum
-
-    
+   
 
 
 class traductor :
@@ -81,7 +49,7 @@ class traductor :
 
     def doChecksum(self,trameUsed):
         """
-        Sum up all the bytes of the trame except sep and take the 2 last byte
+        Sum up all the bytes of the trame except sep and return the 2 last byte
         """
         sum=0
         sum+=int(trameUsed.length,16)

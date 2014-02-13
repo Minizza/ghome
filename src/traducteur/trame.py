@@ -1,11 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""I want da logger"""
-import logger.loggerConfig as myLog
-
-logger=myLog.configure()
-
 class trame :
     """
         La classe trame regroupe toutes les informations qui peuvent être
@@ -31,9 +26,6 @@ class trame :
         self.flag = receivedData[24:26]
         if(len(receivedData)>26):
         	self.checkSum = receivedData[26:]
-    
-    def nameIt (self) :
-        logger.info("{} is a {} ".format(self.ident,self.rOrg))
 
     def lessRawView(self):
         return self.sep + self.length+self.rOrg+" "+self.data3+self.data2+self.data1+self.data0+" "+self.ident+" "+self.flag+self.checkSum
@@ -44,7 +36,7 @@ class trame :
     def calculateChecksum(self):
         """
         Sum up all the bytes of the trame except sep and take the 2 last byte
-        Then update the checksum value
+        Then update the value of checksum
         """
         sum=0
         sum+=int(self.length,16)

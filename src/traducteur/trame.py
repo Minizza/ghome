@@ -35,8 +35,11 @@ class trame :
     def nameIt (self) :
         logger.info("{} is a {} ".format(self.ident,self.rOrg))
 
-    def rawView(self):
+    def lessRawView(self):
         return self.sep + self.length+self.rOrg+" "+self.data3+self.data2+self.data1+self.data0+" "+self.ident+" "+self.flag+self.checkSum
+
+    def rawView(self):
+        return self.sep + self.length+self.rOrg+self.data3+self.data2+self.data1+self.data0+self.ident+self.flag+self.checkSum
 
     def calculateChecksum(self):
         """

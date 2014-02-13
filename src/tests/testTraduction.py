@@ -4,7 +4,6 @@ import socket
 import thread
 import unittest2
 
-import sys
 
 """I want da model"""
 from Model.Device.device import *
@@ -12,18 +11,10 @@ from Model.Device.actuator import *
 from Model.Device.historic import *
 from Model.Device.sensor import *
 from Model.Device.switch import *
-from Model.Device.temperature import *
-    
-path = "../Model/User/"
-sys.path.append(path)
+from Model.Device.temperature import *    
 
-from user import *
-
-path = "../traducteur"
-sys.path.append(path)
-
-from traductor import *
-from fakeJerome import *
+from traducteur.traductor import *
+from traducteur.trame import *
 
 from mongoengine import *
 
@@ -40,8 +31,9 @@ def send_trameDoor():
     server.bind(('', 1515))    
     server.listen(5)
     c,adrr = server.accept()
-    print "         envoie de trame"
+    print "         envoie de trame : A55A0B06000000090001B25E002B"
     c.send('A55A0B06000000090001B25E002B')
+    server.close()
 
 def send_trameTemp():
     print "Demarrage du fauxServeur"
@@ -53,7 +45,7 @@ def send_trameTemp():
     print "         envoie de trame : A55A0B07000078080089338200D0"
     c.send('A55A0B07000078080089338200D0')
     #sensor is supposed to be in da base and send temp equal to 18
-
+    server.close()
 
 
 
@@ -65,19 +57,17 @@ class ModelTest(unittest2.TestCase):
     def setUp(self):
         #Deleting pre-existing peripherique to clean the test database
         Device.drop_collection()
-        print "=============================="
+        print "==============================Début"
          
 
     def tearDown(self):
         #Deleting pre-existing peripherique to clean the test database
         Device.drop_collection()
-        print "le serveur meurt !"
-        server.close()
-        print "=============================="
+        print "==============================Fin"
     
     def test_fakeJerome(self):
         thread.start_new_thread(send_trameDoor,())
-        print "Test de fake Gérome + base + traducteur" 
+        print "     Test de fake Gérome + base + traducteur" 
         capteur1 = Sensor(physic_id = "12230EAF", name = "CAPTEUR1_CUISINE", current_state = 19)
         
         capteur1.save()
@@ -107,7 +97,7 @@ class ModelTest(unittest2.TestCase):
 
     def test_temp(self):
         thread.start_new_thread(send_trameTemp,())
-        print "Test capteur de température "
+        print "     Test capteur de température "
         capteur1 = Temperature(physic_id = "00893382", name = "CAPTEUR1_TEMP", current_state = 15)
         capteur1.save()
 

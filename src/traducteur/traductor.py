@@ -11,7 +11,7 @@ from Model.Device import switch
 from Model.Device import temperature
 from Model.Device import actuator
 from Model.Device import historic
-from traductor.trame import trame
+from traducteur import trame
 
 """I want da logger"""
 import logger.loggerConfig as myLog
@@ -23,7 +23,7 @@ from mongoengine import *
 logger=myLog.configure()
 connect('test')
    
-
+	
 
 class traductor :
     """
@@ -45,7 +45,7 @@ class traductor :
     def receive (self) :
         message = self.soc.recv(1024)
         if message:
-            self.trameUsed = trame(message)
+            self.trameUsed = trame.trame(message)
 
     def doChecksum(self,trameUsed):
         """
@@ -123,7 +123,7 @@ if __name__ == '__main__':
             message = soc.recv(1024)
             if message:
                 tram2 = trame(message)
-                tram2.nameIt()
+                print tram2.lessRawView()
     except socket.error:
         logger.info("Déconnection du serveur")
         soc.close()

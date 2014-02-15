@@ -8,6 +8,18 @@ var allies = new Array ();
 var enemies = new Array ();
 var player;
 
+//basic function needed 
+
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 
 
 function initData (callback)
@@ -24,6 +36,7 @@ function initData (callback)
                         console.log(data[i].type);
                         var aDevice = new Object ();
                         aDevice.ident = data[i].ident;
+                        aDevice.state = data[i].state;
                         aDevice.coordX = parseInt(data[i].coordX);
                         aDevice.coordY = parseInt(data[i].coordY);
                         if (data[i].type == "Actuator")
@@ -61,7 +74,7 @@ function initData (callback)
 }
 
 
-function updateData (callback)
+function updateData ()
 {
     $.ajax({    
                 dataType: 'json',
@@ -72,13 +85,41 @@ function updateData (callback)
                     data = JSON.parse(data);
                     for (var i=0; i<data.length; i++)
                     {
-                        var aDevice = new Object ();
-                        aDevice.ident = data[i].ident;
-                        aDevice.coordX = parseInt(data[i].coordX);
-                        aDevice.coordY = parseInt(data[i].coordY);
-                        bddCapteurs.push(aDevice);
+                        if (data[i].type == "Sensor")
+                        {
+
+                            if (parseInt(data[i].state) == 1)
+                            {
+                                for (var j=0; i<bddAllies.length; j++)
+                                {
+                                    if (data[i].ident == bddAllies[j].ident)
+                                    {
+                                        bddAllies[j].coordX = data[i].coordX;
+                                        bddAllies[j].coordY = data[i].coordY;
+                                        allies[j].x = data[i].coordX;
+                                        allies[j].y = data[i].coordY;
+                                    }
+                                }
+                            }
+                            else if (parseInt(data[i].state) == 2)
+                            {
+                                for (var j=0; i<bddEnemies.length; j++)
+                                {
+                                    if (data[i].ident == bddEnemies[j].ident)
+                                    {
+                                        bddEnemies[j].coordX = data[i].coordX;
+                                        bddEnemies[j].coordY = data[i].coordY;
+                                        enemies[j].x = data[i].coordX;
+                                        enemies[j].y = data[i].coordY;
+                                    }
+                                }
+                            }
+
+                        }
                     }
-                        callback ();    
+
+                    sleep(100);
+                    updateData ();    
                     
                 }
             });
@@ -122,6 +163,8 @@ function GameStart ()
 	    var playerSpeed = 4;
 		player.x = 300;
 	    player.y = 250;
+
+        updateData();
                     
     }   
 	

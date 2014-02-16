@@ -55,7 +55,7 @@ def index():
     
 @app.route('/connection')
 def connection():
-    return render_template('connection.html', message="Please enter your login and your password")
+    return render_template('connection.html')
 	
 @app.route('/testtemp')
 def testTemperature():
@@ -84,7 +84,7 @@ def connection_post():
     if find:
         return render_template('index.html')
     else : 
-        return render_template('connection.html', message = "Wrong login or password, please try again.")
+        return render_template('connection.html', notif_title="Wrong login or password", notif_content="Please try again.", notif_type="danger")
 
 @app.route('/devices', methods=["GET", "POST"])
 @requires_roles('admin')

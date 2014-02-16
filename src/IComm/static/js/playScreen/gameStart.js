@@ -1,10 +1,24 @@
 var bddCapteurs = new Array ();
 var bddActionneurs = new Array ();
+var bddAllies = new Array ();
+var bddEnemies = new Array ();
 var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var player;
+
+//basic function needed 
+
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
 
 
 
@@ -22,6 +36,7 @@ function initData (callback)
                         console.log(data[i].type);
                         var aDevice = new Object ();
                         aDevice.ident = data[i].ident;
+                        aDevice.state = data[i].state;
                         aDevice.coordX = parseInt(data[i].coordX);
                         aDevice.coordY = parseInt(data[i].coordY);
                         if (data[i].type == "Actuator")
@@ -36,8 +51,17 @@ function initData (callback)
                         {
                             bddCapteurs.push(aDevice);
                         }
-                        else 
+                        else if (data[i].type == "Sensor")
                         {
+
+                            if (parseInt(data[i].state) == 1)
+                            {
+                                bddAllies.push(aDevice);
+                            }
+                            else if (parseInt(data[i].state) == 2)
+                            {
+                                bddEnemies.push(aDevice);
+                            }
 
                         }
                         
@@ -50,7 +74,7 @@ function initData (callback)
 }
 
 
-function updateData (callback)
+function updateData ()
 {
     $.ajax({    
                 dataType: 'json',
@@ -61,13 +85,41 @@ function updateData (callback)
                     data = JSON.parse(data);
                     for (var i=0; i<data.length; i++)
                     {
-                        var aDevice = new Object ();
-                        aDevice.ident = data[i].ident;
-                        aDevice.coordX = parseInt(data[i].coordX);
-                        aDevice.coordY = parseInt(data[i].coordY);
-                        bddCapteurs.push(aDevice);
+                        if (data[i].type == "Sensor")
+                        {
+
+                            if (parseInt(data[i].state) == 1)
+                            {
+                                for (var j=0; i<bddAllies.length; j++)
+                                {
+                                    if (data[i].ident == bddAllies[j].ident)
+                                    {
+                                        bddAllies[j].coordX = data[i].coordX;
+                                        bddAllies[j].coordY = data[i].coordY;
+                                        allies[j].x = data[i].coordX;
+                                        allies[j].y = data[i].coordY;
+                                    }
+                                }
+                            }
+                            else if (parseInt(data[i].state) == 2)
+                            {
+                                for (var j=0; i<bddEnemies.length; j++)
+                                {
+                                    if (data[i].ident == bddEnemies[j].ident)
+                                    {
+                                        bddEnemies[j].coordX = data[i].coordX;
+                                        bddEnemies[j].coordY = data[i].coordY;
+                                        enemies[j].x = data[i].coordX;
+                                        enemies[j].y = data[i].coordY;
+                                    }
+                                }
+                            }
+
+                        }
                     }
-                        callback ();    
+
+                    sleep(100);
+                    updateData ();    
                     
                 }
             });
@@ -98,23 +150,21 @@ function GameStart ()
             actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
-        for (var i=0 ; i < 5 ; i++) {
+        for (var i=0 ; i < bddAllies.length ; i++) {
             allies[i] = new jaws.Sprite({image:"../static/medias/allies.png"});
-            x = Math.floor((Math.random()*(610-35))+35);
-            y = Math.floor((Math.random()*(545-40))+40);
-            allies[i].x = x;
-            allies[i].y = y;
+            allies[i].x = bddAllies[i].coordX;
+            allies[i].y = bddAllies[i].coordY;
             enemies[i] = new jaws.Sprite({image:"../static/medias/enemies.png"});
-            x = Math.floor((Math.random()*(610-35))+35);
-            y = Math.floor((Math.random()*(545-40))+40);
-            enemies[i].x = x;
-            enemies[i].y = y;
+            enemies[i].x = bddEnemies[i].coordX;
+            enemies[i].y = bddEnemies[i].coordY;
         }
 
 		player = new jaws.Sprite({ image:"../static/medias/player.png" });
 	    var playerSpeed = 4;
 		player.x = 300;
 	    player.y = 250;
+
+        updateData();
                     
     }   
 	

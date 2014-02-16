@@ -53,7 +53,7 @@ def device_test():
 	device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde", coordX = 300, coordY = 400)
 
 	#list of actuators
-	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 65, coordY = 530)
+	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 65, coordY = 330)
 
 	#list of temperature sensors
 	device3 = temperature.Temperature(physic_id = "AZ3RT1UI0P", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
@@ -66,7 +66,21 @@ def device_test():
 	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "False", coordX = 400, coordY = 100)
 	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)
 
-	#Adding new users
+	#list of players
+		# A player is just represented by a coordonate getting sensor
+	player11 = sensor.Sensor(physic_id = "AGRGR3R7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500)
+	player12 = sensor.Sensor(physic_id = "BG458RCD", name = "Equipe 1 joueur 2", current_state = 1, coordX = 60, coordY = 500)
+	player13 = sensor.Sensor(physic_id = "DE4265JU", name = "Equipe 1 joueur 3", current_state = 1, coordX = 70, coordY = 500)
+	player14 = sensor.Sensor(physic_id = "AI3542FR", name = "Equipe 1 joueur 4", current_state = 1, coordX = 60, coordY = 510)
+	player15 = sensor.Sensor(physic_id = "FDRE42CD", name = "Equipe 1 joueur 5", current_state = 1, coordX = 50, coordY = 510)
+	player21 = sensor.Sensor(physic_id = "AB4MLFRD", name = "Equipe 2 joueur 1", current_state = 2, coordX = 600, coordY = 50)
+	player22 = sensor.Sensor(physic_id = "MP25FRCD", name = "Equipe 2 joueur 2", current_state = 2, coordX = 600, coordY = 60)
+	player23 = sensor.Sensor(physic_id = "EBBG5542", name = "Equipe 2 joueur 3", current_state = 2, coordX = 600, coordY = 70)
+	player24 = sensor.Sensor(physic_id = "MFR4E3R8", name = "Equipe 2 joueur 4", current_state = 2, coordX = 590, coordY = 60)
+	player25 = sensor.Sensor(physic_id = "3255GH67", name = "Equipe 2 joueur 5", current_state = 2, coordX = 590, coordY = 50)
+
+
+	#Adding new sensors or actuators
 	device1.save()
 	device2.save()
 	device3.save()
@@ -76,6 +90,19 @@ def device_test():
 	device7.save()
 	device8.save()
 	device9.save()
+
+	#Adding new players
+	player11.save()
+	player12.save()
+	player13.save()
+	player14.save()
+	player15.save()
+	player21.save()
+	player22.save()
+	player23.save()
+	player24.save()
+	player25.save()
+
 
 	#Printing users in Utilisateur base
 	for device in ghomedevice.Device.objects:

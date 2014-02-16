@@ -32,7 +32,7 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             if get_current_user_role() not in roles:
-                return error("Eh oh tu t'as pas les droits la","page inaccessible")
+                return error("Eh oh tu t'as pas les droits là","page inaccessible")
             return f(*args, **kwargs)
         return wrapped
     return wrapper
@@ -100,6 +100,17 @@ def devices():
         for device in devices:
             device.type = type(device).__name__
         return render_template('devices.html', devices=devices, form=newForm)
+
+@app.route('/devices/remove', methods=["POST"])
+@requires_roles('admin')
+def remove_device():
+    connect('test')
+    devicePhysicId = request.form['physic_id']
+    device = ghomedevice.Device.objects(physic_id = devicePhysicId)
+    #Vérification si objet existant ?
+    device.delete()
+    return redirect('/devices')
+
 
 @app.route('/logout')
 def logout():

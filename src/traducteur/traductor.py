@@ -11,7 +11,7 @@ from Model.Device import switch
 from Model.Device import temperature
 from Model.Device import actuator
 from Model.Device import historic
-from traducteur import trame
+from traducteur import trame 
 
 """I want da logger"""
 import logger.loggerConfig as myLog
@@ -78,11 +78,11 @@ class traductor :
     def checkTrame(self):
         logger.info("Trame used : {}".format(self.trameUsed.rawView()))
         if ("A55A" not in self.trameUsed.sep):
-            logger.info("Wrong separator, rejected")
+            logger.warn("Wrong separator, rejected")
             return False
         if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
             #Mauvais checkSum
-            logger.info("Wrong checksum, expected : {}, rejected".format(self.doChecksum()))
+            logger.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
             return False
         if (self.trameUsed.ident in self.identSet):
             #Recuperer le capteur en bdd
@@ -97,14 +97,15 @@ class traductor :
                     logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
                     newData = False
                 else:
-                    logger.info("Strange state : ".format(self.trameUsed.data2))
+                    logger.warn("Strange state : ".format(self.trameUsed.data2))
             elif (sensorUsed.__class__.__name__=="Temperature"):
                 newData = self.translateTemp(self.trameUsed)
                 logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
             else :
-                logger.info("Other Captor (not handle (YET !) )")
+                logger.warn("Other Captor (not handle (YET !) )")
             "Update de la trame au niveau de la base"
-            sensorUsed.update(newData)
+            if newData :
+            	sensorUsed.update(newData)
             
 
     def updateIdentSet(self):
@@ -122,7 +123,7 @@ if __name__ == '__main__':
         while 1 :
             message = soc.recv(1024)
             if message:
-                tram2 = trame(message)
+                tram2 = trame.trame(message)
                 print tram2.lessRawView()
     except socket.error:
         logger.info("Déconnection du serveur")

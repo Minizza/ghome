@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+{% set active_page = "draw" %} 
+{% block title %}Draw{% endblock %}
+
+{% block css %}
+    <link href="static/css/draw.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <svg id="plan" width="500" height="500"></svg>
+    <button type="button" id="export" class="btn btn-primary">Export SVG</button>
+{% endblock %}
+
+{% block js %}
+    <script src="static/js/draw.js"></script>
+{% endblock %}

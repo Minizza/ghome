@@ -12,6 +12,8 @@ import Model.Device.sensor as ghomesensor
 import Model.Device.actuator as ghomeactuator
 import tests.base as testdata
 
+import json
+
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -83,6 +85,10 @@ def devices():
     connect('test')
     devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
     return render_template('devices.html', devices=devices)
+
+@app.route('/draw')
+def draw():
+    return render_template('draw.html')
 
 @app.route('/logout')
 def logout():

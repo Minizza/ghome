@@ -21,7 +21,6 @@ from mongoengine import *
 
 
 
-connect('test')
 
 
 
@@ -58,6 +57,7 @@ class ModelTest(unittest2.TestCase):
     ########################################################################
 
     def setUp(self):
+        connect('test')
         #Deleting pre-existing peripherique to clean the test database
         Device.drop_collection()
         print ("==============================Début")
@@ -79,23 +79,24 @@ class ModelTest(unittest2.TestCase):
         capteur = Switch(physic_id = tram.ident, name = "INTERRUPTEUR_PLAQUE", current_state = False)
         capteur.save()
 
-        print (colorama.Fore.MAGENTA + "Base : ")
+        print (colorama.Fore.MAGENTA + "Base : "+colorama.Fore.RESET)
         for device in Device.objects:
-            print device.physic_id, " ", device.current_state
-        print colorama.Fore.RESET
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
         tradMeThis = traductor()
-        tradMeThis.connect('',1515)
-        tradMeThis.receive()
-        tradMeThis.checkTrame()
+        # tradMeThis.connect('',1515)
+        # tradMeThis.receive()
+        # tradMeThis.checkTrame()
+        tradMeThis.launch('',1515)
 
         comparedCapt = Sensor.objects(physic_id=tram.ident)[0]
         print comparedCapt.current_state
 
-        print (colorama.Fore.MAGENTA + "Base after: ")
+        print (colorama.Fore.MAGENTA + "Base after: "+colorama.Fore.RESET)
         for device in Device.objects:
-            print device.physic_id, " ", device.current_state
-        print colorama.Fore.RESET
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
+        print "                     ARRET"
+        tradMeThis.stop()
         self.assertTrue(comparedCapt.current_state)
 
 
@@ -107,20 +108,20 @@ class ModelTest(unittest2.TestCase):
 
         assert (capteur1.physic_id in daatObj.physic_id for daatObj in Device.objects),"New sensor in Da dataBase"
 
-        print (colorama.Fore.MAGENTA + "Base before: ")
+        print (colorama.Fore.MAGENTA + "Base before: "+colorama.Fore.RESET)
         for device in Device.objects:
-            print device.physic_id, " ", device.current_state
-        print colorama.Fore.RESET
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
+
         tradMeThis = traductor()
-        tradMeThis.connect('',1515)
-        tradMeThis.receive()
-        tradMeThis.checkTrame()
+        # tradMeThis.connect('',1515)
+        # tradMeThis.receive()
+        # tradMeThis.checkTrame()
+        tradMeThis.launch('',1515)
 
-        print (colorama.Fore.MAGENTA + "Base after : ")
+        print (colorama.Fore.MAGENTA + "Base after : "+colorama.Fore.RESET)
         for device in Device.objects:
-            print device.physic_id, " ", device.current_state
-        print colorama.Fore.RESET
-
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
+        tradMeThis.stop()
 
         
 ########################################################################

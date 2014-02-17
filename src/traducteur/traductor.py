@@ -107,7 +107,7 @@ class traductor ():
         return the temperature (range 0-40 c) from data byte 2 
         """
         rowTemp=int(trameUsed.data1,16)
-        temp = rowTemp*40/255.0
+        temp = round((rowTemp*40/255.0),3)
         return temp
 
 

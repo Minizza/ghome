@@ -49,9 +49,10 @@ function initData (callback)
                         }
                         else if (data[i].type == "Switch")
                         {
+                            aDevice.detect = 0;
                             bddCapteurs.push(aDevice);
                         }
-                        else if (data[i].type == "Sensor")
+                        else if (data[i].type == "Position")
                         {
 
                             if (parseInt(data[i].state) == 1)
@@ -85,13 +86,14 @@ function updateData ()
                     data = JSON.parse(data);
                     for (var i=0; i<data.length; i++)
                     {
-                        if (data[i].type == "Sensor")
+                        if (data[i].type == "Position")
                         {
 
                             if (parseInt(data[i].state) == 1)
                             {
                                 for (var j=0; i<bddAllies.length; j++)
                                 {
+                                    console.log(bddAllies[j].ident);
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
                                         bddAllies[j].coordX = data[i].coordX;
@@ -116,10 +118,17 @@ function updateData ()
                             }
 
                         }
-                    }
-
-                    sleep(100);
-                    updateData ();    
+                        else if ((data[i].type == "Switch")||(data[i].type == "Temperature"))
+                        {
+                            for (var j=0; i<bddCapteurs.length; j++)
+                                {
+                                    if (data[i].ident == bddCapteurs[j].ident)
+                                    {
+                                        bddCapteurs[j].state = data[i].state;
+                                    }
+                                }
+                        }
+                    }  
                     
                 }
             });
@@ -127,14 +136,22 @@ function updateData ()
 }
 
 
+//Fonctions de traitement des events
+function canvasClicked ()
+{
+
+}
+
 
 function GameStart ()
 {
-            
+        
+    var Eoo = 0;        
 
     this.setup = function() { 
         var x;
         var y; 
+        
 
         for (var i=0; i<bddCapteurs.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
@@ -164,13 +181,16 @@ function GameStart ()
 		player.x = 300;
 	    player.y = 250;
 
+
         updateData();
                     
     }   
 	
+
+    
     this.update = function() { 
-                    
-		
+
+
 		if (jaws.pressed("left")) {
 	      player.x -= 3;
 	    }
@@ -200,6 +220,41 @@ function GameStart ()
 	    {
 			player.y = 545;
 	    }
+
+        
+        if (Eoo===300)
+        {
+            Eoo =0;
+            updateData();
+        }
+        else
+        {
+            Eoo+=1;
+        }
+
+        for (var i=0; i<bddCapteurs.length; i++)
+        {
+            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
+            {
+                bddCapteurs[i].detect+=1;
+                switch(bddCapteurs[i].detect)
+                {
+                    case 15 : 
+                        capteurs[i].setImage("../static/medias/capteurS1.png");
+                        break;
+                    case 30 : 
+                        capteurs[i].setImage("../static/medias/capteurS2.png");
+                        break;
+                    case 45 : 
+                        capteurs[i].setImage("../static/medias/capteurS3.png");
+                        break;
+                    case 60 : 
+                        capteurs[i].setImage("../static/medias/capteur.png");
+                        bddCapteurs[i].detect=0;
+                        break;
+                }
+            }
+        }
         
     }
             
@@ -224,6 +279,9 @@ function GameStart ()
      
 window.onload = function() {
     jaws.assets.add("../static/medias/capteur.png");
+    jaws.assets.add("../static/medias/capteurS1.png");
+    jaws.assets.add("../static/medias/capteurS2.png");
+    jaws.assets.add("../static/medias/capteurS3.png");
     jaws.assets.add("../static/medias/actionneur.png");
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");

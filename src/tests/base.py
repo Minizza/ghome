@@ -4,11 +4,14 @@ from mongoengine import *
 
 import sys
 import datetime
+import math
+import thread
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as sensor
 import Model.Device.actuator as actuator
 import Model.Device.temperature as temperature
 import Model.Device.switch as switch
+import Model.Device.position as position
 import Model.Device.historic as historic
 import Model.Draw.draw as draw 
 #import Model.Draw.form as form
@@ -68,16 +71,16 @@ def device_test():
 
 	#list of players
 		# A player is just represented by a coordonate getting sensor
-	player11 = sensor.Sensor(physic_id = "AGRGR3R7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500)
-	player12 = sensor.Sensor(physic_id = "BG458RCD", name = "Equipe 1 joueur 2", current_state = 1, coordX = 60, coordY = 500)
-	player13 = sensor.Sensor(physic_id = "DE4265JU", name = "Equipe 1 joueur 3", current_state = 1, coordX = 70, coordY = 500)
-	player14 = sensor.Sensor(physic_id = "AI3542FR", name = "Equipe 1 joueur 4", current_state = 1, coordX = 60, coordY = 510)
-	player15 = sensor.Sensor(physic_id = "FDRE42CD", name = "Equipe 1 joueur 5", current_state = 1, coordX = 50, coordY = 510)
-	player21 = sensor.Sensor(physic_id = "AB4MLFRD", name = "Equipe 2 joueur 1", current_state = 2, coordX = 600, coordY = 50)
-	player22 = sensor.Sensor(physic_id = "MP25FRCD", name = "Equipe 2 joueur 2", current_state = 2, coordX = 600, coordY = 60)
-	player23 = sensor.Sensor(physic_id = "EBBG5542", name = "Equipe 2 joueur 3", current_state = 2, coordX = 600, coordY = 70)
-	player24 = sensor.Sensor(physic_id = "MFR4E3R8", name = "Equipe 2 joueur 4", current_state = 2, coordX = 590, coordY = 60)
-	player25 = sensor.Sensor(physic_id = "3255GH67", name = "Equipe 2 joueur 5", current_state = 2, coordX = 590, coordY = 50)
+	player11 = position.Position(physic_id = "AGRGR3R7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500)
+	player12 = position.Position(physic_id = "BG458RCD", name = "Equipe 1 joueur 2", current_state = 1, coordX = 60, coordY = 500)
+	player13 = position.Position(physic_id = "DE4265JU", name = "Equipe 1 joueur 3", current_state = 1, coordX = 70, coordY = 500)
+	player14 = position.Position(physic_id = "AI3542FR", name = "Equipe 1 joueur 4", current_state = 1, coordX = 60, coordY = 510)
+	player15 = position.Position(physic_id = "FDRE42CD", name = "Equipe 1 joueur 5", current_state = 1, coordX = 50, coordY = 510)
+	player21 = position.Position(physic_id = "AB4MLFRD", name = "Equipe 2 joueur 1", current_state = 2, coordX = 600, coordY = 50)
+	player22 = position.Position(physic_id = "MP25FRCD", name = "Equipe 2 joueur 2", current_state = 2, coordX = 600, coordY = 60)
+	player23 = position.Position(physic_id = "EBBG5542", name = "Equipe 2 joueur 3", current_state = 2, coordX = 600, coordY = 70)
+	player24 = position.Position(physic_id = "MFR4E3R8", name = "Equipe 2 joueur 4", current_state = 2, coordX = 590, coordY = 60)
+	player25 = position.Position(physic_id = "3255GH67", name = "Equipe 2 joueur 5", current_state = 2, coordX = 590, coordY = 50)
 
 
 	#Adding new sensors or actuators
@@ -107,5 +110,15 @@ def device_test():
 	#Printing users in Utilisateur base
 	for device in ghomedevice.Device.objects:
 		print device.id, " ", device.physic_id, " ", device.name
+
+	def loop() : 
+		ang = 0
+		while True:
+			player11.coordX = 500*(1-math.cos(ang)*math.cos(ang))
+			player11.coordY = 500*(1-math.cos(ang)*math.cos(ang))
+			ang += 0.001
+			player11.save()
+
+	thread.start_new_thread(loop,())
 ########################################################################
 device_test()

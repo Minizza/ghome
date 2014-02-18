@@ -54,7 +54,7 @@ class traductor ():
     
     def receive (self) :
         message = self.soc.recv(1024)
-        if message:
+        if message and len(message)==28:
             self.trameUsed = trame.trame(message)
 
     def launch(self,addr,port):
@@ -96,7 +96,7 @@ class traductor ():
 
 
     def checkTrame(self):
-        logger.info("Trame used : {}".format(self.trameUsed.rawView()))
+        logger.info("Trame used : {}".format(self.trameUsed.lessRawView()))
         if ("A55A" not in self.trameUsed.sep):
             logger.warn("Wrong separator, rejected")
             return False

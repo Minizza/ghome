@@ -57,6 +57,7 @@ class traductor ():
     def launch(self,addr,port):
         self.connect(addr,port)
         while 1:
+            self.updateIdentSet()
             self.receive()
             if self.trameUsed:
                 self.checkTrame()
@@ -133,9 +134,10 @@ class traductor ():
         """
         with self.lock:
             logger.info("Update the traductor's set of captors")
-            del(self.identSet[:])
+            #del(self.identSet[:])
+            self.identSet=[]
             for lsensor in sensor.Sensor.objects:
-                self.identSet.add(lsensor.physic_id)
+                self.identSet.append(lsensor.physic_id)
 
 
 

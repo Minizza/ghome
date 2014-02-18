@@ -4,8 +4,8 @@ from traducteur.traductor import *
 from mongoengine import *
 
 
-addr=''
-port=1515
+addr='134.214.106.23'
+port=5000
 
 def addCaptor():
     """

@@ -15,7 +15,7 @@ class DeviceFactory(object):
         elif type == "position":
             new = Position(physic_id=physic_id, name=name)
         else:
-            "Bad device creation, type " + type + " doesn't exist !"
+            raise TypeError("Bad device creation, type " + type + " doesn't exist !")
         return new
 
     @staticmethod

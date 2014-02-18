@@ -5,6 +5,8 @@ from mongoengine import *
 
 import sys
 
+import Model.Device.DeviceFactory as factory
+
 import Model.Device.device as ghomedevice
 
 import Model.Device.sensor as sensor
@@ -37,18 +39,9 @@ def getDeviceValue(device_name):
     return device.current_state
 
 # Add a device to the database, using its device_id, device_name and device_type
-def addDevice(device_id, device_name, device_type):
-    if device_type.lower() == "switch":
-        newDevice = switch.Switch(physic_id = device_id, name = device_name)    
-    elif device_type.lower() == "temperature":
-        newDevice = temperature.Temperature(physic_id = device_id, name = device_name)
-    elif device_type.lower() == "actuator":
-        newDevice = actuator.Actuator(physic_id = device_id, name = device_name)
-    else:
-        return False
-
-    newDevice.save()
-    return True
+def addDevice(device_type, device_id, device_name,):
+    device = factory.DeviceFactory.newDevice(device_type.lower(), device_id, device_name)
+    device.save()
 
 # Create a new place with a place_name
 def addPlace(place_name):

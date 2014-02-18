@@ -103,7 +103,7 @@ function updateData ()
                             }
                             else if (parseInt(data[i].state) == 2)
                             {
-                                for (var j=0; i<bddEnemies.length; j++)
+                                for (var j=0; j<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
@@ -118,7 +118,7 @@ function updateData ()
                         }
                         else if ((data[i].type == "Switch")||(data[i].type == "Temperature"))
                         {
-                            for (var j=0; i<bddCapteurs.length; j++)
+                            for (var j=0; j<bddCapteurs.length; j++)
                                 {
                                     if (data[i].ident == bddCapteurs[j].ident)
                                     {

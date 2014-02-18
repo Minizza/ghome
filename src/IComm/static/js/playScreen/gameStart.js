@@ -197,7 +197,7 @@ function GameStart ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
-            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
+            if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
             {
                 console.log(bddCapteurs[i].state);
                 bddCapteurs[i].detect+=1;

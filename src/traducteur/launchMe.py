@@ -5,7 +5,7 @@ from mongoengine import *
 
 
 addr=''
-port=5000
+port=1515
 
 def addCaptor():
     """
@@ -16,7 +16,6 @@ def main():
     addCaptor()
     myTrad=traductor()
     myTrad.launch(addr,port)
-
 
 
 if __name__ == '__main__':

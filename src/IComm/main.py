@@ -138,6 +138,8 @@ def gameSetQuery():
         data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
         data+='"coordY" : '+'"'+str(device.coordY)+'"'
         data+='},'
+        if(device.physic_id == "0001B592"):
+            print device.current_state
     data = data[:len(data)-1]
     data +=']'
     return json.dumps(data)

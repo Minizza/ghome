@@ -92,7 +92,6 @@ function updateData ()
                             {
                                 for (var j=0; i<bddAllies.length; j++)
                                 {
-                                    console.log(bddAllies[j].ident);
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
                                         bddAllies[j].coordX = data[i].coordX;
@@ -138,7 +137,13 @@ function updateData ()
 //Fonctions de traitement des events
 function canvasClicked ()
 {
-
+    for (var i=0; i<bddActionneurs.length; i++)
+    {
+        if (actionneurs[i].rect().collidePoint(jaws.mouse_x,jaws.mouse_y))
+        {
+            console.log("Hahaha, bien ouej !");
+        }
+    }
 }
 
 
@@ -186,7 +191,7 @@ function GameStart ()
     
     this.update = function() { 
         
-        if (Eoo===300)
+        if (Eoo===60)
         {
             Eoo =0;
             updateData();

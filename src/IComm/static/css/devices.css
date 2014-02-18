@@ -2,6 +2,11 @@
     max-width: 200px;
 }
 
+#new_device_button {
+	/* faire en sorte que le bouton soit fixé au bas 
+	de la page uniquement quand il n'est pas visible ?*/
+}
+
 .colonne_content {
     
 }

@@ -42,12 +42,12 @@ class traductor ():
         self.trameUsed = ''
         self.identSet = set()
         #Load all the device in the base
-        with self.lock:
-            for lsensor in sensor.Sensor.objects:
-                self.identSet.add(lsensor.physic_id)
+        self.updateIdentSet()
+
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
+        logger.info("Connected to {} : {}".format(addr,port))
     
     def receive (self) :
         message = self.soc.recv(1024)
@@ -133,11 +133,11 @@ class traductor ():
             Safely update the identifier set of the traductor
         """
         with self.lock:
-            logger.info("Update the traductor's set of captors")
             #del(self.identSet[:])
             self.identSet=[]
             for lsensor in sensor.Sensor.objects:
                 self.identSet.append(lsensor.physic_id)
+            logger.info("Traductor's set of captors updated")
 
 
 

@@ -46,33 +46,6 @@ class traductor ():
             for lsensor in sensor.Sensor.objects:
                 self.identSet.add(lsensor.physic_id)
 
-    def launch(self,addr, port):
-        """
-            Connect to the (address, port) and star a thread which analyze everything coming from that (adress, port).
-        """
-        logger.info("traductor thread launched")
-        self.connect(addr,port)
-        self.coreThread=threading.Thread(name="De core thread",target=self.threadedAutomation)
-        self.coreThread.start()
-
-    def threadedAutomation(self):
-        """
-        Analyzing thread
-        """
-        while not self.stoppedAnalyze:
-            self.receive()
-            if self.trameUsed:
-                self.checkTrame()
-
-    def stop(self):
-        """
-        Stop the analyzing thread
-        """
-        if self.coreThread.isAlive():
-            self.stoppedAnalyze=True
-            self.coreThread.join()
-            logger.info("traductor thread stopped and dead now")
-
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
     
@@ -81,6 +54,12 @@ class traductor ():
         if message:
             self.trameUsed = trame.trame(message)
 
+    def launch(self,addr,port):
+        self.connect(addr,port)
+        while 1:
+            self.receive()
+            if self.trameUsed:
+                self.checkTrame()
             
 
     def doChecksum(self,trameUsed):
@@ -139,6 +118,7 @@ class traductor ():
                 elif (sensorUsed.__class__.__name__=="Temperature"):
                     newData = self.translateTemp(self.trameUsed)
                     logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
+                #elif (sensorUsed.__class__.__name__)
                 else :
                     logger.warn("Other Captor (not handle (YET !) )")
                 # Update de la trame au niveau de la base

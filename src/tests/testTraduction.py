@@ -4,7 +4,6 @@ import socket
 import thread
 import unittest2
 import colorama
-import time
 
 """I want da model"""
 from Model.Device.device import *
@@ -83,13 +82,10 @@ class ModelTest(unittest2.TestCase):
         for device in Device.objects:
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
         tradMeThis = traductor()
-        # tradMeThis.connect('',1515)
-        # tradMeThis.receive()
-        # tradMeThis.checkTrame()
-        tradMeThis.launch('',1515)
-        
-        #Pourquoi de voir attendre !!!! 
-        time.sleep(0.1)
+        tradMeThis.connect('',1515)
+        tradMeThis.receive()
+        tradMeThis.checkTrame()
+
 
         comparedCapt = Sensor.objects(physic_id=tram.ident)[0]
         print comparedCapt.current_state
@@ -98,8 +94,6 @@ class ModelTest(unittest2.TestCase):
         for device in Device.objects:
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
-        print "                     ARRET"
-        tradMeThis.stop()
         self.assertTrue(comparedCapt.current_state)
 
 
@@ -116,18 +110,14 @@ class ModelTest(unittest2.TestCase):
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
         tradMeThis = traductor()
-        # tradMeThis.connect('',1515)
-        # tradMeThis.receive()
-        # tradMeThis.checkTrame()
-        tradMeThis.launch('',1515)
+        tradMeThis.connect('',1515)
+        tradMeThis.receive()
+        tradMeThis.checkTrame()
 
-        #Pourquoi de voir attendre !!!! 
-        time.sleep(0.1)
 
         print (colorama.Fore.MAGENTA + "Base after : "+colorama.Fore.RESET)
         for device in Device.objects:
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
-        tradMeThis.stop()
         capteur1=Sensor.objects(physic_id = "00893382")[0]
         self.assertAlmostEqual(capteur1.current_state, 18.82, places=2)
 

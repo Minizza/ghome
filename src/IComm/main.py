@@ -86,6 +86,12 @@ def connection_post():
     else : 
         return render_template('connection.html', notif_title="Wrong login or password", notif_content="Please try again.", notif_type="danger")
 
+def fetchDevices():
+    devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
+    for device in devices:
+        device.type = type(device).__name__
+    return devices
+
 @app.route('/devices', methods=["GET", "POST"])
 @requires_roles('admin')
 def devices():
@@ -93,13 +99,13 @@ def devices():
     newForm = forms.NewDeviceForm()
     if newForm.validate_on_submit():
         new = factories.DeviceFactory.newDevice(newForm.device_type.data, newForm.physic_id.data, newForm.name.data)
-        new.save()
+        try:
+            new.save()
+        except NotUniqueError as e:
+            return render_template('devices.html', devices=fetchDevices(), form=newForm, notif_title="Unique constraint violation", notif_content=e, notif_type="danger")
         return redirect('/devices')
     else:
-        devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
-        for device in devices:
-            device.type = type(device).__name__
-        return render_template('devices.html', devices=devices, form=newForm)
+        return render_template('devices.html', devices=fetchDevices(), form=newForm)
 
 @app.route('/devices/remove', methods=["POST"])
 @requires_roles('admin')

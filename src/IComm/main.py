@@ -85,10 +85,8 @@ def gamePlayerSetQuery():
 	
 @app.route('/testplayer/location', methods=["POST"])
 def getPosition():
-	ab = request.form['abscissa']
-	ord = request.form['ordinate']
-	print ab
-	print ord
+	ab = request.form['abscissa'] #min = 35 max = 610
+	ord = request.form['ordinate'] #min = 40 max = 545
 	return render_template('testplayer.html')
     
 

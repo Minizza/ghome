@@ -118,7 +118,5 @@ def device_test():
 			player11.coordY = 500*(1-math.cos(ang)*math.cos(ang))
 			ang += 0.001
 			player11.save()
-
-	thread.start_new_thread(loop,())
 ########################################################################
 device_test()

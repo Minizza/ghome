@@ -222,7 +222,7 @@ function GameStart ()
 	    }
 
         
-        if (Eoo===300)
+        if (Eoo===2)
         {
             Eoo =0;
             updateData();

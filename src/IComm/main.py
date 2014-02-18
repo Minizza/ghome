@@ -112,6 +112,16 @@ def remove_device():
     return redirect('/devices')
 
 
+@app.route('/draw')
+def draw():
+    return render_template('draw.html')
+
+@app.route('/draw', methods=["POST"])
+def save_svg():
+    if "svg" in request.form:
+        print request.form['svg']
+    return "OK"
+
 @app.route('/logout')
 def logout():
     session.pop('role', None)

@@ -36,3 +36,41 @@ A5 5A | 0B 07 | 08 28 2C 80 | 00 89 33 7F | 00 29
 A5 5A | 0B 07 | 08 28 2C 80 | 00 89 33 7F | 00 29
 A5 5A | 0B 07 | 08 28 2C 80 | 00 89 33 7F | 00 29
 
+température 
+A55A 0B07    00 00 78 08    00893382 00D0
+A55A 0B07    00 00 70 08    00893382 00C8
+A55A 0B07    08 28 2C 80    00893382 002C
+
+data bytes
+00001000 00101000 00101100 10000000
+00000000 00000000 11110000 00001000
+00000000 00000000 01110000 00001000
+			      |Temp  |	   |
+			      |Temp  |	  Bit learn
+
+A55A 0B07          20        08        01         85        00053F44 0048
+A55A 0B07          C3        45        00         0D        00053F44 00AF
+A55A 0B07          20        08        01         85        00053F44 0048
+A55A 0B07          C3        46        00         0D        00053F44 00B0
+A55A 0B07          20        08        01         85        00053F44 0048
+A55A 0B07          C3        40        00         08        00053F44 00AA
+A55A 0B07          20        08        01         85        00053F44 0048
+A55A 0B07          C3        40        00         0C        00053F44 00AA
+A55A 0B07          20        08        01         85        00053F44 0048
+A55A 0B07          C3        3B        00         0D        00053F44 00A5
+A55A 0B07          C3        47        00         0F        00053F44 00B1
+			  Voltage	illumination 			Présence/learn/PIR
+			  						Temperature
+
+Détail dernier data byte
+			  			0d
+			  					00001101
+			  						|
+			  					  learn bit
+
+			  			85
+			  						PIR bit (y a des gens ou pas)
+			  						  |
+			  					10000101
+			  							|
+			  						Occupation (on appuie sur le bouton ?)

@@ -8,6 +8,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
+var map;
 
 //basic function needed 
 
@@ -198,6 +199,10 @@ function GamePlayer ()
 		}
 		
 		SendCoordinates();
+		
+		map = new jaws.Sprite({ image:"../plan.svg" });
+		map.x = 35;
+		map.y = 40;
                     
     }   
 	
@@ -290,6 +295,8 @@ function GamePlayer ()
         }
 		
 		player.draw();
+		
+		map.draw();
     }
 }
      
@@ -302,6 +309,8 @@ window.onload = function() {
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
 	jaws.assets.add("../static/medias/player.png");
+	
+	jaws.assets.add("../plan.svg");
     initData(jaws.start(GamePlayer));
 };
 

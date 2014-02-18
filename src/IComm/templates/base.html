@@ -37,12 +37,10 @@
 		<div class="container wrapper">
 			<!-- Notification -->
 			<!-- possible types : success, info, warning, danger -->
-			{% if notif_content %}
-				<div class="notif alert alert-{{'danger' if not notif_type else notif_type}} fade in">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-					<strong>{{notif_title}}</strong> {{notif_content}}
-				</div>
-			{% endif %}
+			<div class="notif alert alert-{{'danger' if not notif_type else notif_type}} fade in" {% if not notif_content %}style="display: none;"{% endif %}>
+				<button type="button" class="close" aria-hidden="true">×</button>
+				<strong>fes{{notif_title}}</strong> <span>{{notif_content}}</span>
+			</div>
 
 			<!-- Content of page -->
 			{% block content %}{% endblock %}
@@ -56,6 +54,9 @@
 
 		<!-- Bootstrap FormHelpers javascript files -->
 		<script src="static/formhelpers/js/bootstrap-formhelpers.min.js"></script>
+
+		<!-- Base JS -->
+		<script src="static/js/base.js"></script>
 
 		{% block js %}{% endblock %}
 	</body>

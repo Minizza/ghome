@@ -90,9 +90,8 @@ function updateData ()
 
                             if (parseInt(data[i].state) == 1)
                             {
-                                for (var j=0; i<bddAllies.length; j++)
+                                for (var j=0; j<bddAllies.length; j++)
                                 {
-                                    console.log(bddAllies[j].ident);
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
                                         bddAllies[j].coordX = data[i].coordX;
@@ -185,7 +184,7 @@ function GameStart ()
     this.update = function() { 
 
         
-        if (Eoo===2)
+        if (Eoo===15)
         {
             Eoo =0;
             updateData();
@@ -197,9 +196,12 @@ function GameStart ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
-            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
+            if (bddCapteurs[i].ident == "0001B592")
             {
                 console.log(bddCapteurs[i].state);
+            }
+            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
+            {
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
                 {
@@ -236,8 +238,6 @@ function GameStart ()
             allies[i].draw();
             enemies[i].draw();
         }
-		
-		player.draw();
     }
 }
      

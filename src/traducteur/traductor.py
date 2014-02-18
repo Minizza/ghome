@@ -115,6 +115,7 @@ class traductor ():
                         newData = False
                     else:
                         logger.warn("Strange state : ".format(self.trameUsed.data2))
+                        
                 elif (sensorUsed.__class__.__name__=="Temperature"):
                     newData = self.translateTemp(self.trameUsed)
                     logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))

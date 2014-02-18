@@ -67,6 +67,22 @@ def testTemperature():
 def testplayer():
     return render_template('testplayer.html')
 	
+@app.route('/testplayer', methods=["POST"])
+def gamePlayerSetQuery():
+    devices = ghomedevice.Device.objects
+    data = '['
+    for device in devices :
+        data+='{'
+        data+='"type" : '+'"'+str(device.__class__.__name__)+'"'+','
+        data+='"ident" : '+'"'+str(device.physic_id)+'"'+','
+        data+='"state" : '+'"'+str(device.current_state)+'"'+','
+        data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
+        data+='"coordY" : '+'"'+str(device.coordY)+'"'
+        data+='},'
+    data = data[:len(data)-1]
+    data +=']'
+    return json.dumps(data)
+	
 @app.route('/testplayer/location', methods=["POST"])
 def getPosition():
 	ab = request.form['abscissa']

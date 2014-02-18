@@ -140,6 +140,7 @@ class traductor ():
             self.identSet=[]
             for lsensor in sensor.Sensor.objects:
                 self.identSet.append(lsensor.physic_id)
+                logger.info(lsensor.physic_id)
             logger.info("Traductor's set of captors updated")
 
 

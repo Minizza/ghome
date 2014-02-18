@@ -64,7 +64,7 @@ def device_test():
 
 	#list of switch sensors
 	device5 = switch.Switch(physic_id = "AJI24MF5", name = "Plaque pression couloir", current_state = "False", coordX = 300, coordY = 400)
-	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "False", coordX = 400, coordY = 300)
+	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "True", coordX = 400, coordY = 300)
 	device7 = switch.Switch(physic_id = "A457GT6D", name = "Détecteur présence bureau", current_state = "False", coordX = 100, coordY = 400)
 	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "False", coordX = 400, coordY = 100)
 	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)

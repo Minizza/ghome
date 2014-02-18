@@ -66,6 +66,14 @@ def testTemperature():
 @app.route('/testplayer')
 def testplayer():
     return render_template('testplayer.html')
+	
+@app.route('/testplayer/location', methods=["POST"])
+def getPosition():
+	ab = request.form['abscissa']
+	ord = request.form['ordinate']
+	print ab
+	print ord
+	return render_template('testplayer.html')
     
 
 @app.route('/connection', methods=["POST"])

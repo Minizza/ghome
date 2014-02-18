@@ -1,5 +1,6 @@
 body {
     padding-top: 50px;
+    overflow-y: scroll;
 }
 
 .container {
@@ -13,4 +14,27 @@ body {
 .notif {
     margin-top: 20px;
     text-align: left;
+}
+
+/* BAR COLORS */
+
+.navbar {
+    background-color: #3f5e8c;
+    border-color: #3e85ed !important;
+}
+
+.navbar a {
+    color: #e5f0ec !important;
+}
+
+.navbar a:hover {
+    color: white !important;
+}
+
+.navbar li.active a {
+    background-color: #3e85ed !important;
+}
+
+.navbar .navbar-toggle {
+    background-color: #3e85ed !important;
 }

@@ -7,9 +7,35 @@
 {% endblock %}
 
 {% block content %}
-    <svg id="plan" width="580" height="505"></svg>
-    <br/>
-    <button type="button" id="export" class="btn btn-primary">Export SVG</button>
+    <div class="page-header">
+        <h1>Map of the Laser Game <small>Let's draw!</small></h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="callout blue">
+                <h4>How</h4>
+                <p>To draw a line click a first time, move and click again to end.</p>
+            </div>
+
+            <div class="callout yellow">
+                <h4>Ctrl Key</h4>
+                <p>If you hold <strong>Ctrl</strong> when you draw, you will be able to create a path instead of a single line.</p>
+            </div>
+
+            <div class="callout green">
+                <h4>Shift Key</h4>
+                <p>Hold the <strong>Shift</strong> key when you draw to make straights lines.</p>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-md-offset-1">
+            <svg class="plan" width="580" height="505"></svg>
+            <br/>
+            <button type="button" id="export" class="btn btn-primary">Export SVG</button>
+            <button type="button" id="clear" class="btn btn-primary">Clear Canvas</button>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}

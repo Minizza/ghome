@@ -34,6 +34,9 @@
 			{% include 'menu.html' %}
 		{% endblock %}
 
+		<!-- Jumbotron -->
+		{% block jumbotron %}{% endblock %}
+
 		<div class="container wrapper">
 			<!-- Notification -->
 			<!-- possible types : success, info, warning, danger -->
@@ -44,6 +47,14 @@
 
 			<!-- Content of page -->
 			{% block content %}{% endblock %}
+
+			<!-- Footer of page -->
+			<footer>
+				<hr/>
+				{% block footer %}
+					<p>&copy; Equipe Minizza</p>
+				{% endblock %}
+			</footer>
 		</div>
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

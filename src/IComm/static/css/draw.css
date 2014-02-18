@@ -2,10 +2,13 @@
     text-align: center;
 }
 
-#plan {
+.plan {
     border: 2px #313131 solid;
-    margin-top: 25px;
-    margin-bottom: 25px;
     border-radius: 5px;
     background-color: #F4F6FF;
 }
+
+.btn {
+    margin: 10px;
+}
+

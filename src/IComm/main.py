@@ -50,8 +50,7 @@ def set_current_user_role(role):
 
 @app.route('/')
 def index():
-    monTexte = "Ceci est la page d'accueil du super site"
-    return render_template('index.html', data=monTexte, notif_title="Titre", notif_content="je suis sur l'index", notif_type="success")
+    return render_template('index.html')
     
 @app.route('/connection')
 def connection():

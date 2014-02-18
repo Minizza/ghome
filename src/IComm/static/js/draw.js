@@ -1,17 +1,45 @@
 $(function() {
 
-    $svg = $("#plan");
+    $svg = $(".plan");
 
     $svg
         .on("mousedown", mousedown)
-        .on("mouseup", mouseup)
         .on("contextmenu", function(event) {     // Prevent context menu on right click
             event.preventDefault();
         });
 
-    var $line;
-    var $circle1;
-    var $circle2;
+    var ctrlPressed = false;
+    var shiftPressed = false;
+    var started = false;
+    var mouse = null;
+    var $currentLine = null;
+
+    // Get key events
+    $(window).keydown(function(event) {
+        // On Ctrl press
+        if(event.which == 17) {
+            ctrlPressed = true;
+        }
+        // On shift press
+        if(event.which == 16) {
+            shiftPressed = true;
+        }
+    }).keyup(function(event) {
+        // On Ctrl release
+        if(event.which == 17) {
+            ctrlPressed = false;
+
+            // Stop drawing if drawing started
+            if(started) {
+                started = false;
+                $currentLine = null;
+            }
+        }
+        // On shift release
+        if(event.which == 16) {
+            shiftPressed = false;
+        }
+    });
 
     // Javascript function to get the context of SVG
     function SVG(tag) {
@@ -19,48 +47,37 @@ $(function() {
     }
 
     function mousedown(event) {
-        var mouse = getMousePos($(this), event);
+        var currentMouse = getMousePos($(this), event);
 
         // Fire only on left click event
         if(event.which == 1) {
 
-            $line = drawLine(mouse.x, mouse.y, mouse.x, mouse.y);
+            drawCircle(currentMouse.x, currentMouse.y);         
 
-            $circle1 = drawCircle(mouse.x, mouse.y);
-            $circle2 = drawCircle(mouse.x, mouse.y);
+            if(started) {
+                if(ctrlPressed) {
+                    $currentLine = drawLine(currentMouse.x, currentMouse.y, currentMouse.x, currentMouse.y);
+                } else {
+                    started = false;
+                    $svg.off("mousemove");
+                }
+            } else {
+                started = true;
+                $currentLine = drawLine(currentMouse.x, currentMouse.y, currentMouse.x, currentMouse.y);
+                $svg.on("mousemove", mousemove);
+            }
 
-            $svg.on("mousemove", mousemove);
+            mouse = currentMouse;
+        
         }
         
     }
 
     function mousemove(event) {
-        var mouse = getMousePos($(this), event);
-
-        $line
-            .attr("x2", mouse.x)
-            .attr("y2", mouse.y);
-
-        $circle2
-            .attr("cx", mouse.x)
-            .attr("cy", mouse.y)
-            .attr("r", 5);
-    }
-
-    function mouseup(event) {
-        var mouse = getMousePos($(this), event);
-
-        // Fire only on left click event
-        if(event.which == 1) {
-
-            $circle2
-                .attr("cx", mouse.x)
-                .attr("cy", mouse.y)
-                .attr("r", 5);
-
-        }
-
-        $svg.off("mousemove");
+        var currentMouse = getMousePos($(this), event);
+        $currentLine
+            .attr("x2", currentMouse.x)
+            .attr("y2", currentMouse.y);
     }
 
     function getMousePos(dom, event) {
@@ -79,13 +96,7 @@ $(function() {
                 .attr('fill', '#14029D')
                 .attr('stroke', 'black')
                 .attr('stroke-width', 5)
-                .appendTo($svg)
-                .on("mouseover", function() {
-                    $(this).attr("r", 10)
-                })
-                .on("mouseout", function() {
-                    $(this).attr("r", 5)
-                });
+                .appendTo($svg);
 
         return $circle;
     }
@@ -108,6 +119,7 @@ $(function() {
         $svg.empty();
     }
 
+    // Export Button
     $export_button = $('#export');
     $export_button.click(function() {
         var html = $('<svg>').append($svg.clone()).html();
@@ -115,6 +127,13 @@ $(function() {
             clearCanvas();
             setNotification("Succès export","Le plan a été exporté.", "success");
         });
+    });
+
+    // Clear Button
+    $clear_button = $('#clear');
+    $clear_button.click(function() {
+        clearCanvas();
+        started = false;
     });
 
 });

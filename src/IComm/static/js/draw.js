@@ -1,11 +1,10 @@
-(function($){
+$(function() {
 
     $svg = $("#plan");
 
-    drawCircle(50,50);
-
     $svg
         .on("mousedown", mousedown)
+        .on("mouseup", mouseup)
         .on("contextmenu", function(event) {     // Prevent context menu on right click
             event.preventDefault();
         });
@@ -51,10 +50,15 @@
     function mouseup(event) {
         var mouse = getMousePos($(this), event);
 
-        $circle2
-            .attr("cx", mouse.x)
-            .attr("cy", mouse.y)
-            .attr("r", 5);
+        // Fire only on left click event
+        if(event.which == 1) {
+
+            $circle2
+                .attr("cx", mouse.x)
+                .attr("cy", mouse.y)
+                .attr("r", 5);
+
+        }
 
         $svg.off("mousemove");
     }
@@ -100,9 +104,17 @@
         return $line;
     }
 
+    function clearCanvas() {
+        $svg.empty();
+    }
+
     $export_button = $('#export');
     $export_button.click(function() {
-        console.log($svg);
+        var html = $('<svg>').append($svg.clone()).html();
+        $.post( "/draw", { svg: html }, function(data) {
+            clearCanvas();
+            setNotification("Succès export","Le plan a été exporté.", "success");
+        });
     });
-    
-})(jQuery);
+
+});

@@ -125,7 +125,8 @@ def draw():
 @app.route('/draw', methods=["POST"])
 def save_svg():
     if "svg" in request.form:
-        print request.form['svg']
+        with open('{}.svg'.format(CONFIG['nom_plan']), 'w') as fichiersvg:
+            fichiersvg.write(request.form['svg'])
     return "OK"
 
 @app.route('/logout')
@@ -157,6 +158,9 @@ def gameSetQuery():
     data = data[:len(data)-1]
     data +=']'
     return json.dumps(data)
+
+# Config Object
+CONFIG = json.loads(open('config.json').read())
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", debug=True, port=5000)

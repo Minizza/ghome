@@ -11,14 +11,21 @@ $(function() {
     var ctrlPressed = false;
     var shiftPressed = false;
     var started = false;
-    var mouse = null;
+    var lastPoint = null;
     var $currentLine = null;
+    var nbLines = 0;
 
     // Get key events
     $(window).keydown(function(event) {
         // On Ctrl press
         if(event.which == 17) {
             ctrlPressed = true;
+
+            if(lastPoint != null && !started) {
+                started = true;
+                $currentLine = drawLine(lastPoint.x, lastPoint.y, lastPoint.x, lastPoint.y);
+                $svg.on("mousemove", mousemove);
+            }
         }
         // On shift press
         if(event.which == 16) {
@@ -30,9 +37,11 @@ $(function() {
             ctrlPressed = false;
 
             // Stop drawing if drawing started
-            if(started) {
+            if(started && nbLines > 1) {
                 started = false;
+                $currentLine.remove();
                 $currentLine = null;
+                $svg.off("mousemove");
             }
         }
         // On shift release
@@ -47,43 +56,112 @@ $(function() {
     }
 
     function mousedown(event) {
-        var currentMouse = getMousePos($(this), event);
+        var mouse = getMousePos($(this), event);
 
         // Fire only on left click event
         if(event.which == 1) {
 
-            drawCircle(currentMouse.x, currentMouse.y);         
-
+            // Path already started
             if(started) {
+                // Continue path
                 if(ctrlPressed) {
-                    $currentLine = drawLine(currentMouse.x, currentMouse.y, currentMouse.x, currentMouse.y);
-                } else {
+                    
+                    if(shiftPressed) {
+                        closestPoint = getClosestPoint(mouse, lastPoint);
+                        drawCircle(closestPoint.x, closestPoint.y);
+                        $currentLine = drawLine(closestPoint.x, closestPoint.y, closestPoint.x, closestPoint.y);
+                        lastPoint = closestPoint;
+                    } else {
+                        drawCircle(mouse.x, mouse.y);
+                        $currentLine = drawLine(mouse.x, mouse.y, mouse.x, mouse.y);
+                        lastPoint = mouse;
+                    }
+                    
+                } 
+                // Stop path
+                else {
                     started = false;
+
+                    if(shiftPressed) {
+                        closestPoint = getClosestPoint(mouse, lastPoint);
+                        drawCircle(closestPoint.x, closestPoint.y);
+                        lastPoint = closestPoint;
+                    } else {
+                        drawCircle(mouse.x, mouse.y);
+                        lastPoint = mouse;
+                    }
+
                     $svg.off("mousemove");
                 }
-            } else {
+            } 
+            // Start path
+            else {
                 started = true;
-                $currentLine = drawLine(currentMouse.x, currentMouse.y, currentMouse.x, currentMouse.y);
+                drawCircle(mouse.x, mouse.y);
+                $currentLine = drawLine(mouse.x, mouse.y, mouse.x, mouse.y);
                 $svg.on("mousemove", mousemove);
+                lastPoint = mouse;
+                nbLines = 0;
             }
 
-            mouse = currentMouse;
+            nbLines++;
         
         }
         
     }
 
     function mousemove(event) {
-        var currentMouse = getMousePos($(this), event);
-        $currentLine
-            .attr("x2", currentMouse.x)
-            .attr("y2", currentMouse.y);
+        var mouse = getMousePos($(this), event);
+
+        if(shiftPressed) {
+            closestPoint = getClosestPoint(mouse, lastPoint);
+
+            $currentLine
+                .attr("x2", closestPoint.x)
+                .attr("y2", closestPoint.y);
+
+        } else {
+            $currentLine
+                .attr("x2", mouse.x)
+                .attr("y2", mouse.y);
+        }
+        
     }
 
+    // Get the mouse position being careful of offset
     function getMousePos(dom, event) {
         return {
             'x': event.pageX - dom.offset().left,
             'y': event.pageY - dom.offset().top
+        };
+    }
+
+    // Get the point to closest straight line
+    function getClosestPoint(point2, point1) {
+        if(point1 == null) {
+
+            x = point2.x;
+            y = point2.y;
+
+        } else {
+
+            diff_x = Math.abs(point2.x - point1.x);
+            diff_y = Math.abs(point2.y - point1.y);
+
+            var x, y;
+
+            if(diff_x >= diff_y) {
+                x = point2.x;
+                y = point1.y;
+            } else {
+                x = point1.x;
+                y = point2.y;
+            }
+        }
+
+        return {
+            'x': x,
+            'y': y
         };
     }
 

@@ -17,7 +17,7 @@ body {
 }
 
 footer {
-    text-align: left;
+    text-align: center;
 }
 
 /* BAR COLORS */
@@ -48,6 +48,7 @@ footer {
 .callout {
     padding: 5px;
     padding-left: 25px;
+    padding-right: 25px;
     margin-bottom: 25px;
     text-align: left;
     border-radius: 0 4px 4px 0;
@@ -57,6 +58,10 @@ footer {
 
 .callout h4 {
     color: #9E9E9E;
+}
+
+.callout p {
+    text-align: justify;
 }
 
 /* Callout colors */

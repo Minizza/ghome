@@ -24,8 +24,7 @@ class trame :
         self.data0 = receivedData[14:16]
         self.ident = receivedData[16:24]
         self.flag = receivedData[24:26]
-        if(len(receivedData)>26):
-        	self.checkSum = receivedData[26:]
+        self.checkSum = receivedData[26:]
 
     def lessRawView(self):
         return self.sep + self.length+self.rOrg+" "+self.data3+self.data2+self.data1+self.data0+" "+self.ident+" "+self.flag+self.checkSum

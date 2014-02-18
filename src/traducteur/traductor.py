@@ -43,7 +43,10 @@ class traductor ():
         self.identSet = set()
         #Load all the device in the base
         self.updateIdentSet()
-
+        with self.lock:
+            for lsensor in sensor.Sensor.objects:
+                self.identSet.add(lsensor.physic_id)
+                logger.info(lsensor.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))

@@ -113,10 +113,10 @@ class traductor ():
                 if (sensorUsed.__class__.__name__=="Switch"):
                     if (self.trameUsed.data0=='09'):
                         logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
-                        newData = True
+                        newData = "close"
                     elif (self.trameUsed.data0=='08'):
                         logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
-                        newData = False
+                        newData = "open"
                     else:
                         logger.warn("Strange state : ".format(self.trameUsed.data2))
                 elif (sensorUsed.__class__.__name__=="Temperature"):
@@ -128,6 +128,7 @@ class traductor ():
                 # Update de la trame au niveau de la base
                 if newData :
                     sensorUsed.update(newData)
+                    logger.info("New data {}".format(sensorUsed.current_state))
         self.trameUsed=''
             
 

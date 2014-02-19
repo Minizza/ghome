@@ -5,5 +5,7 @@ from mongoengine import *
 class Position(Sensor):
 
 	"""Class for position sensor"""
-	maxX=IntField()
-	maxY=IntField()
+	maxX=610
+	maxY=545
+	trameStart="A55A4242"
+	trameEnd ="FF"

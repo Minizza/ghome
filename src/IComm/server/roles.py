@@ -2,6 +2,7 @@
 # -*-coding:Utf-8 -*
 
 from functools import wraps
+from flask import session
 
 # Decorator to check roles
 def requires_roles(*roles):

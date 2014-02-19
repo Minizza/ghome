@@ -8,11 +8,11 @@ import sys
 
 app = Flask(__name__)
 
-import server.connection
-import server.devices
-import server.draw
-import server.game
-import server.play
+import server.routes.connection
+import server.routes.devices
+import server.routes.draw
+import server.routes.game
+import server.routes.play
 
 # Set secret key for session
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

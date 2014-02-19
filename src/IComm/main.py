@@ -50,8 +50,7 @@ def set_current_user_role(role):
 
 @app.route('/')
 def index():
-    monTexte = "Ceci est la page d'accueil du super site"
-    return render_template('index.html', data=monTexte, notif_title="Titre", notif_content="je suis sur l'index", notif_type="success")
+    return render_template('index.html')
     
 @app.route('/connection')
 def connection():
@@ -66,6 +65,28 @@ def testTemperature():
 @app.route('/testplayer')
 def testplayer():
     return render_template('testplayer.html')
+	
+@app.route('/testplayer', methods=["POST"])
+def gamePlayerSetQuery():
+    devices = ghomedevice.Device.objects
+    data = '['
+    for device in devices :
+        data+='{'
+        data+='"type" : '+'"'+str(device.__class__.__name__)+'"'+','
+        data+='"ident" : '+'"'+str(device.physic_id)+'"'+','
+        data+='"state" : '+'"'+str(device.current_state)+'"'+','
+        data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
+        data+='"coordY" : '+'"'+str(device.coordY)+'"'
+        data+='},'
+    data = data[:len(data)-1]
+    data +=']'
+    return json.dumps(data)
+	
+@app.route('/testplayer/location', methods=["POST"])
+def getPosition():
+	ab = request.form['abscissa'] #min = 35 max = 610
+	ord = request.form['ordinate'] #min = 40 max = 545
+	return render_template('testplayer.html')
     
 
 @app.route('/connection', methods=["POST"])
@@ -86,6 +107,12 @@ def connection_post():
     else : 
         return render_template('connection.html', notif_title="Wrong login or password", notif_content="Please try again.", notif_type="danger")
 
+def fetchDevices():
+    devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
+    for device in devices:
+        device.type = type(device).__name__
+    return devices
+
 @app.route('/devices', methods=["GET", "POST"])
 @requires_roles('admin')
 def devices():
@@ -93,13 +120,13 @@ def devices():
     newForm = forms.NewDeviceForm()
     if newForm.validate_on_submit():
         new = factories.DeviceFactory.newDevice(newForm.device_type.data, newForm.physic_id.data, newForm.name.data)
-        new.save()
+        try:
+            new.save()
+        except NotUniqueError as e:
+            return render_template('devices.html', devices=fetchDevices(), form=newForm, notif_title="Unique constraint violation", notif_content=e, notif_type="danger")
         return redirect('/devices')
     else:
-        devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
-        for device in devices:
-            device.type = type(device).__name__
-        return render_template('devices.html', devices=devices, form=newForm)
+        return render_template('devices.html', devices=fetchDevices(), form=newForm)
 
 @app.route('/devices/remove', methods=["POST"])
 @requires_roles('admin')
@@ -111,6 +138,17 @@ def remove_device():
     device.delete()
     return redirect('/devices')
 
+
+@app.route('/draw')
+def draw():
+    return render_template('draw.html')
+
+@app.route('/draw', methods=["POST"])
+def save_svg():
+    if "svg" in request.form:
+        with open('{}.svg'.format(CONFIG['nom_plan']), 'w') as fichiersvg:
+            fichiersvg.write(request.form['svg'])
+    return "OK"
 
 @app.route('/logout')
 def logout():
@@ -144,6 +182,17 @@ def gameSetQuery():
     data +=']'
     return json.dumps(data)
 
+def printUsers(base="test"):
+    connect(base)
+    print "User - Role - Password"
+    print "----------------------"
+    for user in ghomeuser.GHomeUser.objects:
+        print "{} - {} - {}".format(user.name, user.role, user.password)
+
+# Config Object
+CONFIG = json.loads(open('config.json').read())
+
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", debug=True, port=5000)
+    printUsers()
+    app.run(host=CONFIG['host'], debug=CONFIG['debug'], port=CONFIG['port'])
 

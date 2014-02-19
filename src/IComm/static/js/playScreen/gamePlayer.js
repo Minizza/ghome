@@ -1,3 +1,5 @@
+$(function() {
+
 var bddCapteurs = new Array ();
 var bddActionneurs = new Array ();
 var bddAllies = new Array ();
@@ -6,6 +8,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
+var map;
 
 //basic function needed 
 
@@ -25,7 +28,7 @@ function initData (callback)
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/launchGame', 
+                url:'/testplayer', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -78,7 +81,7 @@ function updateData ()
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/launchGame', 
+                url:'/testplayer', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -90,7 +93,7 @@ function updateData ()
 
                             if (parseInt(data[i].state) == 1)
                             {
-                                for (var j=0; j<bddAllies.length; j++)
+                                for (var j=0; i<bddAllies.length; j++)
                                 {
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
@@ -103,7 +106,7 @@ function updateData ()
                             }
                             else if (parseInt(data[i].state) == 2)
                             {
-                                for (var j=0; j<bddEnemies.length; j++)
+                                for (var j=0; i<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
@@ -118,7 +121,7 @@ function updateData ()
                         }
                         else if ((data[i].type == "Switch")||(data[i].type == "Temperature"))
                         {
-                            for (var j=0; j<bddCapteurs.length; j++)
+                            for (var j=0; i<bddCapteurs.length; j++)
                                 {
                                     if (data[i].ident == bddCapteurs[j].ident)
                                     {
@@ -147,7 +150,7 @@ function canvasClicked ()
 }
 
 
-function GameStart ()
+function GamePlayer ()
 {
         
     var Eoo = 0;        
@@ -179,14 +182,35 @@ function GameStart ()
             enemies[i].x = bddEnemies[i].coordX;
             enemies[i].y = bddEnemies[i].coordY;
         }
-        updateData();                   
+
+        updateData();
+		
+		player = new jaws.Sprite({ image:"../static/medias/player.png" });
+	    var playerSpeed = 4;
+		
+		//Player up in the middle
+		player.x = 300;
+	    player.y = 40;
+		
+		function SendCoordinates() {
+			$.post( "testplayer/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
+				setTimeout(SendCoordinates, 2000);
+			});
+		}
+		
+		SendCoordinates();
+		
+		map = new jaws.Sprite({ image:"../plan.svg" });
+		map.x = 35;
+		map.y = 40;
+                    
     }   
 	
 
     
     this.update = function() { 
-            
-        if (Eoo===15)
+        
+        if (Eoo===60)
         {
             Eoo =0;
             updateData();
@@ -198,11 +222,7 @@ function GameStart ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
-            if (bddCapteurs[i].ident == "0001B592")
-            {
-                console.log(bddCapteurs[i].state);
-            }
-            if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
+            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
             {
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
@@ -223,6 +243,39 @@ function GameStart ()
                 }
             }
         }
+		
+		//Moves if button pressed
+		if (jaws.pressed("left")) {
+	      player.x -= 3;
+	    }
+	    if (jaws.pressed("right")) {
+	      player.x += 3;
+	    }
+		if (jaws.pressed("up")) {
+	      player.y -= 3;
+	    }
+	    if (jaws.pressed("down")) {
+	      player.y += 3;
+	    }
+		
+		//Player can't leave square
+		if (player.x < 35)
+	    {
+			player.x = 35;
+	    }
+		if (player.x > 610)
+	    {
+			player.x = 610;
+
+	    }
+		if (player.y < 40)
+	    {
+			player.y = 40;
+	    }
+		if (player.y > 545)
+	    {
+			player.y = 545;
+	    }
         
     }
             
@@ -240,6 +293,10 @@ function GameStart ()
             allies[i].draw();
             enemies[i].draw();
         }
+		
+		player.draw();
+		
+		map.draw();
     }
 }
      
@@ -251,5 +308,10 @@ window.onload = function() {
     jaws.assets.add("../static/medias/actionneur.png");
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
-    initData(jaws.start(GameStart));
+	jaws.assets.add("../static/medias/player.png");
+	
+	jaws.assets.add("../plan.svg");
+    initData(jaws.start(GamePlayer));
 };
+
+});

@@ -28,12 +28,18 @@ def user_test():
 	#Deleting pre-existing users to clean the test database
 	ghomeuser.GHomeUser.drop_collection()
 
-	user1 = ghomeuser.GHomeUser(name = "Dupont", password = "test", role = "")
-	user2 = ghomeuser.GHomeUser(name = "Martin", password = "pass", role = "admin")
+	user1 = ghomeuser.GHomeUser(name = "Gerant", password = "admin", role = "admin")
+	user2 = ghomeuser.GHomeUser(name = "Joueur1", password = "pass1", role = "joueur")
+	user3 = ghomeuser.GHomeUser(name = "Joueur2", password = "pass2", role = "joueur")
+	user4 = ghomeuser.GHomeUser(name = "Chef1", password = "passChef1", role = "chef")
+	user5 = ghomeuser.GHomeUser(name = "Chef2", password = "passChef2", role = "chef")
 
 	#Adding new users
 	user1.save()
 	user2.save() 
+	user3.save()
+	user4.save()
+	user5.save()
 
 	#Invalid user: name is missing (uncomment to test)
 	#user3 = ghomeuser.GHomeUser(password = "f*ck", role = "Basic")	
@@ -64,7 +70,7 @@ def device_test():
 
 	#list of switch sensors
 	device5 = switch.Switch(physic_id = "AJI24MF5", name = "Plaque pression couloir", current_state = "False", coordX = 300, coordY = 400)
-	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "False", coordX = 400, coordY = 300)
+	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "True", coordX = 400, coordY = 300)
 	device7 = switch.Switch(physic_id = "A457GT6D", name = "Détecteur présence bureau", current_state = "False", coordX = 100, coordY = 400)
 	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "False", coordX = 400, coordY = 100)
 	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)

@@ -163,29 +163,29 @@ function GamePlayer ()
         for (var i=0; i<bddCapteurs.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
-            capteurs[i] = new jaws.Sprite({image:"../static/medias/capteur.png"});
+            capteurs[i] = new jaws.Sprite({image:"static/medias/capteur.png"});
             capteurs[i].x = bddCapteurs[i].coordX;
             capteurs[i].y = bddCapteurs[i].coordY;
         }
 
         for (var i=0 ; i < bddActionneurs.length ; i++) {
-            actionneurs[i] = new jaws.Sprite({image:"../static/medias/actionneur.png"});
+            actionneurs[i] = new jaws.Sprite({image:"static/medias/actionneur.png"});
             actionneurs[i].x = bddActionneurs[i].coordX;
             actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
         for (var i=0 ; i < bddAllies.length ; i++) {
-            allies[i] = new jaws.Sprite({image:"../static/medias/allies.png"});
+            allies[i] = new jaws.Sprite({image:"static/medias/allies.png"});
             allies[i].x = bddAllies[i].coordX;
             allies[i].y = bddAllies[i].coordY;
-            enemies[i] = new jaws.Sprite({image:"../static/medias/enemies.png"});
+            enemies[i] = new jaws.Sprite({image:"static/medias/enemies.png"});
             enemies[i].x = bddEnemies[i].coordX;
             enemies[i].y = bddEnemies[i].coordY;
         }
 
         updateData();
 		
-		player = new jaws.Sprite({ image:"../static/medias/player.png" });
+		player = new jaws.Sprite({ image:"static/medias/player.png" });
 	    var playerSpeed = 4;
 		
 		//Player up in the middle
@@ -193,7 +193,7 @@ function GamePlayer ()
 	    player.y = 40;
 		
 		function SendCoordinates() {
-			$.post( "testplayer/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
+			$.post( "play/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
 				setTimeout(SendCoordinates, 2000);
 			});
 		}
@@ -228,16 +228,16 @@ function GamePlayer ()
                 switch(bddCapteurs[i].detect)
                 {
                     case 15 : 
-                        capteurs[i].setImage("../static/medias/capteurS1.png");
+                        capteurs[i].setImage("static/medias/capteurS1.png");
                         break;
                     case 30 : 
-                        capteurs[i].setImage("../static/medias/capteurS2.png");
+                        capteurs[i].setImage("static/medias/capteurS2.png");
                         break;
                     case 45 : 
-                        capteurs[i].setImage("../static/medias/capteurS3.png");
+                        capteurs[i].setImage("static/medias/capteurS3.png");
                         break;
                     case 60 : 
-                        capteurs[i].setImage("../static/medias/capteur.png");
+                        capteurs[i].setImage("static/medias/capteur.png");
                         bddCapteurs[i].detect=0;
                         break;
                 }
@@ -301,14 +301,14 @@ function GamePlayer ()
 }
      
 window.onload = function() {
-    jaws.assets.add("../static/medias/capteur.png");
-    jaws.assets.add("../static/medias/capteurS1.png");
-    jaws.assets.add("../static/medias/capteurS2.png");
-    jaws.assets.add("../static/medias/capteurS3.png");
-    jaws.assets.add("../static/medias/actionneur.png");
-    jaws.assets.add("../static/medias/allies.png");
-    jaws.assets.add("../static/medias/enemies.png");
-	jaws.assets.add("../static/medias/player.png");
+    jaws.assets.add("static/medias/capteur.png");
+    jaws.assets.add("static/medias/capteurS1.png");
+    jaws.assets.add("static/medias/capteurS2.png");
+    jaws.assets.add("static/medias/capteurS3.png");
+    jaws.assets.add("static/medias/actionneur.png");
+    jaws.assets.add("static/medias/allies.png");
+    jaws.assets.add("static/medias/enemies.png");
+	jaws.assets.add("static/medias/player.png");
 	
 	//jaws.assets.add("../static/medias/map.svg");
     initData(jaws.start(GamePlayer));

@@ -13,19 +13,19 @@
 </div>
 <nav class="tabbable tabs-left">
     <div class="row">
-        <div class="col-md-6 colonne_devices">
-            <ul class="nav nav-pills">
+        <div class="col-md-4 colonne_devices">
+            <ul class="nav nav-pills">    
+                <li>
+                    <a href="#device_new" data-toggle="tab" class="label label-default" id="new_device_button">Nouveau périphérique</a>
+                </li>
                 {% for device in devices %}
                 <li>
                     <a href="#device_{{ loop.index }}" data-toggle="tab">{{ device.name }}</a>
                 </li>
                 {% endfor %}
-                <li>
-                    <a href="#device_new" data-toggle="tab" class="label label-default" id="new_device_button">Nouveau périphérique</a>
-                </li>
             </ul>
         </div>
-        <div class="col-md-6 colonne_content">
+        <div class="col-md-8 colonne_content">
             <div class="tab-content">
                 {% for device in devices %}
                 <div class="tab-pane" id="device_{{ loop.index }}">
@@ -50,6 +50,14 @@
                     </form>
                 </div>
             </div>
+        </div>
+        <div id="plan" width="500" height="500" {% if not plan %} class="undefined"{% endif %}>
+            {% if plan %}
+              {{ plan | safe }}
+                
+            {% else %}
+                No plan defined !
+            {% endif %}
         </div>
     </div>
 </nav>

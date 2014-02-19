@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
-from server import app
+from server import app, CONFIG
 from flask import render_template, request, redirect
 from server.roles import *
 from mongoengine import *
@@ -11,20 +11,29 @@ import server.forms.NewDeviceForm as forms
 
 import server.controller as controller
 
+def loadPlan():
+    try:
+        with open(CONFIG['nom_plan']+".svg") as ficPlan:
+            return ficPlan.read()
+    except IOError as e:
+        return None
+    return None
+
 @app.route('/devices', methods=["GET", "POST"])
 @requires_roles('admin')
 def devices():
     connect('test')
     newForm = forms.NewDeviceForm()
+    plan = loadPlan()
     if newForm.validate_on_submit():
         new = factories.DeviceFactory.newDevice(newForm.device_type.data, newForm.physic_id.data, newForm.name.data)
         try:
             new.save()
         except NotUniqueError as e:
-            return render_template('devices.html', devices=controller.fetchDevices(), form=newForm, notif_title="Unique constraint violation", notif_content=e, notif_type="danger")
+            return render_template('devices.html', devices=controller.fetchDevices(), plan=plan, form=newForm, notif_title="Unique constraint violation", notif_content=e, notif_type="danger")
         return redirect('/devices')
     else:
-        return render_template('devices.html', devices=controller.fetchDevices(), form=newForm)
+        return render_template('devices.html', devices=controller.fetchDevices(), plan=plan, form=newForm)
 
 @app.route('/devices/remove', methods=["POST"])
 @requires_roles('admin')

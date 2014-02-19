@@ -7,6 +7,8 @@ var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var boutonActiver = new Object ();
+var infos = new Object ();
+var pingSound;
 
 //basic function needed 
 
@@ -26,7 +28,7 @@ function initData (callback)
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/launchGame', 
+                url:'/game', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -79,7 +81,7 @@ function updateData ()
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/launchGame', 
+                url:'/game', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -135,6 +137,18 @@ function updateData ()
 }
 
 
+function actiActiv (theAct)
+//Fonction d'envoi d'info lorsqu'un un actuator est activé
+{
+    $.ajax({    
+                dataType: 'json',
+                url:'/game/activated', 
+                type:'POST', 
+                async :'false',
+                data : { ident : theAct.ident, anX : theAct.coordX, anY : theAct.coordY }
+                });
+}
+
 //Fonctions de traitement des events
 function canvasClicked ()
 {
@@ -143,7 +157,7 @@ function canvasClicked ()
 
     if ((boutonActiver.isActive==true)&&(boutonActiver.image.rect().collidePoint(jaws.mouse_x,jaws.mouse_y)))
     {
-        console.log("Cacaaaaaaaaaa");
+        actiActiv(bddActionneurs[canvasClicked.selectedA]);
         return;
     }
     for (var i=0; i<bddActionneurs.length; i++)
@@ -200,11 +214,17 @@ function GameStart ()
             enemies[i].y = bddEnemies[i].coordY;
         }
 
+
+        //Les infos concernant l'actuator selectionne
+
+        //Le bouton d'activation d'actuator
         boutonActiver.image = 	new jaws.Sprite({image:"../static/medias/butActiver.png"});
         boutonActiver.image.x = 683;
         boutonActiver.image.y = 480;
         boutonActiver.isActive  = false;	
 
+        //Le son de ping
+        pingSound = new Audio("../static/medias/ping.wav");
 
         updateData();
                     
@@ -228,10 +248,12 @@ function GameStart ()
         {
             if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
             {
+
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
                 {
-                    case 15 : 
+                    case 15 :
+                        //pingSound.play();
                         capteurs[i].setImage("../static/medias/capteurS1.png");
                         break;
                     case 30 : 

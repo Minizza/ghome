@@ -8,6 +8,14 @@ import sys
 
 app = Flask(__name__)
 
+# Config Object
+try:
+    with open('server/config.json', 'r') as fileconf:
+        CONFIG = json.loads(fileconf.read())
+except IOError:
+    print "Can't load the configuration file. Exiting..."
+    sys.exit()
+
 import server.routes.connection
 import server.routes.devices
 import server.routes.draw

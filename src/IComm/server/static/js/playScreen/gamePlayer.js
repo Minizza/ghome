@@ -277,6 +277,12 @@ function GamePlayer ()
 	    {
 			player.y = 545;
 	    }
+		
+		for (var i=0 ; i < capteurs.length ; i++) {
+			jaws.collide(player, capteurs[i], function() { 
+				$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
+			});
+        }
         
     }
             

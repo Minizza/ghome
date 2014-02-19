@@ -34,4 +34,10 @@ def getPosition():
     ab = request.form['abscissa'] #min = 35 max = 610
     ord = request.form['ordinate'] #min = 40 max = 545
     return render_template('play.html')
+	
+@app.route('/play/captor', methods=["POST"])
+def getCaptor():
+    idCaptor = request.form['captor']
+    print idCaptor;
+    return render_template('play.html')
 

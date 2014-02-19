@@ -8,11 +8,19 @@ import sys
 
 app = Flask(__name__)
 
-import server.connection
-import server.devices
-import server.draw
-import server.game
-import server.play
+# Config Object
+try:
+    with open('server/config.json', 'r') as fileconf:
+        CONFIG = json.loads(fileconf.read())
+except IOError:
+    print "Can't load the configuration file. Exiting..."
+    sys.exit()
+
+import server.routes.connection
+import server.routes.devices
+import server.routes.draw
+import server.routes.game
+import server.routes.play
 
 # Set secret key for session
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -34,10 +42,3 @@ def testTemperature():
     devices = ghometemperature.Temperature.objects
     return render_template('testtemp.html', devices=devices)
 
-# Config Object
-try:
-    with open('server/config.json', 'r') as fileconf:
-        CONFIG = json.loads(fileconf.read())
-except IOError:
-    print "Can't load the configuration file. Exiting..."
-    sys.exit()

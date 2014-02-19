@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
-from server import app
+from server import app, CONFIG
 from flask import render_template, request
 from server.roles import *
 

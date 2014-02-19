@@ -135,6 +135,18 @@ function updateData ()
 }
 
 
+function actiActiv (theAct)
+//Fonction d'envoi d'info lorsqu'un un actuator est activé
+{
+    $.ajax({    
+                dataType: 'json',
+                url:'/launchGame/activated', 
+                type:'POST', 
+                async :'false',
+                data : { ident : theAct.ident }
+                });
+}
+
 //Fonctions de traitement des events
 function canvasClicked ()
 {
@@ -143,7 +155,7 @@ function canvasClicked ()
 
     if ((boutonActiver.isActive==true)&&(boutonActiver.image.rect().collidePoint(jaws.mouse_x,jaws.mouse_y)))
     {
-        console.log("Cacaaaaaaaaaa");
+        actiActiv(bddActionneurs[canvasClicked.selectedA]);
         return;
     }
     for (var i=0; i<bddActionneurs.length; i++)

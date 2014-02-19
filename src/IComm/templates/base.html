@@ -5,6 +5,7 @@
 		<title>
 			GHome - {% block title %}{% endblock %}
 		</title>
+		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<!-- Bootstrap -->
@@ -42,7 +43,7 @@
 			<!-- possible types : success, info, warning, danger -->
 			<div class="notif alert alert-{{'danger' if not notif_type else notif_type}} fade in" {% if not notif_content %}style="display: none;"{% endif %}>
 				<button type="button" class="close" aria-hidden="true">×</button>
-				<strong>fes{{notif_title}}</strong> <span>{{notif_content}}</span>
+				<strong>{{notif_title}}</strong> <span>{{notif_content}}</span>
 			</div>
 
 			<!-- Content of page -->

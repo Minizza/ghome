@@ -180,9 +180,17 @@ def gameSetQuery():
     data +=']'
     return json.dumps(data)
 
+def printUsers(base="test"):
+    connect(base)
+    print "User - Role - Password"
+    print "----------------------"
+    for user in ghomeuser.GHomeUser.objects:
+        print "{} - {} - {}".format(user.name, user.role, user.password)
+
 # Config Object
 CONFIG = json.loads(open('config.json').read())
 
 if __name__ == '__main__':
+    printUsers()
     app.run(host=CONFIG['host'], debug=CONFIG['debug'], port=CONFIG['port'])
 

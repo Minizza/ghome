@@ -7,8 +7,11 @@ var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var boutonActiver = new Object ();
-var infos = new Object ();
+var infosActuator = new Object ();
+var infosParty = new Object ();
 var pingSound;
+
+infosParty.team = parseInt(myGame());
 
 //basic function needed 
 
@@ -22,8 +25,6 @@ function sleep(milliseconds) {
   }
 }
 
-
-
 function initData (callback)
 {
     $.ajax({    
@@ -33,7 +34,8 @@ function initData (callback)
                 async :'false',
                 success : function (data) {
                     data = JSON.parse(data);
-                    for (var i=0; i<data.length; i++)
+                    //Stockage des infos capteurs/joueurs
+                    for (var i=1; i<data.length; i++)
                     {
                         console.log(data[i].type);
                         var aDevice = new Object ();
@@ -56,16 +58,28 @@ function initData (callback)
                         }
                         else if (data[i].type == "Position")
                         {
-
-                            if (parseInt(data[i].state) == 1)
+                            if (infosParty.team == 0)
                             {
-                                bddAllies.push(aDevice);
+                                if (parseInt(data[i].state) == 1)
+                                {
+                                    bddAllies.push(aDevice);
+                                }
+                                else 
+                                {
+                                    bddEnemies.push(aDevice);
+                                }
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else
                             {
-                                bddEnemies.push(aDevice);
+                                if (parseInt(data[i].state) == infosParty.team)
+                                {
+                                    bddAllies.push(aDevice);
+                                }
+                                else
+                                {
+                                    bddEnemies.push(aDevice);
+                                }
                             }
-
                         }
                         
                     }
@@ -209,6 +223,8 @@ function GameStart ()
             allies[i] = new jaws.Sprite({image:"../static/medias/allies.png"});
             allies[i].x = bddAllies[i].coordX;
             allies[i].y = bddAllies[i].coordY;
+        }
+        for (var i=0; i < bddEnemies.length ; i++) {
             enemies[i] = new jaws.Sprite({image:"../static/medias/enemies.png"});
             enemies[i].x = bddEnemies[i].coordX;
             enemies[i].y = bddEnemies[i].coordY;
@@ -284,7 +300,12 @@ function GameStart ()
         } 
 		for (var i=0 ; i < allies.length ; i++) {
             allies[i].draw();
-            enemies[i].draw();
+        }
+        if (infosParty.team==0)
+        {
+            for (var i=0 ; i < enemies.length ; i++) {
+                enemies[i].draw();
+            }
         }
 
         if (boutonActiver.isActive)

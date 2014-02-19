@@ -28,7 +28,7 @@ def user_test():
 	#Deleting pre-existing users to clean the test database
 	ghomeuser.GHomeUser.drop_collection()
 
-	user1 = ghomeuser.GHomeUser(name = "Gérant", password = "admin", role = "admin")
+	user1 = ghomeuser.GHomeUser(name = "Gerant", password = "admin", role = "admin")
 	user2 = ghomeuser.GHomeUser(name = "Joueur1", password = "pass1", role = "joueur")
 	user3 = ghomeuser.GHomeUser(name = "Joueur2", password = "pass2", role = "joueur")
 	user4 = ghomeuser.GHomeUser(name = "Chef1", password = "passChef1", role = "chef")
@@ -37,6 +37,9 @@ def user_test():
 	#Adding new users
 	user1.save()
 	user2.save() 
+	user3.save()
+	user4.save()
+	user5.save()
 
 	#Invalid user: name is missing (uncomment to test)
 	#user3 = ghomeuser.GHomeUser(password = "f*ck", role = "Basic")	

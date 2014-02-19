@@ -7,6 +7,8 @@ var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var boutonActiver = new Object ();
+var infos = new Object ();
+var pingSound;
 
 //basic function needed 
 
@@ -163,7 +165,7 @@ function canvasClicked ()
         if (actionneurs[i].rect().collidePoint(jaws.mouse_x,jaws.mouse_y))
         {
             canvasClicked.selectedA = i;
-            actionneurs[i].setImage("static/medias/sel_actionneur.png");
+            actionneurs[i].setImage("../static/medias/sel_actionneur.png");
             boutonActiver.isActive = true;
             return;
         }
@@ -171,7 +173,7 @@ function canvasClicked ()
 
     if (canvasClicked.selectedA != -1)
     {
-        actionneurs[canvasClicked.selectedA].setImage("static/medias/actionneur.png");
+        actionneurs[canvasClicked.selectedA].setImage("../static/medias/actionneur.png");
         boutonActiver.isActive = false;
         canvasClicked.selectedA = -1;
     }
@@ -192,31 +194,37 @@ function GameStart ()
         for (var i=0; i<bddCapteurs.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
-            capteurs[i] = new jaws.Sprite({image:"static/medias/capteur.png"});
+            capteurs[i] = new jaws.Sprite({image:"../static/medias/capteur.png"});
             capteurs[i].x = bddCapteurs[i].coordX;
             capteurs[i].y = bddCapteurs[i].coordY;
         }
 
         for (var i=0 ; i < bddActionneurs.length ; i++) {
-            actionneurs[i] = new jaws.Sprite({image:"static/medias/actionneur.png"});
+            actionneurs[i] = new jaws.Sprite({image:"../static/medias/actionneur.png"});
             actionneurs[i].x = bddActionneurs[i].coordX;
             actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
         for (var i=0 ; i < bddAllies.length ; i++) {
-            allies[i] = new jaws.Sprite({image:"static/medias/allies.png"});
+            allies[i] = new jaws.Sprite({image:"../static/medias/allies.png"});
             allies[i].x = bddAllies[i].coordX;
             allies[i].y = bddAllies[i].coordY;
-            enemies[i] = new jaws.Sprite({image:"static/medias/enemies.png"});
+            enemies[i] = new jaws.Sprite({image:"../static/medias/enemies.png"});
             enemies[i].x = bddEnemies[i].coordX;
             enemies[i].y = bddEnemies[i].coordY;
         }
 
-        boutonActiver.image = 	new jaws.Sprite({image:"static/medias/butActiver.png"});
+
+        //Les infos concernant l'actuator selectionne
+
+        //Le bouton d'activation d'actuator
+        boutonActiver.image = 	new jaws.Sprite({image:"../static/medias/butActiver.png"});
         boutonActiver.image.x = 683;
         boutonActiver.image.y = 480;
         boutonActiver.isActive  = false;	
 
+        //Le son de ping
+        pingSound = new Audio("../static/medias/ping.wav");
 
         updateData();
                     
@@ -243,17 +251,18 @@ function GameStart ()
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
                 {
-                    case 15 : 
-                        capteurs[i].setImage("static/medias/capteurS1.png");
+                    case 15 :
+                        pingSound.play();
+                        capteurs[i].setImage("../static/medias/capteurS1.png");
                         break;
                     case 30 : 
-                        capteurs[i].setImage("static/medias/capteurS2.png");
+                        capteurs[i].setImage("../static/medias/capteurS2.png");
                         break;
                     case 45 : 
-                        capteurs[i].setImage("static/medias/capteurS3.png");
+                        capteurs[i].setImage("../static/medias/capteurS3.png");
                         break;
                     case 60 : 
-                        capteurs[i].setImage("static/medias/capteur.png");
+                        capteurs[i].setImage("../static/medias/capteur.png");
                         bddCapteurs[i].detect=0;
                         break;
                 }
@@ -285,14 +294,14 @@ function GameStart ()
 }
      
 window.onload = function() {
-    jaws.assets.add("static/medias/capteur.png");
-    jaws.assets.add("static/medias/capteurS1.png");
-    jaws.assets.add("static/medias/capteurS2.png");
-    jaws.assets.add("static/medias/capteurS3.png");
-    jaws.assets.add("static/medias/actionneur.png");
-    jaws.assets.add("static/medias/sel_actionneur.png");
-    jaws.assets.add("static/medias/allies.png");
-    jaws.assets.add("static/medias/enemies.png");
-    jaws.assets.add("static/medias/butActiver.png");
+    jaws.assets.add("../static/medias/capteur.png");
+    jaws.assets.add("../static/medias/capteurS1.png");
+    jaws.assets.add("../static/medias/capteurS2.png");
+    jaws.assets.add("../static/medias/capteurS3.png");
+    jaws.assets.add("../static/medias/actionneur.png");
+    jaws.assets.add("../static/medias/sel_actionneur.png");
+    jaws.assets.add("../static/medias/allies.png");
+    jaws.assets.add("../static/medias/enemies.png");
+    jaws.assets.add("../static/medias/butActiver.png");
     initData(jaws.start(GameStart));
 };

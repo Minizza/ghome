@@ -1,17 +1,54 @@
 $(function() {
 
-    $svg = $("#plan");
+    $svg = $(".plan");
 
     $svg
         .on("mousedown", mousedown)
-        .on("mouseup", mouseup)
         .on("contextmenu", function(event) {     // Prevent context menu on right click
             event.preventDefault();
         });
 
-    var $line;
-    var $circle1;
-    var $circle2;
+    var ctrlPressed = false;
+    var shiftPressed = false;
+    var started = false;
+    var lastPoint = null;
+    var $currentLine = null;
+    var nbLines = 0;
+
+    // Get key events
+    $(window).keydown(function(event) {
+        // On Ctrl press
+        if(event.which == 17) {
+            ctrlPressed = true;
+
+            if(lastPoint != null && !started) {
+                started = true;
+                $currentLine = drawLine(lastPoint.x, lastPoint.y, lastPoint.x, lastPoint.y);
+                $svg.on("mousemove", mousemove);
+            }
+        }
+        // On shift press
+        if(event.which == 16) {
+            shiftPressed = true;
+        }
+    }).keyup(function(event) {
+        // On Ctrl release
+        if(event.which == 17) {
+            ctrlPressed = false;
+
+            // Stop drawing if drawing started
+            if(started && nbLines > 1) {
+                started = false;
+                $currentLine.remove();
+                $currentLine = null;
+                $svg.off("mousemove");
+            }
+        }
+        // On shift release
+        if(event.which == 16) {
+            shiftPressed = false;
+        }
+    });
 
     // Javascript function to get the context of SVG
     function SVG(tag) {
@@ -24,12 +61,51 @@ $(function() {
         // Fire only on left click event
         if(event.which == 1) {
 
-            $line = drawLine(mouse.x, mouse.y, mouse.x, mouse.y);
+            // Path already started
+            if(started) {
+                // Continue path
+                if(ctrlPressed) {
+                    
+                    if(shiftPressed) {
+                        closestPoint = getClosestPoint(mouse, lastPoint);
+                        drawCircle(closestPoint.x, closestPoint.y);
+                        $currentLine = drawLine(closestPoint.x, closestPoint.y, closestPoint.x, closestPoint.y);
+                        lastPoint = closestPoint;
+                    } else {
+                        drawCircle(mouse.x, mouse.y);
+                        $currentLine = drawLine(mouse.x, mouse.y, mouse.x, mouse.y);
+                        lastPoint = mouse;
+                    }
+                    
+                } 
+                // Stop path
+                else {
+                    started = false;
 
-            $circle1 = drawCircle(mouse.x, mouse.y);
-            $circle2 = drawCircle(mouse.x, mouse.y);
+                    if(shiftPressed) {
+                        closestPoint = getClosestPoint(mouse, lastPoint);
+                        drawCircle(closestPoint.x, closestPoint.y);
+                        lastPoint = closestPoint;
+                    } else {
+                        drawCircle(mouse.x, mouse.y);
+                        lastPoint = mouse;
+                    }
 
-            $svg.on("mousemove", mousemove);
+                    $svg.off("mousemove");
+                }
+            } 
+            // Start path
+            else {
+                started = true;
+                drawCircle(mouse.x, mouse.y);
+                $currentLine = drawLine(mouse.x, mouse.y, mouse.x, mouse.y);
+                $svg.on("mousemove", mousemove);
+                lastPoint = mouse;
+                nbLines = 0;
+            }
+
+            nbLines++;
+        
         }
         
     }
@@ -37,36 +113,55 @@ $(function() {
     function mousemove(event) {
         var mouse = getMousePos($(this), event);
 
-        $line
-            .attr("x2", mouse.x)
-            .attr("y2", mouse.y);
+        if(shiftPressed) {
+            closestPoint = getClosestPoint(mouse, lastPoint);
 
-        $circle2
-            .attr("cx", mouse.x)
-            .attr("cy", mouse.y)
-            .attr("r", 5);
-    }
+            $currentLine
+                .attr("x2", closestPoint.x)
+                .attr("y2", closestPoint.y);
 
-    function mouseup(event) {
-        var mouse = getMousePos($(this), event);
-
-        // Fire only on left click event
-        if(event.which == 1) {
-
-            $circle2
-                .attr("cx", mouse.x)
-                .attr("cy", mouse.y)
-                .attr("r", 5);
-
+        } else {
+            $currentLine
+                .attr("x2", mouse.x)
+                .attr("y2", mouse.y);
         }
-
-        $svg.off("mousemove");
+        
     }
 
+    // Get the mouse position being careful of offset
     function getMousePos(dom, event) {
         return {
             'x': event.pageX - dom.offset().left,
             'y': event.pageY - dom.offset().top
+        };
+    }
+
+    // Get the point to closest straight line
+    function getClosestPoint(point2, point1) {
+        if(point1 == null) {
+
+            x = point2.x;
+            y = point2.y;
+
+        } else {
+
+            diff_x = Math.abs(point2.x - point1.x);
+            diff_y = Math.abs(point2.y - point1.y);
+
+            var x, y;
+
+            if(diff_x >= diff_y) {
+                x = point2.x;
+                y = point1.y;
+            } else {
+                x = point1.x;
+                y = point2.y;
+            }
+        }
+
+        return {
+            'x': x,
+            'y': y
         };
     }
 
@@ -79,13 +174,7 @@ $(function() {
                 .attr('fill', '#14029D')
                 .attr('stroke', 'black')
                 .attr('stroke-width', 5)
-                .appendTo($svg)
-                .on("mouseover", function() {
-                    $(this).attr("r", 10)
-                })
-                .on("mouseout", function() {
-                    $(this).attr("r", 5)
-                });
+                .appendTo($svg);
 
         return $circle;
     }
@@ -108,6 +197,7 @@ $(function() {
         $svg.empty();
     }
 
+    // Export Button
     $export_button = $('#export');
     $export_button.click(function() {
         var html = $('<svg>').append($svg.clone()).html();
@@ -115,6 +205,13 @@ $(function() {
             clearCanvas();
             setNotification("Succès export","Le plan a été exporté.", "success");
         });
+    });
+
+    // Clear Button
+    $clear_button = $('#clear');
+    $clear_button.click(function() {
+        clearCanvas();
+        started = false;
     });
 
 });

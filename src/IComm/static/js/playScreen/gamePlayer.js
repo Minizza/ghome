@@ -8,6 +8,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
+var map;
 
 //basic function needed 
 
@@ -92,7 +93,7 @@ function updateData ()
 
                             if (parseInt(data[i].state) == 1)
                             {
-                                for (var j=0; i<bddAllies.length; j++)
+                                for (var j=0; j<bddAllies.length; j++)
                                 {
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
@@ -105,7 +106,7 @@ function updateData ()
                             }
                             else if (parseInt(data[i].state) == 2)
                             {
-                                for (var j=0; i<bddEnemies.length; j++)
+                                for (var j=0; j<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
@@ -120,7 +121,7 @@ function updateData ()
                         }
                         else if ((data[i].type == "Switch")||(data[i].type == "Temperature"))
                         {
-                            for (var j=0; i<bddCapteurs.length; j++)
+                            for (var j=0; j<bddCapteurs.length; j++)
                                 {
                                     if (data[i].ident == bddCapteurs[j].ident)
                                     {
@@ -198,6 +199,10 @@ function GamePlayer ()
 		}
 		
 		SendCoordinates();
+		
+		/*map = new jaws.Sprite({ image:"../static/medias/plan.svg" });
+		map.x = 35;
+		map.y = 40;*/
                     
     }   
 	
@@ -290,6 +295,8 @@ function GamePlayer ()
         }
 		
 		player.draw();
+		
+		//map.draw();
     }
 }
      
@@ -302,6 +309,8 @@ window.onload = function() {
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
 	jaws.assets.add("../static/medias/player.png");
+	
+	//jaws.assets.add("../static/medias/plan.svg");
     initData(jaws.start(GamePlayer));
 };
 

@@ -50,8 +50,7 @@ def set_current_user_role(role):
 
 @app.route('/')
 def index():
-    monTexte = "Ceci est la page d'accueil du super site"
-    return render_template('index.html', data=monTexte, notif_title="Titre", notif_content="je suis sur l'index", notif_type="success")
+    return render_template('index.html')
     
 @app.route('/connection')
 def connection():
@@ -181,9 +180,17 @@ def gameSetQuery():
     data +=']'
     return json.dumps(data)
 
+def printUsers(base="test"):
+    connect(base)
+    print "User - Role - Password"
+    print "----------------------"
+    for user in ghomeuser.GHomeUser.objects:
+        print "{} - {} - {}".format(user.name, user.role, user.password)
+
 # Config Object
 CONFIG = json.loads(open('config.json').read())
 
 if __name__ == '__main__':
+    printUsers()
     app.run(host=CONFIG['host'], debug=CONFIG['debug'], port=CONFIG['port'])
 

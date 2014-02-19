@@ -1,5 +1,5 @@
 .colonne_devices {
-    max-width: 200px;
+    
 }
 
 #new_device_button {
@@ -29,4 +29,12 @@
 
 .attr_value {
     
+}
+
+#plan {
+
+}
+
+#plan.undefined {
+	font-weight: bold;
 }

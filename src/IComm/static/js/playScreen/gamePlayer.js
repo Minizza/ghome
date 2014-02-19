@@ -28,7 +28,7 @@ function initData (callback)
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/testplayer', 
+                url:'/play', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -81,7 +81,7 @@ function updateData ()
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/testplayer', 
+                url:'/play', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -310,7 +310,7 @@ window.onload = function() {
     jaws.assets.add("../static/medias/enemies.png");
 	jaws.assets.add("../static/medias/player.png");
 	
-	//jaws.assets.add("../static/medias/plan.svg");
+	//jaws.assets.add("../static/medias/map.svg");
     initData(jaws.start(GamePlayer));
 };
 

@@ -3,22 +3,23 @@
 from mongoengine import *
 import socket
 import trame
+from Model.Device import position
 import logger.loggerConfig as mylog
 
 logger=mylog.configure()
 
 class fakePosition():
 
-    def __init__(self):
-        self.positionAbs = {'x':0, 'y':0}
+    def __init__(self,player):
         self.start = "A55A4242"
         #dataBytes
-        self.ident = "12345601"
+        self.ident = player.physic_id
+        print self.ident
         self.end ="FF"
 
         #Hard Value !
-        self.maxX=500
-        self.maxY=500
+        self.maxX=player.maxX
+        self.maxY=player.maxY
         #Hard Value !
         self.addr='134.214.106.23'
         self.port=5000
@@ -36,8 +37,8 @@ class fakePosition():
         """
         convert absolute coordonate to 4 Bytes value
         """
-        rawConvertedX=hex(absX*(16**4-1)/self.maxX)
-        rawConvertedY=hex(absY*(16**4-1)/self.maxY)
+        rawConvertedX=hex(absX*(16**4-1)/self.maxX).upper()
+        rawConvertedY=hex(absY*(16**4-1)/self.maxY).upper()
         return {'x':rawConvertedX[2:],'y':rawConvertedY[2:]}
 
     def sendTrame(self,trameToSend):
@@ -53,8 +54,9 @@ class fakePosition():
 
    
 def main():
-    blarg=fakePosition()
-    blarg.update(500,500)
+    player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500,maxX=610,minX=35,maxY=545)
+    blarg=fakePosition(player11)
+    blarg.update(610,545)
 
 if __name__ == '__main__':
        main()   

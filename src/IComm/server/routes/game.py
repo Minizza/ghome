@@ -7,9 +7,17 @@ from server.roles import *
 import json
 import Model.Device.device as ghomedevice
 
-@app.route('/game')
-def launchGame():
-    return render_template('game.html')
+wichGame = []
+
+@app.route('/game0')
+def theGame0():
+    return render_template('game.html', theGame = 0)
+@app.route('/game1')
+def theGame1():
+    return render_template('game.html', theGame = 1)
+@app.route('/game2')
+def theGame2():
+    return render_template('game.html', theGame = 2)
 
 
 @app.route('/game', methods=["POST"])

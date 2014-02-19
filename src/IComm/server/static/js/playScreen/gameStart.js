@@ -7,8 +7,11 @@ var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var boutonActiver = new Object ();
-var infos = new Object ();
+var infosActuator = new Object ();
+var infosParty = new Object ();
 var pingSound;
+
+infosParty.team = parseInt(myGame());
 
 //basic function needed 
 
@@ -22,8 +25,6 @@ function sleep(milliseconds) {
   }
 }
 
-
-
 function initData (callback)
 {
     $.ajax({    
@@ -33,7 +34,8 @@ function initData (callback)
                 async :'false',
                 success : function (data) {
                     data = JSON.parse(data);
-                    for (var i=0; i<data.length; i++)
+                    //Stockage des infos capteurs/joueurs
+                    for (var i=1; i<data.length; i++)
                     {
                         console.log(data[i].type);
                         var aDevice = new Object ();
@@ -284,7 +286,12 @@ function GameStart ()
         } 
 		for (var i=0 ; i < allies.length ; i++) {
             allies[i].draw();
-            enemies[i].draw();
+        }
+        if (infosParty.team==0)
+        {
+            for (var i=0 ; i < allies.length ; i++) {
+                enemies[i].draw();
+            }
         }
 
         if (boutonActiver.isActive)

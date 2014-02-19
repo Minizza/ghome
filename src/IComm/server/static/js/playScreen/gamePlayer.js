@@ -8,6 +8,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
+var player;
 var map;
 
 //basic function needed 
@@ -69,6 +70,7 @@ function initData (callback)
                         }
                         
                     }
+
                         callback ();    
                     
                 }
@@ -182,15 +184,14 @@ function GamePlayer ()
             enemies[i].x = bddEnemies[i].coordX;
             enemies[i].y = bddEnemies[i].coordY;
         }
+		
 
         updateData();
 		
 		player = new jaws.Sprite({ image:"static/medias/player.png" });
-	    var playerSpeed = 4;
-		
-		//Player up in the middle
-		player.x = 300;
-	    player.y = 40;
+
+		player.x = allies[0].x;
+	    player.y = allies[0].y;
 		
 		function SendCoordinates() {
 			$.post( "play/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
@@ -289,10 +290,11 @@ function GamePlayer ()
         for (var i=0 ; i < actionneurs.length ; i++) {
             actionneurs[i].draw();
         } 
-		for (var i=0 ; i < allies.length ; i++) {
+		for (var i=1 ; i < allies.length ; i++) {
             allies[i].draw();
             enemies[i].draw();
         }
+		enemies[0].draw();
 		
 		player.draw();
 		

@@ -107,7 +107,7 @@ class traductor ():
                     newData = sensorUsed.translateTrame(self.trameUsed)
 
                 elif (sensorUsed.__class__.__name__=="Position"):
-                    sensorUsed.translateTrame(self.trameUsed)
+                    newData = sensorUsed.translateTrame(self.trameUsed)
                 else :
                     logger.warn("Other Captor (not handle (YET !) )")
                 # Update de la trame au niveau de la base

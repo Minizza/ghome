@@ -1,6 +1,10 @@
 # -*-coding:Utf-8 -*
 from sensor import *
 from mongoengine import *
+from logger import loggerConfig
+
+logger=loggerConfig.configure()
+
  
 class Position(Sensor):
 
@@ -12,9 +16,12 @@ class Position(Sensor):
 
 	def translateTrame(self,inTrame):
 		"""
-
+			convert 4 bytes to a value in range (0 - maxX) (resp Y)
 		"""
-		print inTrame.lessRawView()
+		
 		rawConvertedX= int((inTrame.data1+inTrame.data0),16)
 		rawConvertedY=int((inTrame.data3+inTrame.data2),16)
 		absX=rawConvertedX/(16**4-1.0)*self.maxX
+		absY=rawConvertedY/(16**4-1.0)*self.maxY
+		logger.info("Position sensor {} with new coordonate {} -- {}".format(self.physic_id,absX,absY))
+		return {"coordX":absX,"coordY":absY}

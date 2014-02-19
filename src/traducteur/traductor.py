@@ -42,21 +42,25 @@ class traductor ():
         self.trameUsed = ''
         self.identSet = set()
         #Load all the device in the base
+        self.updateIdentSet()
         with self.lock:
             for lsensor in sensor.Sensor.objects:
-                self.identSet.add(lsensor.physic_id)
+                self.identSet.append(lsensor.physic_id)
+                logger.info(lsensor.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
+        logger.info("Connected to {} : {}".format(addr,port))
     
     def receive (self) :
         message = self.soc.recv(1024)
-        if message:
+        if message and len(message)==28:
             self.trameUsed = trame.trame(message)
 
     def launch(self,addr,port):
         self.connect(addr,port)
         while 1:
+            self.updateIdentSet()
             self.receive()
             if self.trameUsed:
                 self.checkTrame()
@@ -92,7 +96,7 @@ class traductor ():
 
 
     def checkTrame(self):
-        logger.info("Trame used : {}".format(self.trameUsed.rawView()))
+        logger.info("Trame used : {}".format(self.trameUsed.lessRawView()))
         if ("A55A" not in self.trameUsed.sep):
             logger.warn("Wrong separator, rejected")
             return False
@@ -109,10 +113,10 @@ class traductor ():
                 if (sensorUsed.__class__.__name__=="Switch"):
                     if (self.trameUsed.data0=='09'):
                         logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
-                        newData = True
+                        newData = "close"
                     elif (self.trameUsed.data0=='08'):
                         logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
-                        newData = False
+                        newData = "open"
                     else:
                         logger.warn("Strange state : ".format(self.trameUsed.data2))
                         
@@ -125,6 +129,7 @@ class traductor ():
                 # Update de la trame au niveau de la base
                 if newData :
                     sensorUsed.update(newData)
+                    logger.info("New data {}".format(sensorUsed.current_state))
         self.trameUsed=''
             
 
@@ -133,10 +138,12 @@ class traductor ():
             Safely update the identifier set of the traductor
         """
         with self.lock:
-            logger.info("Update the traductor's set of captors")
-            del(self.identSet[:])
+            #del(self.identSet[:])
+            self.identSet=[]
             for lsensor in sensor.Sensor.objects:
-                self.identSet.add(lsensor.physic_id)
+                self.identSet.append(lsensor.physic_id)
+                logger.info(lsensor.physic_id)
+            logger.info("Traductor's set of captors updated")
 
 
 

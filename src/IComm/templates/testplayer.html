@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% set active_page = "testplayer" %}
+
+{% block title %}Test Player{% endblock %}
+
+{% block css %}
+        <style>
+            body { text-align: center; }
+            canvas { background: url('../static/medias/fond.png') center; }
+        </style>
+{% endblock %}
+
+
+{% block content %}
+	<canvas id="gameCanvas" width="800" height="600">
+        Votre navigateur n'est pas compatible !
+    </canvas>
+{% endblock %}
+
+{% block js %}      
+      <script src="../static/js/jaws.js"></script>
+      <script src="../static/js/playScreen/gamePlayer.js"></script>
+	  <script src="static/js/easter_eggs/jeromecmoi.js"></script>
+{% endblock %}

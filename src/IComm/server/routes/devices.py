@@ -7,7 +7,7 @@ from server.roles import *
 from mongoengine import *
 import Model.Device.device as ghomedevice
 import Model.Device.DeviceFactory as factories
-import forms.NewDeviceForm as forms
+import server.forms.NewDeviceForm as forms
 
 import server.controller as controller
 

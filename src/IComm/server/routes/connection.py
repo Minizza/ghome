@@ -2,7 +2,7 @@
 # -*-coding:Utf-8 -*
 
 from server import app
-from flask import render_template, request, session
+from flask import render_template, request, session, redirect
 from server.roles import *
 from mongoengine import *
 import Model.Place.ghomeuser as ghomeuser
@@ -25,12 +25,12 @@ def connection_post():
                 session['role'] = user.role
     
     if find:
-        return render_template('index.html')
+        return redirect('/')
     else : 
         return render_template('connection.html', notif_title="Wrong login or password", notif_content="Please try again.", notif_type="danger")
 
 @app.route('/logout')
 def logout():
     session.pop('role', None)
-    return connection()
+    return redirect('/')
 

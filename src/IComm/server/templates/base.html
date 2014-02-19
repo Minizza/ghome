@@ -17,12 +17,6 @@
 		<!-- Base CSS -->
 		<link href="static/css/base.css" rel="stylesheet">
 
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="static/js/jquery.js"></script>
-
-		<!-- Base JS -->
-		<script src="static/js/base.js"></script>
-
 		{% block css %}{% endblock %}
 
 		<!--[if lt IE 9]>
@@ -41,17 +35,20 @@
 			{% include 'menu.html' %}
 		{% endblock %}
 
-		<!-- Jumbotron -->
-		{% block jumbotron %}{% endblock %}
-
-		<div class="container wrapper">
-			<!-- Notification -->
-			<!-- possible types : success, info, warning, danger -->
+		<!-- Notification -->
+		<!-- possible types : success, info, warning, danger -->
+		<div class="container">
 			<div class="notif alert alert-{{'danger' if not notif_type else notif_type}} fade in" {% if not notif_content %}style="display: none;"{% endif %}>
 				<button type="button" class="close" aria-hidden="true">×</button>
 				<strong>{{notif_title}}</strong> <span>{{notif_content}}</span>
 			</div>
+		</div>
 
+		<!-- Jumbotron -->
+		{% block jumbotron %}{% endblock %}
+
+		<div class="container wrapper">
+			
 			<!-- Content of page -->
 			{% block content %}{% endblock %}
 
@@ -64,7 +61,11 @@
 			</footer>
 		</div>
 
-		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="static/js/jquery.js"></script>
+
+		<!-- Base JS -->
+		<script src="static/js/base.js"></script>
 
 		<!-- Bootstrap javascript files -->
 		<script src="static/bootstrap/js/bootstrap.min.js"></script>

@@ -2,7 +2,8 @@
 # -*-coding:Utf-8 -*
 
 from functools import wraps
-from flask import session
+from flask import session, redirect
+from server.routes.utilities import *
 
 # Decorator to check roles
 def requires_roles(*roles):
@@ -10,7 +11,7 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             if get_current_user_role() not in roles:
-                return error("Eh oh tu t'as pas les droits là","page inaccessible")
+                return error("Eh oh tu t'as pas les droits la","page inaccessible")
             return f(*args, **kwargs)
         return wrapped
     return wrapper

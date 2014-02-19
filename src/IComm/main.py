@@ -50,8 +50,7 @@ def set_current_user_role(role):
 
 @app.route('/')
 def index():
-    monTexte = "Ceci est la page d'accueil du super site"
-    return render_template('index.html', data=monTexte, notif_title="Titre", notif_content="je suis sur l'index", notif_type="success")
+    return render_template('index.html')
     
 @app.route('/connection')
 def connection():
@@ -67,12 +66,26 @@ def testTemperature():
 def testplayer():
     return render_template('testplayer.html')
 	
+@app.route('/testplayer', methods=["POST"])
+def gamePlayerSetQuery():
+    devices = ghomedevice.Device.objects
+    data = '['
+    for device in devices :
+        data+='{'
+        data+='"type" : '+'"'+str(device.__class__.__name__)+'"'+','
+        data+='"ident" : '+'"'+str(device.physic_id)+'"'+','
+        data+='"state" : '+'"'+str(device.current_state)+'"'+','
+        data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
+        data+='"coordY" : '+'"'+str(device.coordY)+'"'
+        data+='},'
+    data = data[:len(data)-1]
+    data +=']'
+    return json.dumps(data)
+	
 @app.route('/testplayer/location', methods=["POST"])
 def getPosition():
-	ab = request.form['abscissa']
-	ord = request.form['ordinate']
-	print ab
-	print ord
+	ab = request.form['abscissa'] #min = 35 max = 610
+	ord = request.form['ordinate'] #min = 40 max = 545
 	return render_template('testplayer.html')
     
 
@@ -177,9 +190,17 @@ def gameSetQuery():
     data +=']'
     return json.dumps(data)
 
+def printUsers(base="test"):
+    connect(base)
+    print "User - Role - Password"
+    print "----------------------"
+    for user in ghomeuser.GHomeUser.objects:
+        print "{} - {} - {}".format(user.name, user.role, user.password)
+
 # Config Object
 CONFIG = json.loads(open('config.json').read())
 
 if __name__ == '__main__':
+    printUsers()
     app.run(host=CONFIG['host'], debug=CONFIG['debug'], port=CONFIG['port'])
 

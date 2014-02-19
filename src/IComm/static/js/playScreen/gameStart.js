@@ -6,6 +6,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
+var boutonActiver = new Object ();
 
 //basic function needed 
 
@@ -90,7 +91,7 @@ function updateData ()
 
                             if (parseInt(data[i].state) == 1)
                             {
-                                for (var j=0; i<bddAllies.length; j++)
+                                for (var j=0; j<bddAllies.length; j++)
                                 {
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
@@ -103,7 +104,7 @@ function updateData ()
                             }
                             else if (parseInt(data[i].state) == 2)
                             {
-                                for (var j=0; i<bddEnemies.length; j++)
+                                for (var j=0; j<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
@@ -118,7 +119,7 @@ function updateData ()
                         }
                         else if ((data[i].type == "Switch")||(data[i].type == "Temperature"))
                         {
-                            for (var j=0; i<bddCapteurs.length; j++)
+                            for (var j=0; j<bddCapteurs.length; j++)
                                 {
                                     if (data[i].ident == bddCapteurs[j].ident)
                                     {
@@ -137,13 +138,32 @@ function updateData ()
 //Fonctions de traitement des events
 function canvasClicked ()
 {
+    if (typeof canvasClicked.selectedA == 'undefined') {canvasClicked.selectedA = -1}
+
+
+    if ((boutonActiver.isActive==true)&&(boutonActiver.image.rect().collidePoint(jaws.mouse_x,jaws.mouse_y)))
+    {
+        console.log("Cacaaaaaaaaaa");
+        return;
+    }
     for (var i=0; i<bddActionneurs.length; i++)
     {
         if (actionneurs[i].rect().collidePoint(jaws.mouse_x,jaws.mouse_y))
         {
-            console.log("Hahaha, bien ouej !");
+            canvasClicked.selectedA = i;
+            actionneurs[i].setImage("../static/medias/sel_actionneur.png");
+            boutonActiver.isActive = true;
+            return;
         }
     }
+
+    if (canvasClicked.selectedA != -1)
+    {
+        actionneurs[canvasClicked.selectedA].setImage("../static/medias/actionneur.png");
+        boutonActiver.isActive = false;
+        canvasClicked.selectedA = -1;
+    }
+    
 }
 
 
@@ -180,7 +200,10 @@ function GameStart ()
             enemies[i].y = bddEnemies[i].coordY;
         }
 
-		
+        boutonActiver.image = 	new jaws.Sprite({image:"../static/medias/butActiver.png"});
+        boutonActiver.image.x = 683;
+        boutonActiver.image.y = 480;
+        boutonActiver.isActive  = false;	
 
 
         updateData();
@@ -241,6 +264,11 @@ function GameStart ()
             allies[i].draw();
             enemies[i].draw();
         }
+
+        if (boutonActiver.isActive)
+        {
+            boutonActiver.image.draw();
+        }
     }
 }
      
@@ -250,7 +278,9 @@ window.onload = function() {
     jaws.assets.add("../static/medias/capteurS2.png");
     jaws.assets.add("../static/medias/capteurS3.png");
     jaws.assets.add("../static/medias/actionneur.png");
+    jaws.assets.add("../static/medias/sel_actionneur.png");
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
+    jaws.assets.add("../static/medias/butActiver.png");
     initData(jaws.start(GameStart));
 };

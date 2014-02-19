@@ -85,25 +85,16 @@ class traductor ():
         sum=hex(sum)
         return sum[(len(sum)-2):].upper()
 
-    def translateTemp(self,trameUsed):
-        """
-        return the temperature (range 0-40 c) from data byte 2 
-        """
-        rowTemp=int(trameUsed.data1,16)
-        temp = round((rowTemp*40/255.0),3)
-        return temp
-
-
 
     def checkTrame(self):
         logger.info("Trame used : {}".format(self.trameUsed.lessRawView()))
         if ("A55A" not in self.trameUsed.sep):
             logger.warn("Wrong separator, rejected")
-            return False
+
         if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
             #Mauvais checkSum
             logger.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
-            return False
+
         with self.lock:
             if (self.trameUsed.ident in self.identSet):
                 #Recuperer le capteur en bdd
@@ -111,19 +102,12 @@ class traductor ():
                 #Identifier le type de trame && Traiter les data de la trame
                 newData = '' #la nouvelle data a entrer en base, type dynamique
                 if (sensorUsed.__class__.__name__=="Switch"):
-                    if (self.trameUsed.data0=='09'):
-                        logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
-                        newData = "close"
-                    elif (self.trameUsed.data0=='08'):
-                        logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
-                        newData = "open"
-                    else:
-                        logger.warn("Strange state : ".format(self.trameUsed.data2))
-                        
+                    newData=sensorUsed.translateTrame(self.trameUsed)
                 elif (sensorUsed.__class__.__name__=="Temperature"):
-                    newData = self.translateTemp(self.trameUsed)
-                    logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
-                #elif (sensorUsed.__class__.__name__)
+                    newData = sensorUsed.translateTrame(self.trameUsed)
+
+                elif (sensorUsed.__class__.__name__=="Position"):
+                    sensorUsed.translateTrame(self.trameUsed)
                 else :
                     logger.warn("Other Captor (not handle (YET !) )")
                 # Update de la trame au niveau de la base

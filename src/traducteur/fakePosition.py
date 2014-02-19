@@ -3,6 +3,9 @@
 from mongoengine import *
 import socket
 import trame
+import logger.loggerConfig as mylog
+
+logger=mylog.configure()
 
 class fakePosition():
 
@@ -17,15 +20,15 @@ class fakePosition():
         self.maxX=500
         self.maxY=500
         #Hard Value !
-        self.addr=''
-        self.port=1515
+        self.addr='134.214.106.23'
+        self.port=5000
 
     def update(self,absX,absY):
         newCoord=self.translateCoord(absX,absY)
         strTrame=self.start+newCoord.get('x')+newCoord.get('y')+self.ident+self.end
         myTrame=trame.trame(strTrame)
         myTrame.calculateChecksum()
-        print myTrame.lessRawView()
+        logger.info(myTrame.lessRawView())
         self.sendTrame(myTrame.rawView())
 
 
@@ -43,11 +46,10 @@ class fakePosition():
         """
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server.bind((self.addr,self.port))
-        server.listen(5)  
-        c,addrOut=server.accept()
-        c.send(trameToSend)
-        c.close
+        server=socket.socket()
+        server.connect((self.addr,self.port))
+        server.send(trameToSend)
+        server.close()
 
    
 def main():

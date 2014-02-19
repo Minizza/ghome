@@ -248,11 +248,12 @@ function GameStart ()
         {
             if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
             {
+
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
                 {
                     case 15 :
-                        pingSound.play();
+                        //pingSound.play();
                         capteurs[i].setImage("../static/medias/capteurS1.png");
                         break;
                     case 30 : 

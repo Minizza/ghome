@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% block head %}
+		<title>
+			GHome - {% block title %}{% endblock %}
+		</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Bootstrap -->
+		<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Bootstrap FormHelpers -->
+		<link href="static/formhelpers/css/bootstrap-formhelpers.min.css" rel="stylesheet">
+
+		<!-- Base CSS -->
+		<link href="static/css/base.css" rel="stylesheet">
+
+		{% block css %}{% endblock %}
+
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js">
+			</script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js">
+			</script>
+		<![endif]-->
+		{% endblock %}
+	</head>
+	<body>
+
+		<!-- Menu -->
+		{% block menu %}
+			{% set active_page = active_page -%}
+			{% include 'menu.html' %}
+		{% endblock %}
+
+		<!-- Notification -->
+		<!-- possible types : success, info, warning, danger -->
+		<div class="container">
+			<div class="notif alert alert-{{'danger' if not notif_type else notif_type}} fade in" {% if not notif_content %}style="display: none;"{% endif %}>
+				<button type="button" class="close" aria-hidden="true">×</button>
+				<strong>{{notif_title}}</strong> <span>{{notif_content}}</span>
+			</div>
+		</div>
+
+		<!-- Jumbotron -->
+		{% block jumbotron %}{% endblock %}
+
+		<div class="container wrapper">
+			
+			<!-- Content of page -->
+			{% block content %}{% endblock %}
+
+			<!-- Footer of page -->
+			<footer>
+				<hr/>
+				{% block footer %}
+					<p>&copy; Equipe Minizza</p>
+				{% endblock %}
+			</footer>
+		</div>
+
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="static/js/jquery.js"></script>
+
+		<!-- Base JS -->
+		<script src="static/js/base.js"></script>
+
+		<!-- Bootstrap javascript files -->
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+
+		<!-- Bootstrap FormHelpers javascript files -->
+		<script src="static/formhelpers/js/bootstrap-formhelpers.min.js"></script>
+
+		{% block js %}{% endblock %}
+	</body>
+
+</html>

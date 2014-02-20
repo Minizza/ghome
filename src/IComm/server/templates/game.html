@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% set active_page = "game" %}
+
+{% block title %}That Game !{% endblock %}
+
+{% block css %}
+        <style>
+            body { text-align: center; }
+            canvas { background: url('../static/medias/fond.png') center; }
+        </style>
+{% endblock %}
+
+<!-- Hide the menu (Redefine it blank) -->
+{% block menu %}{% endblock %}
+
+{% block content %}
+<canvas id="gameCanvas" width="800" height="600" onclick="canvasClicked()">
+        Votre navigateur n'est pas compatible !
+      </canvas>
+      
+      <script src="../static/js/jaws.js"></script>
+      <script> function myGame ()
+      			{
+      				return '{{ theGame }}'
+      			}</script>
+      <script src="../static/js/playScreen/gameStart.js"></script>
+{% endblock %}
+

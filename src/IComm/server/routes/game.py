@@ -2,7 +2,7 @@
 # -*-coding:Utf-8 -*
 
 from server import app
-from flask import render_template
+from flask import render_template, request
 from server.roles import *
 import json
 import Model.Device.device as ghomedevice
@@ -35,4 +35,10 @@ def gameSetQuery():
     data = data[:len(data)-1]
     data +=']'
     return json.dumps(data)
+
+@app.route('/game/activated', methods=["POST"])
+def actiActiv():
+    theIdent = request.form["ident"]
+    
+    print "ok"
 

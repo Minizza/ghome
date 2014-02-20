@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
+from server import app
+
 from mongoengine import *
 
 import sys
@@ -67,3 +69,10 @@ def getForm(place_name, list_position = 0):
 def saveForm(place_name, file_name):
     default_place = getPlace(place_name = place_name)
     default_place.addForm(file_name)
+
+# Fetch all devices
+def fetchDevices():
+    devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
+    for device in devices:
+        device.type = type(device).__name__
+    return devices

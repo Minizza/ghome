@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% set active_page = "testplayer" %}
+{% set active_page = "play" %}
 
-{% block title %}Test Player{% endblock %}
+{% block title %}Play{% endblock %}
 
 {% block css %}
         <style>
@@ -11,6 +11,8 @@
         </style>
 {% endblock %}
 
+<!-- Hide the menu (Redefine it blank) -->
+{% block menu %}{% endblock %}
 
 {% block content %}
 	<canvas id="gameCanvas" width="800" height="600">

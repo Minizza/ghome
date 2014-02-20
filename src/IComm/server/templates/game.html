@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% set active_page = "launchGame" %}
+{% set active_page = "game" %}
 
 {% block title %}That Game !{% endblock %}
 
@@ -20,6 +20,10 @@
       </canvas>
       
       <script src="../static/js/jaws.js"></script>
+      <script> function myGame ()
+      			{
+      				return '{{ theGame }}'
+      			}</script>
       <script src="../static/js/playScreen/gameStart.js"></script>
 {% endblock %}
 

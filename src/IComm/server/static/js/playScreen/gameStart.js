@@ -7,6 +7,11 @@ var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var boutonActiver = new Object ();
+var infosActuator = new Object ();
+var infosParty = new Object ();
+var pingSound;
+
+infosParty.team = parseInt(myGame());
 
 //basic function needed 
 
@@ -20,18 +25,17 @@ function sleep(milliseconds) {
   }
 }
 
-
-
 function initData (callback)
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/launchGame', 
+                url:'/game', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
                     data = JSON.parse(data);
-                    for (var i=0; i<data.length; i++)
+                    //Stockage des infos capteurs/joueurs
+                    for (var i=1; i<data.length; i++)
                     {
                         console.log(data[i].type);
                         var aDevice = new Object ();
@@ -54,16 +58,28 @@ function initData (callback)
                         }
                         else if (data[i].type == "Position")
                         {
-
-                            if (parseInt(data[i].state) == 1)
+                            if (infosParty.team == 0)
                             {
-                                bddAllies.push(aDevice);
+                                if (parseInt(data[i].state) == 1)
+                                {
+                                    bddAllies.push(aDevice);
+                                }
+                                else 
+                                {
+                                    bddEnemies.push(aDevice);
+                                }
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else
                             {
-                                bddEnemies.push(aDevice);
+                                if (parseInt(data[i].state) == infosParty.team)
+                                {
+                                    bddAllies.push(aDevice);
+                                }
+                                else
+                                {
+                                    bddEnemies.push(aDevice);
+                                }
                             }
-
                         }
                         
                     }
@@ -79,7 +95,7 @@ function updateData ()
 {
     $.ajax({    
                 dataType: 'json',
-                url:'/launchGame', 
+                url:'/game', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
@@ -135,6 +151,18 @@ function updateData ()
 }
 
 
+function actiActiv (theAct)
+//Fonction d'envoi d'info lorsqu'un un actuator est activé
+{
+    $.ajax({    
+                dataType: 'json',
+                url:'/game/activated', 
+                type:'POST', 
+                async :'false',
+                data : { ident : theAct.ident, anX : theAct.coordX, anY : theAct.coordY }
+                });
+}
+
 //Fonctions de traitement des events
 function canvasClicked ()
 {
@@ -143,7 +171,7 @@ function canvasClicked ()
 
     if ((boutonActiver.isActive==true)&&(boutonActiver.image.rect().collidePoint(jaws.mouse_x,jaws.mouse_y)))
     {
-        console.log("Cacaaaaaaaaaa");
+        actiActiv(bddActionneurs[canvasClicked.selectedA]);
         return;
     }
     for (var i=0; i<bddActionneurs.length; i++)
@@ -195,6 +223,8 @@ function GameStart ()
             allies[i] = new jaws.Sprite({image:"../static/medias/allies.png"});
             allies[i].x = bddAllies[i].coordX;
             allies[i].y = bddAllies[i].coordY;
+        }
+        for (var i=0; i < bddEnemies.length ; i++) {
             enemies[i] = new jaws.Sprite({image:"../static/medias/enemies.png"});
             enemies[i].x = bddEnemies[i].coordX;
             enemies[i].y = bddEnemies[i].coordY;
@@ -204,6 +234,8 @@ function GameStart ()
         boutonActiver.image.y = 480;
         boutonActiver.isActive  = false;	
 
+        //Le son de ping
+        pingSound = new Audio("../static/medias/ping.wav");
 
         updateData();
     }   
@@ -230,10 +262,12 @@ function GameStart ()
             }
             if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
             {
+
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
                 {
-                    case 15 : 
+                    case 15 :
+                        //pingSound.play();
                         capteurs[i].setImage("../static/medias/capteurS1.png");
                         break;
                     case 30 : 
@@ -264,7 +298,12 @@ function GameStart ()
         } 
 		for (var i=0 ; i < allies.length ; i++) {
             allies[i].draw();
-            enemies[i].draw();
+        }
+        if (infosParty.team==0)
+        {
+            for (var i=0 ; i < enemies.length ; i++) {
+                enemies[i].draw();
+            }
         }
 
         if (boutonActiver.isActive)

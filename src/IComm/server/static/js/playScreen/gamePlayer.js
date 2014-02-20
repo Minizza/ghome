@@ -282,6 +282,19 @@ function GamePlayer ()
 			jaws.collide(player, capteurs[i], function() { 
 				$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
 			});
+			
+			for (var j=1 ; j < allies.lenght ; j++) {
+				jaws.collide(allies[j], capteurs[i], function() { 
+					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
+				});
+				jaws.collide(enemies[j], capteurs[i], function() { 
+					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
+				});
+			}
+			
+			jaws.collide(enemies[0], capteurs[i], function() { 
+					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
+			});
         }
         
     }

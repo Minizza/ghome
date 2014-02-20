@@ -3,6 +3,7 @@
 
 """Socket very useful to connect to every sh*t in da world"""
 import socket
+import threading
 
 """I want da model"""
 from Model.Device import device
@@ -11,7 +12,7 @@ from Model.Device import switch
 from Model.Device import temperature
 from Model.Device import actuator
 from Model.Device import historic
-from traducteur import trame
+from traducteur import trame 
 
 """I want da logger"""
 import logger.loggerConfig as myLog
@@ -23,29 +24,47 @@ from mongoengine import *
 logger=myLog.configure()
 connect('test')
    
-	
+    
 
-class traductor :
+class traductor ():
     """
     TODO écrire la doc
 
     """
 
     def __init__ (self) :
+        """
+            Create things for synchro, get the sensors from the DB
+        """
+        self.lock=threading.Lock()#Lock use for DB updates
         self.soc = socket.socket()
+        self.stoppedAnalyze=False
         self.trameUsed = ''
         self.identSet = set()
         #Load all the device in the base
-        for lsensor in sensor.Sensor.objects:
-            self.identSet.add(lsensor.physic_id)
+        self.updateIdentSet()
+        with self.lock:
+            for lsensor in sensor.Sensor.objects:
+                self.identSet.append(lsensor.physic_id)
+                logger.info(lsensor.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
+        logger.info("Connected to {} : {}".format(addr,port))
     
     def receive (self) :
         message = self.soc.recv(1024)
-        if message:
+        if message and len(message)==28:
             self.trameUsed = trame.trame(message)
+
+    def launch(self,addr,port):
+        self.connect(addr,port)
+        while 1:
+            self.updateIdentSet()
+            self.receive()
+            if self.trameUsed:
+                self.checkTrame()
+            
 
     def doChecksum(self,trameUsed):
         """
@@ -71,50 +90,65 @@ class traductor :
         return the temperature (range 0-40 c) from data byte 2 
         """
         rowTemp=int(trameUsed.data1,16)
-        temp = rowTemp*40/255.0
+        temp = round((rowTemp*40/255.0),3)
         return temp
 
 
+
     def checkTrame(self):
-        logger.info("Trame used : {}".format(self.trameUsed.rawView()))
+        logger.info("Trame used : {}".format(self.trameUsed.lessRawView()))
         if ("A55A" not in self.trameUsed.sep):
-            logger.info("Wrong separator, rejected")
+            logger.warn("Wrong separator, rejected")
             return False
         if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
             #Mauvais checkSum
-            logger.info("Wrong checksum, expected : {}, rejected".format(self.doChecksum()))
+            logger.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
             return False
-        if (self.trameUsed.ident in self.identSet):
-            #Recuperer le capteur en bdd
-            sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]
-            #Identifier le type de trame && Traiter les data de la trame
-            newData = '' #la nouvelle data a entrer en base, type dynamique
-            if (sensorUsed.__class__.__name__=="Switch"):
-                if (self.trameUsed.data0=='09'):
-                    logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
-                    newData = True
-                elif (self.trameUsed.data0=='08'):
-                    logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
-                    newData = False
-                else:
-                    logger.info("Strange state : ".format(self.trameUsed.data2))
-            elif (sensorUsed.__class__.__name__=="Temperature"):
-                newData = self.translateTemp(self.trameUsed)
-                logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
-            else :
-                logger.info("Other Captor (not handle (YET !) )")
-            "Update de la trame au niveau de la base"
-            sensorUsed.update(newData)
+        with self.lock:
+            if (self.trameUsed.ident in self.identSet):
+                #Recuperer le capteur en bdd
+                sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]
+                #Identifier le type de trame && Traiter les data de la trame
+                newData = '' #la nouvelle data a entrer en base, type dynamique
+                if (sensorUsed.__class__.__name__=="Switch"):
+                    if (self.trameUsed.data0=='09'):
+                        logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
+                        newData = "close"
+                    elif (self.trameUsed.data0=='08'):
+                        logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
+                        newData = "open"
+                    else:
+                        logger.warn("Strange state : ".format(self.trameUsed.data2))
+                        
+                elif (sensorUsed.__class__.__name__=="Temperature"):
+                    newData = self.translateTemp(self.trameUsed)
+                    logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
+                #elif (sensorUsed.__class__.__name__)
+                else :
+                    logger.warn("Other Captor (not handle (YET !) )")
+                # Update de la trame au niveau de la base
+                if newData :
+                    sensorUsed.update(newData)
+                    logger.info("New data {}".format(sensorUsed.current_state))
+        self.trameUsed=''
             
 
     def updateIdentSet(self):
-        del(self.identSet[:])
-        for lsensor in sensor.Sensor.objects:
-            self.identSet.add(lsensor.physic_id)
+        """
+            Safely update the identifier set of the traductor
+        """
+        with self.lock:
+            #del(self.identSet[:])
+            self.identSet=[]
+            for lsensor in sensor.Sensor.objects:
+                self.identSet.append(lsensor.physic_id)
+                logger.info(lsensor.physic_id)
+            logger.info("Traductor's set of captors updated")
 
 
 
 if __name__ == '__main__':
+    connect('test')
     soc = socket.socket()
     soc.connect(('',1515))
     logger.info("Connection")
@@ -122,11 +156,9 @@ if __name__ == '__main__':
         while 1 :
             message = soc.recv(1024)
             if message:
-                tram2 = trame(message)
+                tram2 = trame.trame(message)
                 print tram2.lessRawView()
     except socket.error:
         logger.info("Déconnection du serveur")
-        soc.close()
-    finally:
         soc.close()
     soc.close()

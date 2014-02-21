@@ -69,6 +69,68 @@ class RainbowLoggingHandler(ColorizingStreamHandler):
 
         return color_code
 
+    # def colorize(self, record):
+    #     """
+    #     Get a special format string with ASCII color codes.
+    #     """
+
+    #     # Dynamic message color based on logging level
+    #     if record.levelno in self.level_map:
+    #         fg, bg, bold = self.level_map[record.levelno]
+    #     else:
+    #         # Defaults
+    #         bg = None
+    #         fg = "white"
+    #         bold = False
+
+    #     # Magician's hat
+    #     # https://www.youtube.com/watch?v=1HRa4X07jdE
+    #     template = [
+            
+    #         "%(padded_who)s",
+    #         self.reset,
+    #         " ",
+    #         self.get_color(bg, fg, bold),
+    #         "%(message)s",
+    #         self.reset,
+    #     ]
+
+    #     format = "".join(template)
+
+    #     who = ["[",
+    #         	self.get_color("black", None, True),
+	   #          "%(asctime)s",
+	   #          self.reset,
+	   #          "] ",
+    #     		self.get_color("green"),
+    #            getattr(record, "funcName", ""),
+    #            "()",
+    #            self.get_color("black", None, True),
+    #            ":",
+    #            self.get_color("cyan"),
+    #            str(getattr(record, "lineno", 0))
+    #            ]
+
+    #     who = "".join(who)
+
+    #     # We need to calculate padding length manualy
+    #     # as color codes mess up string length based calcs
+    #     unformatted_who = getattr(record, "funcName", "") + "()" + \
+    #         ":" + str(getattr(record, "lineno", 0))
+
+    #     if len(unformatted_who) < self.who_padding:
+    #         spaces = " " * (self.who_padding - len(unformatted_who))
+    #     else:
+    #         spaces = ""
+
+    #     record.padded_who = who + spaces
+
+    #     formatter = logging.Formatter(format, self.date_format)
+    #     self.colorize_traceback(formatter, record)
+    #     output = formatter.format(record)
+    #     # Clean cache so the color codes of traceback don't leak to other formatters
+    #     record.ext_text = None
+    #     return output
     def colorize(self, record):
         """
         Get a special format string with ASCII color codes.
@@ -86,7 +148,13 @@ class RainbowLoggingHandler(ColorizingStreamHandler):
         # Magician's hat
         # https://www.youtube.com/watch?v=1HRa4X07jdE
         template = [
-            
+            "[",
+            self.get_color("black", None, True),
+            "%(asctime)s",
+            self.reset,
+            "] ",
+            self.get_color("white", None, True) if self.show_name else "",
+            "%(name)s " if self.show_name else "",
             "%(padded_who)s",
             self.reset,
             " ",

@@ -181,6 +181,9 @@ function canvasClicked ()
             canvasClicked.selectedA = i;
             actionneurs[i].setImage("../static/medias/sel_actionneur.png");
             boutonActiver.isActive = true;
+            boutonActiver.textId.set("Ident :\n"+bddActionneurs[i].ident);
+            boutonActiver.textState.set("State :\n"+bddActionneurs[i].state);
+            boutonActiver.textCoord.set("Coord :\n"+bddActionneurs[i].coordX+","+bddActionneurs[i].coordY);
             return;
         }
     }
@@ -235,8 +238,13 @@ function GameStart ()
 
         //Le bouton d'activation d'actuator
         boutonActiver.image = 	new jaws.Sprite({image:"../static/medias/butActiver.png"});
-        boutonActiver.image.x = 683;
-        boutonActiver.image.y = 480;
+        boutonActiver.image.moveTo(683,480);
+        boutonActiver.textId = new jaws.Text("");
+        boutonActiver.textId.moveTo(680,100);
+        boutonActiver.textState = new jaws.Text("");
+        boutonActiver.textState.moveTo(680,150);
+        boutonActiver.textCoord = new jaws.Text("");
+        boutonActiver.textCoord.moveTo(680,200);
         boutonActiver.isActive  = false;	
 
         //Le son de ping
@@ -262,7 +270,7 @@ function GameStart ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
-            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
+            if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
             {
 
                 bddCapteurs[i].detect+=1;
@@ -311,6 +319,9 @@ function GameStart ()
         if (boutonActiver.isActive)
         {
             boutonActiver.image.draw();
+            boutonActiver.textId.draw();
+            boutonActiver.textState.draw();
+            boutonActiver.textCoord.draw();
         }
     }
 }

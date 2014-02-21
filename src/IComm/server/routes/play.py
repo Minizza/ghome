@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
+import time
+
 from server import app
 from flask import render_template, request
 from server.roles import *
@@ -31,13 +33,26 @@ def gamePlayerSetQuery():
 
 @app.route('/play/location', methods=["POST"])
 def getPosition():
-    ab = request.form['abscissa'] #min = 35 max = 610
-    ord = request.form['ordinate'] #min = 40 max = 545
+    ident = request.form["ident"]
+    absc = request.form['abscissa'] #min = 35 max = 610
+    ordo = request.form['ordinate'] #min = 40 max = 545
+
+    #### TEST ##A REMPLACER PAR UN ENVOI DE TRAME#####
+    upDev = ghomedevice.Device.objects(physic_id=ident)[0]
+    upDev.coordX = absc
+    upDev.coordY = ordo
+    upDev.save()
+    ##################################################
+
     return render_template('play.html')
 	
 @app.route('/play/captor', methods=["POST"])
 def getCaptor():
     idCaptor = request.form['captor']
-    print idCaptor;
+    
+    #### TEST ##A REMPLACER PAR UN ENVOI DE TRAME#####
+    ghomedevice.Device.objects(physic_id=idCaptor)[0].update("open")
+    ##################################################
+
     return render_template('play.html')
 

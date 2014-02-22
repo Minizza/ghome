@@ -9,5 +9,5 @@ def main():
 	app.run(host=CONFIG['host'], debug=CONFIG['debug'], port=CONFIG['port'])	
 
 #app.run(host='0.0.0.0')
-"""if __name__ == '__main__':
-	main()"""
+if __name__ == '__main__':
+	main()

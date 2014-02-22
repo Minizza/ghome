@@ -13,5 +13,5 @@ def main():
     myTrad=traductor().launch(addr,port)
 
 
-"""if __name__ == '__main__':
-    main()"""
+if __name__ == '__main__':
+    main()

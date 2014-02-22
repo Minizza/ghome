@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{report}
+\documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
@@ -17,10 +17,16 @@
 \fancyhead{}
 \fancyfoot{}
 \fancyhead[L]{GHome}
-\fancyhead[C]{Procédure d'installation}
+\fancyhead[C]{\begin{Large}
+Procédure d'installation
+\end{Large}}
 \fancyhead[R]{Héxanôme H4111}
 
 
 \begin{document}
-lb ldjfklsdjf
+\paragraph{Avertissement : }La procédure d'installation a été écrite et réalisée sous linux/Debian. Vous devez pouvoir obtenir temporairement les droits root pour la réaliser.
+\section{Installation}
+\paragraph{} Pour installer ce projet, copiez le script $install.sh$ dans le répertoire où vous souhaitez l'installer et éxecuter le.
+
+Il va installer les services requis (droits root nécessaires), créer l'arborescence de fichiers nécessaire, récupérer les sources via git, créer un environnement Python isolé du système comprenant toutes les bibliothèques nécessaires.
 \end{document}

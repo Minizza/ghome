@@ -31,6 +31,13 @@ Procédure d'installation
 Il va installer les services requis (droits root nécessaires), créer l'arborescence de fichiers nécessaire, récupérer les sources via git, créer un environnement Python isolé du système comprenant toutes les bibliothèques nécessaires.
 
 \section{Configuration}
-\paragraph{} Un fichier de configuration $config.json$ est présent dans $racine/src/IComm/server$
+Pour pouvoir éxécuter l'application, il faut ajouter la racine des sources du projet au PYTHONPATH. Le script $add\_python\_path.sh$ permet de le faire. Il prend en paramère le fichier de configuration de votre interpreteur de commande ($.bashrc$,$.zshrc$, ...) généralement situé dans votre dossier personnel.
+\paragraph{} Un fichier de configuration $config.json$ est présent dans $racine/src/IComm/server$. Il renseigne  : 
+\begin{itemize}
+\item l'adresse et le port pour le site web
+\item l'adresse et le port de la passerelle (acquisition de données)
+\item le nom de la base de donnée
+\item si l'on souhaite être en mode DEBUG
+\end{itemize}
 \section{\'{E}xécution}
 \end{document}

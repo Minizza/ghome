@@ -17,7 +17,7 @@ fi
 
 
 # Clone the project
-git clone https://github.com/Minizza/ghome.git
+git clone https://github.com/Minizza/ghome.git -b forInstallOnly
 
 echo "			end git cloning"
 

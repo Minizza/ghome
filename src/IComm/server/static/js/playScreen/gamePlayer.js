@@ -8,6 +8,7 @@ var capteurs = new Array ();
 var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
+var bddPlayer;
 var player;
 var map;
 
@@ -155,7 +156,7 @@ function canvasClicked ()
 function GamePlayer ()
 {
         
-    var Eoo = 0;        
+    var Eoo = 0;      
 
     this.setup = function() { 
         var x;
@@ -193,12 +194,12 @@ function GamePlayer ()
 		player.x = allies[0].x;
 	    player.y = allies[0].y;
 		
-		function SendCoordinates() {
-			$.post( "play/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
-				setTimeout(SendCoordinates, 2000);
-			});
-		}
-		
+        function SendCoordinates() {
+        $.post( "play/location", { ident : bddAllies[0].ident, abscissa: player.x, ordinate: player.y }, function( data ) {
+                setTimeout(SendCoordinates, 200);
+            });
+        }  
+
 		SendCoordinates();
 		
 		/*map = new jaws.Sprite({ image:"../static/medias/plan.svg" });
@@ -211,10 +212,9 @@ function GamePlayer ()
     
     this.update = function() { 
         
-        if (Eoo===60)
+        if (Eoo===10)
         {
             Eoo =0;
-            updateData();
         }
         else
         {
@@ -223,7 +223,7 @@ function GamePlayer ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
-            if ((bddCapteurs[i].state == "True")||(bddCapteurs[i].detect>0))
+            if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
             {
                 bddCapteurs[i].detect+=1;
                 switch(bddCapteurs[i].detect)
@@ -296,6 +296,8 @@ function GamePlayer ()
 					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
 			});
         }
+
+        
         
     }
             

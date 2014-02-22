@@ -1,0 +1,128 @@
+\section{Scénario}
+
+
+\section{Fonctionnalités - Cas d'utilisation}
+
+
+\subsection{Un client}
+~\\
+\textbf{Cas d’utilisation} : Connexion à la plateforme\\
+\textbf{Acteur principal} :   tout utilisateur\\
+\textbf{Post-conditions} :   l’utilisateur est connecté, les différentes pages accessibles selon ses droits\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item L’utilisateur se connecte à la plateforme
+ \item Il se dirige vers la page “Connection”
+ \item Il rentre son identifiant
+ \item Il rentre son mot de passe
+ \item Il valide ses entrées
+\end{enumerate}
+~\\
+\textbf{Extensions} :
+\begin{enumerate}
+ \item L’utilisateur rentre un mauvais identifiant / mot de passe
+    \begin{enumerate}
+     \item L’application lui signifie son erreur
+     \item L’utilisateur est invité à recommencer
+    \end{enumerate}
+\end{enumerate}
+
+\paragraph{}
+~\\
+\textbf{Cas d’utilisation} : Visualisation de l’état courant des capteurs et actionneurs\\
+\textbf{Acteur principal} :   tout utilisateur\\
+\textbf{Pré-conditions} : Etre connecté à la plateforme\\
+\textbf{Post-conditions} :   l’utilisateur est connecté, les différentes pages accessibles selon ses droits\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item L’utilisateur sélectionne la page “Devices” de la plateforme
+ \item Il sélectionne un périphérique dans la liste des existants
+ \item Il visualise l’état du capteur, son identifiant, sa dénomination et sa position sur la carte
+\end{enumerate}
+
+
+\subsection{Le gérant}
+~\\
+\textbf{Cas d’utilisation} : Ajout d’un périphérique\\
+\textbf{Acteur principal} : le gérant\\
+\textbf{Pré-conditions} : Etre connecté à la plateforme\\
+\textbf{Post-conditions} : Le périphérique est ajouté en base avec toutes les informations récoltées\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item L’utilisateur sélectionne la page “Devices” de la plateforme
+ \item Il sélectionne le bouton “Add a device”
+ \item Il choisit dans la liste déroulante le type de périphérique à ajouter
+ \item Il renseigne l’identifiant “fabriquant” du périphérique (identifiant en hexadécimal)
+ \item Il renseigne une dénomination pour le périphérique
+ \item Il choisit son emplacement sur la carte
+\end{enumerate}
+
+\paragraph{}
+~\\
+\textbf{Cas d’utilisation} : Suppression d’un capteur\\
+\textbf{Acteur principal} : le gérant\\
+\textbf{Pré-conditions} : Etre connecté à la plateforme\\
+\textbf{Post-conditions} : Le périphérique est supprimé de la base, son historique d’états également\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item L’utilisateur sélectionne la page “Devices” de la plateforme
+ \item Il sélectionne un périphérique dans la liste des existants
+ \item Il sélectionne le bouton “Delete”
+\end{enumerate}
+
+
+\subsection{Le chef d'équipe}
+~\\
+\textbf{Cas d’utilisation} : Ouvrir l’application\\
+\textbf{Acteur principal} : Le gérant\\
+\textbf{Pré-conditions} : Avoir été désigné les chefs d’équipe, la partie est remise à zéro pour en démarrer une nouvelle (état des capteurs, bonus à utiliser, position des équipiers,...)\\
+\textbf{Post-conditions} : L’application est ouverte, la partie est lancée\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item Le gérant distribue la tablette aux deux chefs d’équipe (tablettes respectivement calibrées pour connaitre allies/enemies)
+ \item Le gérant demande aux chefs d’équipe de lancer l’application
+ \item L’application arrive sur la fenêtre principale, les alliés sont affichés, les bonus disponibles (non grisés, sans surbrillance) et les capteurs à l’arret
+\end{enumerate}
+
+\paragraph{}
+~\\
+\textbf{Cas d’utilisation} :  Détecter la présence d’un ennemi\\
+\textbf{Acteur principal} : Le chef d’équipe\\
+\textbf{Pré-conditions} : L’application est ouverte, la partie est lancée\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item Un ennemi {appuie sur un plaque de pression ; est détecté par un capteur de présence ; ouvre une porte surveillée par un capteur}
+ \item Si l’application détecte le premier point, on teste si c’est effectivement un ennemi qui a déclenché le capteur
+ \item Si c’est effectivement un ennemi, un son est joué et un changement du sprite du capteur en question est effectué pour signaler au chef d’équipe le déclenchement du capteur par un ennemi
+ \item On affiche durant 2s l’ennemi en question, et les alentours dans un rayon de 2m
+\end{enumerate}
+
+\paragraph{}
+~\\
+\textbf{Cas d’utilisation} :  Sélectionner / Déclencher un actuateur\\
+\textbf{Acteur principal} : Le chef d’équipe (CE)\\
+\textbf{Pré-conditions} : L’application est ouverte, la partie est lancée\\
+\textbf{Post-conditions} :  Une gestion post traitement est effectuée pour déclencher l’action de l’actuateur\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item Le CE sélectionne l’actuateur sur la carte de jeu
+ \item Des informations complémentaires à l’actuateur sont affichées (nom, type, localisation) // Type : {lumière ; machine à fumée ; porte close}
+ \item Le bonus relatif au type de l’actuateur est mis en surbrillance, les autres sont ternis (seul le bonus mis en surbrillance doit être détectable)
+ \item Si le CE ré-appuie sur la carte de jeu, en dehors de n’importe quel autre actuateur, celà remet l’affichage de base. S’il appuie sur un autre actuateur, celà met les informations de l’autre actuateur
+ \item Lorsqu’un actuateur est sélectionné, si le CE appuie sur le bonus correspondant, il le déclenche, et le nombre de déclenchement de l’actuateur est décrémenté
+ \item Lorsque le nombre d’activations d’un actuateur est tombé à zéro, le bonus lié à l’actuateur est totalement grisé, il devient inutilisable
+\end{enumerate}
+
+\paragraph{}
+~\\
+\textbf{Cas d’utilisation} :  Fin de manche\\
+\textbf{Acteur principal} : Le chef d’équipe\\
+\textbf{Pré-conditions} : Une manche a été jouée, elle vient de se terminer\\
+\textbf{Post-conditions} :  Une autre manche est relancée, donnant lieu au CdU “Ouvrir l’application”, point 3\\
+\textbf{Scénario principal} :
+\begin{enumerate}
+ \item L’équipe se retrouve autour du CE pour faire un débriefing de la manche
+ \item Des informations sont affichées (Bonus utilisés par l’équipe / l’équipe adverse)
+ \item La carte affiche les capteurs et leur nombre d’activations
+\end{enumerate}
+

@@ -1,8 +1,7 @@
 # -*-coding:Utf-8 -*
 from sensor import *
-from logger import loggerConfig
+from logger import LOGGER
 
-logger=loggerConfig.configure()
 
 class Temperature(Sensor):
     
@@ -15,5 +14,5 @@ class Temperature(Sensor):
         """
         rowTemp=int(inTrame.data1,16)
         temperature = round((rowTemp*40/255.0),3)
-        logger.info("Temperature sensor {} with temp {}".format(inTrame.ident, temperature))
+        LOGGER.info("Temperature sensor {} with temp {}".format(inTrame.ident, temperature))
         return temperature

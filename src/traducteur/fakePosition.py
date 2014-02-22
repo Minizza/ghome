@@ -4,9 +4,8 @@ from mongoengine import *
 import socket
 import trame
 from Model.Device import position
-import logger.loggerConfig as mylog
+from logger import LOGGER
 
-logger=mylog.configure()
 
 class fakePosition():
 
@@ -27,7 +26,7 @@ class fakePosition():
         strTrame=self.start+newCoord.get('x')+newCoord.get('y')+self.ident+self.end
         myTrame=trame.trame(strTrame)
         myTrame.calculateChecksum()
-        logger.debug("Frame to be send : {}".format(myTrame.lessRawView()))
+        LOGGER.debug("Frame to be send : {}".format(myTrame.lessRawView()))
         self.sendTrame(myTrame.rawView())
 
 
@@ -48,7 +47,7 @@ class fakePosition():
         server=socket.socket()
         server.connect((self.addr,self.port))
         server.send(trameToSend)
-        logger.info("Trame to send : {}".format(trameToSend))
+        LOGGER.info("Trame to send : {}".format(trameToSend))
         server.close()
 
    

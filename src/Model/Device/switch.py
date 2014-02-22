@@ -1,8 +1,7 @@
 # -*-coding:Utf-8 -*
 from sensor import *
-from logger import loggerConfig
+from logger import LOGGER
 
-logger=loggerConfig.configure()
 
 class Switch(Sensor):
 	"""Switch class"""
@@ -14,12 +13,12 @@ class Switch(Sensor):
 				else nothing
 		"""
 		if (inTrame.data0=='09'):
-                        logger.info("Door sensor {} with state [close]".format(inTrame.ident))
+                        LOGGER.info("Door sensor {} with state [close]".format(inTrame.ident))
                         dataToRet = "close"
 	        elif(inTrame.data0=='08'):
-	            logger.info("Door sensor {} with state [open]".format(inTrame.ident))
+	            LOGGER.info("Door sensor {} with state [open]".format(inTrame.ident))
 	            dataToRet = "open"
 	        else:
-	            logger.warn("Door sensor {}Strange state : {}".format(inTrame.ident, inTrame.data2))
+	            LOGGER.warn("Door sensor {}Strange state : {}".format(inTrame.ident, inTrame.data2))
 	            dataToRet=''
 		return dataToRet

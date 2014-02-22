@@ -1,9 +1,8 @@
 # -*-coding:Utf-8 -*
 from sensor import *
 from mongoengine import *
-from logger import loggerConfig
+from logger import LOGGER
 
-logger=loggerConfig.configure()
 
  
 class Position(Sensor):
@@ -23,5 +22,5 @@ class Position(Sensor):
 		rawConvertedY=int((inTrame.data3+inTrame.data2),16)
 		absX=rawConvertedX/(16**4-1.0)*self.maxX
 		absY=rawConvertedY/(16**4-1.0)*self.maxY
-		logger.info("Position sensor {} with new coordonate {} -- {}".format(self.physic_id,absX,absY))
+		LOGGER.info("Position sensor {} with new coordonate {} -- {}".format(self.physic_id,absX,absY))
 		return {"coordX":absX,"coordY":absY}

@@ -4,6 +4,7 @@
 """Socket very useful to connect to every sh*t in da world"""
 import socket
 import threading
+import sys
 
 """I want da model"""
 from Model.Device import device
@@ -15,13 +16,12 @@ from Model.Device import historic
 from traducteur import trame 
 
 """I want da logger"""
-import logger.loggerConfig as myLog
+from logger import LOGGER
 
 from user import *
 from mongoengine import *
 
 
-logger=myLog.configure()
 connect('test')
    
     
@@ -46,24 +46,35 @@ class traductor ():
         with self.lock:
             for lsensor in sensor.Sensor.objects:
                 self.identSet.append(lsensor.physic_id)
-                logger.info(lsensor.physic_id)
+                LOGGER.info(lsensor.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
-        logger.info("Connected to {} : {}".format(addr,port))
+        LOGGER.info("Connected to {} : {}".format(addr,port))
     
     def receive (self) :
         message = self.soc.recv(1024)
+        LOGGER.debug("trame reçu")
         if message and len(message)==28:
             self.trameUsed = trame.trame(message)
 
     def launch(self,addr,port):
-        self.connect(addr,port)
+        try:
+            self.connect(addr,port)
+        except socket.error,e:
+            raise e
+        dacount=0
         while 1:
-            self.updateIdentSet()
-            self.receive()
-            if self.trameUsed:
-                self.checkTrame()
+            try:
+                if dacount >10000 : self.updateIdentSet()
+                self.receive()
+                if self.trameUsed:
+                    self.checkTrame()
+                dacount+=1
+            except KeyboardInterrupt:
+                sys.exit(0)
+
+
             
 
     def doChecksum(self,trameUsed):
@@ -85,25 +96,16 @@ class traductor ():
         sum=hex(sum)
         return sum[(len(sum)-2):].upper()
 
-    def translateTemp(self,trameUsed):
-        """
-        return the temperature (range 0-40 c) from data byte 2 
-        """
-        rowTemp=int(trameUsed.data1,16)
-        temp = round((rowTemp*40/255.0),3)
-        return temp
-
-
 
     def checkTrame(self):
-        logger.info("Trame used : {}".format(self.trameUsed.lessRawView()))
+        LOGGER.info("Trame used : {}".format(self.trameUsed.lessRawView()))
         if ("A55A" not in self.trameUsed.sep):
-            logger.warn("Wrong separator, rejected")
-            return False
+            LOGGER.warn("Wrong separator, rejected")
+
         if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
             #Mauvais checkSum
-            logger.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
-            return False
+            LOGGER.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
+
         with self.lock:
             if (self.trameUsed.ident in self.identSet):
                 #Recuperer le capteur en bdd
@@ -111,25 +113,18 @@ class traductor ():
                 #Identifier le type de trame && Traiter les data de la trame
                 newData = '' #la nouvelle data a entrer en base, type dynamique
                 if (sensorUsed.__class__.__name__=="Switch"):
-                    if (self.trameUsed.data0=='09'):
-                        logger.info("Door sensor {} with state [close]".format(self.trameUsed.ident))
-                        newData = "close"
-                    elif (self.trameUsed.data0=='08'):
-                        logger.info("Door sensor {} with state [open]".format(self.trameUsed.ident))
-                        newData = "open"
-                    else:
-                        logger.warn("Strange state : ".format(self.trameUsed.data2))
-                        
+                    newData=sensorUsed.translateTrame(self.trameUsed)
                 elif (sensorUsed.__class__.__name__=="Temperature"):
-                    newData = self.translateTemp(self.trameUsed)
-                    logger.info("Temperature sensor {} with temp {}".format(self.trameUsed.ident, newData))
-                #elif (sensorUsed.__class__.__name__)
+                    newData = sensorUsed.translateTrame(self.trameUsed)
+
+                elif (sensorUsed.__class__.__name__=="Position"):
+                    newData = sensorUsed.translateTrame(self.trameUsed)
                 else :
-                    logger.warn("Other Captor (not handle (YET !) )")
+                    LOGGER.warn("Other Captor (not handle (YET !) )")
                 # Update de la trame au niveau de la base
                 if newData :
                     sensorUsed.update(newData)
-                    logger.info("New data {}".format(sensorUsed.current_state))
+                    LOGGER.info("New data {}".format(sensorUsed.current_state))
         self.trameUsed=''
             
 
@@ -142,23 +137,29 @@ class traductor ():
             self.identSet=[]
             for lsensor in sensor.Sensor.objects:
                 self.identSet.append(lsensor.physic_id)
-                logger.info(lsensor.physic_id)
-            logger.info("Traductor's set of captors updated")
+                LOGGER.info(lsensor.physic_id)
+            LOGGER.info("Traductor's set of captors updated")
 
 
 
 if __name__ == '__main__':
     connect('test')
-    soc = socket.socket()
-    soc.connect(('',1515))
-    logger.info("Connection")
+    # soc = socket.socket()
+    # soc.connect(('',1515))
+    # LOGGER.info("Connection")
+    # try:
+    #     while 1 :
+    #         message = soc.recv(1024)
+    #         if message:
+    #             tram2 = trame.trame(message)
+    #             print tram2.lessRawView()
+    # except socket.error:
+    #     LOGGER.info("Déconnection du serveur")
+    #     soc.close()
     try:
-        while 1 :
-            message = soc.recv(1024)
-            if message:
-                tram2 = trame.trame(message)
-                print tram2.lessRawView()
+        myTrad=traductor()
+        myTrad.launch('',1515)
     except socket.error:
-        logger.info("Déconnection du serveur")
-        soc.close()
-    soc.close()
+        LOGGER.info("Déconnection du serveur")
+    finally:
+        pass

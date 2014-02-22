@@ -28,6 +28,11 @@ def balPres (c):
     print "Sending : {}".format(data)
     c.send(data)
 
+def balBad (c):
+    data = 'A55A0B079DB8000D0004E59500F5'
+    print "Sending : {}".format(data)
+    c.send(data)
+
 def auto () :
     print 'fakeJerome : concepteur de fakeTrames'
     print 'Auto mode : send random trames every 5s'
@@ -57,6 +62,7 @@ def manual () :
         print '1 : Capteur temperature'
         print '2 : Capteur contact'
         print '3 : Capteur presence'
+        print '4 : mauvaisse trame'
         kloug = raw_input('A vous :')
         test = int(kloug)
         if test == 1 :
@@ -65,6 +71,8 @@ def manual () :
             balCont(c)
         elif test == 3 :
             balPres(c)
+        elif test==4:
+        	balBad(c)
         else : 
             print 'Haha petit malin !'
 

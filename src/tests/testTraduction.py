@@ -15,7 +15,7 @@ from Model.Device.temperature import *
 
 from traducteur.traductor import *
 from traducteur.trame import *
-
+from traducteur.fakePosition import *
 from mongoengine import *
 
 
@@ -47,7 +47,8 @@ def send_trameTemp():
     c.send(tramounette)
     #sensor is supposed to be in da base and send temp equal to 18
     server.close()
-
+def send_tramePosition(player):
+        fakePosition(player).update(610,545)
 
 
 class ModelTest(unittest2.TestCase):
@@ -74,8 +75,8 @@ class ModelTest(unittest2.TestCase):
         
         capteur1.save()
 
-        tram = trame('A55A0B06000000080001B25E002A')
-        capteur = Switch(physic_id = tram.ident, name = "INTERRUPTEUR_PLAQUE", current_state = False)
+        tram = trame.trame('A55A0B06000000080001B25E002A')
+        capteur = Switch(physic_id = tram.ident, name = "INTERRUPTEUR_PLAQUE", current_state = "close")
         capteur.save()
 
         print (colorama.Fore.MAGENTA + "Base : "+colorama.Fore.RESET)
@@ -120,6 +121,28 @@ class ModelTest(unittest2.TestCase):
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
         capteur1=Sensor.objects(physic_id = "00893382")[0]
         self.assertAlmostEqual(capteur1.current_state, 18.82, places=2)
+
+    
+
+    def test_position(self):
+        print (colorama.Fore.GREEN+"     Test de faux capteur de position"+colorama.Fore.RESET)
+        player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500)
+        player11.save()
+
+        print (colorama.Fore.MAGENTA + "Base before: "+colorama.Fore.RESET)
+        for device in Device.objects:
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
+
+        mytrad=traductor()
+        mytrad.connect('134.214.106.23',5000)
+        fakePosition(player11).update(608,545)
+        thread.start_new_thread(send_tramePosition,(player11,))
+        mytrad.receive()
+        mytrad.checkTrame()
+
+        print (colorama.Fore.MAGENTA + "Base after: "+colorama.Fore.RESET)
+        for device in Device.objects:
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
         
 ########################################################################

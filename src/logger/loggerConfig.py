@@ -6,6 +6,8 @@
  #en-python/ 
 import logging
 import sys
+import inspect
+
 from loggerColor import *
  
 from logging.handlers import RotatingFileHandler 
@@ -49,5 +51,7 @@ def configure ():
 	#niveau de début
 	steam_handler.setLevel(logging.DEBUG)
 	logger.addHandler(steam_handler)
-
+	curframe = inspect.currentframe()
+	calframe = inspect.getouterframes(curframe, 2)
+	logger.info("A new logger is born from {}".format(calframe[1][3]))
 	return logger

@@ -3,14 +3,13 @@
 from traducteur.traductor import *
 from mongoengine import *
 
-
-addr='134.214.106.23'
-port=5000
+#fichier de conf
+from IComm.server import CONFIG
 
 
 def main():
     connect('test')
-    myTrad=traductor().launch(addr,port)
+    myTrad=traductor().launch(CONFIG['platforme'],CONFIG['platformePort'])
 
 
 if __name__ == '__main__':

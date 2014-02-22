@@ -251,14 +251,13 @@ function GameStart ()
         pingSound = new Audio("../static/medias/ping.wav");
 
         updateData();
-                    
     }   
 	
 
     
     this.update = function() { 
-        
-        if (Eoo===60)
+            
+        if (Eoo===15)
         {
             Eoo =0;
             updateData();
@@ -270,6 +269,10 @@ function GameStart ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
+            if (bddCapteurs[i].ident == "0001B592")
+            {
+                console.log(bddCapteurs[i].state);
+            }
             if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
             {
 
@@ -319,9 +322,6 @@ function GameStart ()
         if (boutonActiver.isActive)
         {
             boutonActiver.image.draw();
-            boutonActiver.textId.draw();
-            boutonActiver.textState.draw();
-            boutonActiver.textCoord.draw();
         }
     }
 }

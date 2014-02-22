@@ -77,7 +77,7 @@ def device_test():
 
 	#list of players
 		# A player is just represented by a coordonate getting sensor
-	player11 = position.Position(physic_id = "AGEGF3E7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500,maxX=610,minX=35,maxY=545)
+	player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500)
 	player12 = position.Position(physic_id = "BG458ECD", name = "Equipe 1 joueur 2", current_state = 1, coordX = 60, coordY = 500)
 	player13 = position.Position(physic_id = "DE4265DE", name = "Equipe 1 joueur 3", current_state = 1, coordX = 70, coordY = 500)
 	player14 = position.Position(physic_id = "AC3542FE", name = "Equipe 1 joueur 4", current_state = 1, coordX = 60, coordY = 510)

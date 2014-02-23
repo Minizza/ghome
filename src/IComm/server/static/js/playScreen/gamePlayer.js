@@ -10,6 +10,7 @@ var bddPlayer;
 var player;
 
 var boolIsAllied = true;
+var selectedPlayerId;
 var selectedPlayerIndex;
 
 // Variable for drawing map
@@ -19,24 +20,31 @@ var image;
 //basic function needed 
 
 function changePlayer() {
-    var deviceSelected = $("#playersList").val();
+    selectedPlayerId = $("#playersList").val();
     var trouve = false;
     for(var i=0; i<bddAllies.length; i++) {
-        if(bddAllies[i].ident == deviceSelected) {
+        if(bddAllies[i].ident == selectedPlayerId) {
             selectedPlayerIndex = i;
             boolIsAllied = true;
-            trouve = true;
-            break;
+            if (player)
+            {
+                player.x = allies[i].x;
+                player.y = allies[i].y;
+            }
+            return;
         }
     }
 
-    if(trouve) return;
-
     for(var i=0; i<bddEnemies.length; i++) {
-        if(bddEnemies[i].ident == deviceSelected) {
+        if(bddEnemies[i].ident == selectedPlayerId) {
             selectedPlayerIndex = i;
             boolIsAllied = false;
-            break;
+            if (player)
+            {
+                player.x = enemies[i].x;
+                player.y = enemies[i].y;
+            }
+            return;
         }
     }
 }
@@ -176,7 +184,7 @@ function canvasClicked ()
 //Fonction d'envoi de l'information "capteur detecte"
 function Detect ()
 {
-    
+
 }
 
 //Fonction d'envoi de l'information "capteur ne detecte plus"
@@ -232,7 +240,7 @@ function GamePlayer ()
 		
 		
         function SendCoordinates() {
-        $.post( "play/location", { ident : bddAllies[0].ident, abscissa: player.x, ordinate: player.y }, function( data ) {
+        $.post( "play/location", { ident : selectedPlayerId, abscissa: player.x, ordinate: player.y }, function( data ) {
                 setTimeout(SendCoordinates, 200);
             });
         }  
@@ -296,6 +304,17 @@ function GamePlayer ()
 	      player.y += 3;
 	    }
 		
+        if (boolIsAllied)
+        {
+            allies[selectedPlayerIndex].x = player.x;
+            allies[selectedPlayerIndex].y = player.y;
+        }
+        else 
+        {
+            enemies[selectedPlayerIndex].x = player.x;
+            enemies[selectedPlayerIndex].y = player.y;
+        }
+
 		//Player can't leave square
 		if (player.x < 35)
 	    {
@@ -319,19 +338,7 @@ function GamePlayer ()
 			jaws.collide(player, capteurs[i], function() { 
 				$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
 			});
-			
-			for (var j=1 ; j < allies.lenght ; j++) {
-				jaws.collide(allies[j], capteurs[i], function() { 
-					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-				});
-				jaws.collide(enemies[j], capteurs[i], function() { 
-					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-				});
-			}
-			
-			jaws.collide(enemies[0], capteurs[i], function() { 
-					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-			});
+
         }
 
         

@@ -8,20 +8,20 @@
 
 <div class="page-header">
     <h1>
-        Liste des périphériques
+        Devices
     </h1>
 </div>
 <nav class="tabbable tabs-left">
     <div class="row">
-        <div class="col-md-4 colonne_devices">
-            <ul class="nav nav-pills">    
-                <li>
-                    <a href="#device_new" data-toggle="tab" class="label label-default" id="new_device_button">Nouveau périphérique</a>
+        <div id="test" class="col-md-4">
+            <ul class="nav nav-pills colonne_devices">    
+                <li class="col-md-12">
+                    <a href="#device_new" data-toggle="tab" class="label label-default" id="new_device_button">New device</a>
                 </li>
                 {% for device in devices %}
-                <li>
-                    <a href="#device_{{ loop.index }}" data-toggle="tab">{{ device.name }}</a>
-                </li>
+                    <li class="col-md-12" id="list_device_id_{{ device.physic_id }}">
+                        <a href="#device_{{ loop.index }}" data-toggle="tab">{{ device.name }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -29,15 +29,21 @@
             <div class="tab-content">
                 {% for device in devices %}
                 <div class="tab-pane" id="device_{{ loop.index }}">
+                    <script type="text/javascript">   
+                        
+                    </script>
                     <div class="attributes_list">
                     <div class="attribute"><span class="attr_label">Type</span><span class="attr_value">{{ device.type }}</span></div>
-                    <div class="attribute"><span class="attr_label">Id physique</span><span class="attr_value">{{ device.physic_id }}</span></div>
-                    <div class="attribute"><span class="attr_label">Nom</span><span class="attr_value">{{ device.name }}</span></div>
+                    <div class="attribute"><span class="attr_label">Physic ID</span><span class="attr_value" id="physic_id">{{ device.physic_id }}</span></div>
+                    <div class="attribute"><span class="attr_label">Name</span><span class="attr_value">{{ device.name }}</span></div>
                     <form method="POST" action="/devices/remove">
                         <input type="hidden" name="physic_id" value="{{ device.physic_id }}">
-                        <button type="submit" class="label label-default"><span class="glyphicon glyphicon-trash"> Supprimer</span></button>
+                        <button type="submit" class="label label-default"><span class="glyphicon glyphicon-trash"> Remove</span></button>
                     </form>
                     </div>
+                    <p>
+                        Click the map to place this device.
+                    </p>
                 </div>
                 {% endfor %}
                 <div class="tab-pane" id="device_new">
@@ -49,16 +55,117 @@
                         <input type="submit" value="Valider">
                     </form>
                 </div>
+
+                <div id="plan" width="500" height="500" {% if not plan %} class="undefined" {% endif %}>
+                    {% if plan %}
+                    <!-- le filtre "safe" permet de retransformer les caractères échappés -->
+                      {{ plan | safe }}
+                        
+                    <script type="text/javascript">
+
+                        var capteurSelectionne = null;
+                        var cerclesCapteurs = [];
+
+                        function SVG(tag) {
+                           return document.createElementNS('http://www.w3.org/2000/svg', tag);
+                        }
+
+                        function getCapteurSelectionne() {
+                            return $("li.active").attr('id');
+                        }
+
+                        function deselectionnerCapteurSurPlan(physic_id) {
+                            cerclesCapteurs[physic_id].attr('stroke', "black");
+                        }
+
+                        function selectionnerCapteurSurPlan(physic_id) {
+                            cerclesCapteurs[physic_id].attr('stroke', "red");
+                        }
+
+                        function ajouterCapteurSurPlan(physic_id, x, y, estSelectionne) {
+                            
+                            var couleurTour = "black";
+                            var couleurFond = "#14029D";
+                            if(estSelectionne) {
+                                couleurTour = "red"
+                            }
+                            var $circle =
+                            $(SVG('circle'))
+                                .attr('id', "circle_"+physic_id)
+                                .attr('cx', x)
+                                .attr('cy', y)
+                                .attr('r', 5)
+                                .attr('fill', couleurFond)
+                                .attr('stroke', couleurTour)
+                                .attr('stroke-width', 5);
+                            $("svg.plan").append($circle);
+                            console.log("Ajout de "+x+" , "+y);
+                            cerclesCapteurs[physic_id] = $circle;
+                        }
+
+                        function dessinerCapteurs() {
+                            var deviceSelectionne = getCapteurSelectionne();
+
+                            //On ajoute les devices ayant été positionnés sur le plan -->
+                            {% for device in devices %}
+                                {% if device.isLocated %}
+                                    if(deviceSelectionne == "list_device_id_{{ device.physic_id }}") {
+                                        ajouterCapteurSurPlan("{{ device.physic_id }}", {{ device.coordX }}, {{ device.coordY }}, true);
+                                    } else {
+                                        ajouterCapteurSurPlan("{{ device.physic_id }}", {{ device.coordX }}, {{ device.coordY }}, false);
+                                    }
+                                {% endif %}
+                            {% endfor %}
+                        }
+
+                        var plan = $("#plan");
+                        plan.click(function(event) {
+                            var planOffset = plan.offset();
+                            var mouseX = Math.round(event.pageX - planOffset.left);
+                            var mouseY = Math.round(event.pageY - planOffset.top);
+                            $.ajax({
+                                dataType: "json",
+                                url: "/devices/addDeviceToPlan",
+                                type:'POST', 
+                                data: { physic_id : capteurSelectionne, x : mouseX, y : mouseY },
+                                success: function(data){
+                                    var device = JSON.parse(data);
+                                    if(!cerclesCapteurs[device.physic_id]) {
+                                        ajouterCapteurSurPlan(capteurSelectionne, mouseX, mouseY, true); 
+                                    }
+                                    cerclesCapteurs[device.physic_id]
+                                        .attr('cx', device.x)
+                                        .attr('cy', device.y);
+                                }
+                            });
+                        });
+                    
+                        dessinerCapteurs();
+
+                        //Détecte le changement de capteur dans la navbar (don't fucking know how ?_?)
+                        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+                            if(capteurSelectionne) {
+                                deselectionnerCapteurSurPlan(capteurSelectionne);
+                            }
+                            var target = $(e.target).attr("href") // activated tab
+                            capteurSelectionne = $(target + " #physic_id").html();
+                            //alert(capteurSelectionne);
+                            if(capteurSelectionne) {
+                                selectionnerCapteurSurPlan(capteurSelectionne);
+                            }
+                        });
+
+                    </script>
+
+                    {% else %}
+                        No plan defined !
+                    {% endif %}
+                </div>
+                
             </div>
         </div>
-        <div id="plan" width="500" height="500" {% if not plan %} class="undefined"{% endif %}>
-            {% if plan %}
-              {{ plan | safe }}
-                
-            {% else %}
-                No plan defined !
-            {% endif %}
-        </div>
+        
     </div>
 </nav>
 {% endblock %}

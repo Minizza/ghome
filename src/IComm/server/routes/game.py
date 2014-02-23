@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
-from server import app
+from server import app, CONFIG
 from flask import render_template, request
 from server.roles import *
 import json
@@ -11,13 +11,13 @@ wichGame = []
 
 @app.route('/game0')
 def theGame0():
-    return render_template('game.html', theGame = 0)
+    return render_template('game.html', theGame = 0, plan = CONFIG['nom_plan'])
 @app.route('/game1')
 def theGame1():
-    return render_template('game.html', theGame = 1)
+    return render_template('game.html', theGame = 1, plan = CONFIG['nom_plan'])
 @app.route('/game2')
 def theGame2():
-    return render_template('game.html', theGame = 2)
+    return render_template('game.html', theGame = 2, plan = CONFIG['nom_plan'])
 
 
 @app.route('/game', methods=["POST"])
@@ -28,7 +28,11 @@ def gameSetQuery():
         data+='{'
         data+='"type" : '+'"'+str(device.__class__.__name__)+'"'+','
         data+='"ident" : '+'"'+str(device.physic_id)+'"'+','
-        data+='"state" : '+'"'+str(device.current_state)+'"'+','
+        if ("Position" in str(device.__class__.__name__)) :
+            data+='"state" : '+str(device.current_state)+','
+            data+='"team" : '+'"'+str(device.team)+'"'+','
+        else :
+            data+='"state" : '+'"'+str(device.current_state)+'"'+','
         data+='"coordX" : '+'"'+str(device.coordX)+'"'+','
         data+='"coordY" : '+'"'+str(device.coordY)+'"'
         data+='},'

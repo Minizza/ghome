@@ -1,0 +1,136 @@
+\documentclass[a4paper]{report}
+
+			%packages
+\usepackage[french]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+%%caractères spéciaux
+ \usepackage{pifont}
+			%config hyperref
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+%liste de base avec des points
+\renewcommand{\FrenchLabelItem}{\textbullet}
+%Tableau
+\usepackage{array,multirow,makecell}
+\setcellgapes{1pt}
+\makegapedcells
+\usepackage[table]{xcolor}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }m{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }m{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }m{#1}}
+
+% Démarre une nouvelle section sur une nouvelle page
+\let\stdsection\section
+\renewcommand\section{\newpage\stdsection}
+
+% Supprime les 0.x pour les sections (ne gère pas appendix)
+\makeatletter 
+\renewcommand\thesection{\@arabic\c@section} 
+\makeatother
+
+			%infos du docuument
+\newcommand{\leTitre}{Rapport}
+
+\title{\leTitre} 
+\author{H4111}
+
+\begin{document}
+
+\begin{titlepage}
+
+
+%----------------------------------------------------------------------------------------
+%	Templates comes from: http://www.latextemplates.com/template/university-assignment-title-page
+%	with some minor changes
+%----------------------------------------------------------------------------------------
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\includegraphics [width=40mm]{image/logo_INSA.png} \\[1.5cm]
+%\textsc{\LARGE INSA de Lyon}\\[1.5cm] % Name of your university/college
+
+
+\textsc{\large Équipe Minizza}\\[0.5cm] % Minor heading such as course title
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries \leTitre}\\[0.4cm] % Title of your document
+\textsc{\Large PLD GHome}\\[0.5cm] % Major heading such as course name
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\textbf{\emph{H4111 :}}\\
+Quentin \textsc{Bonnet}\\
+Loric \textsc{Brevet}\\
+Nicolas \textsc{Buisson}\\
+Louise \textsc{Crépet}\\
+Timothée \textsc{Germain}\\
+Julien \textsc{Rollet}% Your name
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\textbf{\emph{Enseignants :}} \\
+Marian \textsc{Scuturici}\\
+Kévin \textsc{Marquet}% Supervisor's Name
+\end{flushright}
+\end{minipage}\\[4cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large Année scolaire 2013 - 2014}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+%\includegraphics[scale=0.2]{minizza-big.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+
+\input{parts/scenario_fonctionnalites}
+
+\end{document}

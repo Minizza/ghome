@@ -174,6 +174,15 @@ function canvasClicked ()
         actiActiv(bddActionneurs[canvasClicked.selectedA]);
         return;
     }
+    if (canvasClicked.selectedA != -1)
+    {
+        actionneurs[canvasClicked.selectedA].setImage("../static/medias/actionneur.png");
+        boutonActiver.isActive = false;
+        boutonActiver.textId1.set({text : "", x : 690, y :120});
+        boutonActiver.textState1.set({text : "", x : 690, y :170});
+        boutonActiver.textCoord1.set({text : "", x : 690, y :220});
+        canvasClicked.selectedA = -1;
+    }
     for (var i=0; i<bddActionneurs.length; i++)
     {
         if (actionneurs[i].rect().collidePoint(jaws.mouse_x,jaws.mouse_y))
@@ -181,19 +190,14 @@ function canvasClicked ()
             canvasClicked.selectedA = i;
             actionneurs[i].setImage("../static/medias/sel_actionneur.png");
             boutonActiver.isActive = true;
-            boutonActiver.textId.set("Ident :\n"+bddActionneurs[i].ident);
-            boutonActiver.textState.set("State :\n"+bddActionneurs[i].state);
-            boutonActiver.textCoord.set("Coord :\n"+bddActionneurs[i].coordX+","+bddActionneurs[i].coordY);
+            boutonActiver.textId1.set({text : bddActionneurs[i].ident, x : 690, y :120});
+            boutonActiver.textState1.set({text : bddActionneurs[i].state, x : 690, y :170});
+            boutonActiver.textCoord1.set({text : bddActionneurs[i].coordX+","+bddActionneurs[i].coordY, x : 690, y :220});
             return;
         }
     }
 
-    if (canvasClicked.selectedA != -1)
-    {
-        actionneurs[canvasClicked.selectedA].setImage("../static/medias/actionneur.png");
-        boutonActiver.isActive = false;
-        canvasClicked.selectedA = -1;
-    }
+    
     
 }
 
@@ -239,26 +243,25 @@ function GameStart ()
         //Le bouton d'activation d'actuator
         boutonActiver.image = 	new jaws.Sprite({image:"../static/medias/butActiver.png"});
         boutonActiver.image.moveTo(683,480);
-        boutonActiver.textId = new jaws.Text("");
-        boutonActiver.textId.moveTo(680,100);
-        boutonActiver.textState = new jaws.Text("");
-        boutonActiver.textState.moveTo(680,150);
-        boutonActiver.textCoord = new jaws.Text("");
-        boutonActiver.textCoord.moveTo(680,200);
+        boutonActiver.textId = new jaws.Text({text : "Id :", x : 680, y : 100});
+        boutonActiver.textState = new jaws.Text({text : "State :", x : 680, y : 150});
+        boutonActiver.textCoord = new jaws.Text({text : "Coord :", x : 680, y : 200});
+        boutonActiver.textId1 = new jaws.Text({text : "", x : 690, y : 120});
+        boutonActiver.textState1 = new jaws.Text({text : "", x : 690, y : 170});
+        boutonActiver.textCoord1 = new jaws.Text({text : "", x : 690, y : 220});
         boutonActiver.isActive  = false;	
 
         //Le son de ping
         pingSound = new Audio("../static/medias/ping.wav");
 
         updateData();
-                    
     }   
 	
 
     
     this.update = function() { 
-        
-        if (Eoo===60)
+            
+        if (Eoo===15)
         {
             Eoo =0;
             updateData();
@@ -270,6 +273,10 @@ function GameStart ()
 
         for (var i=0; i<bddCapteurs.length; i++)
         {
+            if (bddCapteurs[i].ident == "0001B592")
+            {
+                console.log(bddCapteurs[i].state);
+            }
             if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
             {
 
@@ -298,6 +305,13 @@ function GameStart ()
             
 	this.draw = function() { 
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
+
+        boutonActiver.textId.draw();
+        boutonActiver.textState.draw();
+        boutonActiver.textCoord.draw();
+        boutonActiver.textId1.draw();
+        boutonActiver.textState1.draw();
+        boutonActiver.textCoord1.draw();
                     
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
@@ -319,9 +333,7 @@ function GameStart ()
         if (boutonActiver.isActive)
         {
             boutonActiver.image.draw();
-            boutonActiver.textId.draw();
-            boutonActiver.textState.draw();
-            boutonActiver.textCoord.draw();
+            
         }
     }
 }

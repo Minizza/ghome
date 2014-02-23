@@ -62,7 +62,11 @@ def device_test():
 	device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde", coordX = 300, coordY = 400)
 
 	#list of actuators
-	device2 = actuator.Actuator(physic_id = "AB2424DC", name = "Actionneur zombie apocalypse", coordX = 65, coordY = 330)
+	device2 = actuator.Actuator(physic_id = "AB2489DC", name = "Actionneur zombie apocalypse", coordX = 65, coordY = 330)
+	actu1 = actuator.Actuator(physic_id = "AE2489DC", name = "Actionneur fumée bureau", coordX = 500, coordY = 330)
+	actu2 = actuator.Actuator(physic_id = "AC2489DC", name = "Actionneur lampe cave", coordX = 350, coordY = 100)
+	actu3 = actuator.Actuator(physic_id = "AD2489DC", name = "Actionneur porte coffre", coordX = 480, coordY = 265)
+
 
 	#list of temperature sensors
 	device3 = temperature.Temperature(physic_id = "AZ3RT1UI0P", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
@@ -77,7 +81,7 @@ def device_test():
 
 	#list of players
 		# A player is just represented by a coordonate getting sensor
-	player11 = position.Position(physic_id = "AGEGF3E7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500,maxX=610,minX=35,maxY=545)
+	player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500)
 	player12 = position.Position(physic_id = "BG458ECD", name = "Equipe 1 joueur 2", current_state = 1, coordX = 60, coordY = 500)
 	player13 = position.Position(physic_id = "DE4265DE", name = "Equipe 1 joueur 3", current_state = 1, coordX = 70, coordY = 500)
 	player14 = position.Position(physic_id = "AC3542FE", name = "Equipe 1 joueur 4", current_state = 1, coordX = 60, coordY = 510)
@@ -99,6 +103,10 @@ def device_test():
 	device7.save()
 	device8.save()
 	device9.save()
+
+	actu1.save()
+	actu2.save()
+	actu3.save()
 
 	#Adding new players
 	player11.save()

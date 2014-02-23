@@ -75,4 +75,5 @@ def fetchDevices():
     devices = ghomedevice.Device.objects # Fetch les devices depuis la BD ici !
     for device in devices:
         device.type = type(device).__name__
+        device.isLocated = (device.coordX and device.coordX != ghomedevice.Device.UNDEFINED_COORDINATE and device.coordY and device.coordY != ghomedevice.Device.UNDEFINED_COORDINATE)
     return devices

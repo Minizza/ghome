@@ -24,7 +24,7 @@ def gamePlayerSetQuery():
         data+='"type" : '+'"'+str(device.__class__.__name__)+'"'+','
         data+='"ident" : '+'"'+str(device.physic_id)+'"'+','
         if ("Position" in str(device.__class__.__name__)) :
-            data+='"state" : '+str(device.current_state)+','
+            data+='"state" : {'+'"coordX" : "'+str(device.current_state.get('coordX'))+'", "coordY" : "'+str(device.current_state.get('coordY'))+'"},'
             data+='"team" : '+'"'+str(device.team)+'"'+','
         else :
             data+='"state" : '+'"'+str(device.current_state)+'"'+','

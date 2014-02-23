@@ -81,16 +81,16 @@ def device_test():
 
 	#list of players
 		# A player is just represented by a coordonate getting sensor
-	player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = '{"coordX":50,"coordY":500}', coordX = 50, coordY = 500, team = 1)
-	player12 = position.Position(physic_id = "BG458ECD", name = "Equipe 1 joueur 2", current_state = '{"coordX":60,"coordY":500}', coordX = 60, coordY = 500, team = 1)
-	player13 = position.Position(physic_id = "DE4265DE", name = "Equipe 1 joueur 3", current_state = '{"coordX":70,"coordY":500}', coordX = 70, coordY = 500, team = 1)
-	player14 = position.Position(physic_id = "AC3542FE", name = "Equipe 1 joueur 4", current_state = '{"coordX":60,"coordY":510}', coordX = 60, coordY = 510, team = 1)
-	player15 = position.Position(physic_id = "FDEE42CD", name = "Equipe 1 joueur 5", current_state = '{"coordX":50,"coordY":510}', coordX = 50, coordY = 510, team = 1)
-	player21 = position.Position(physic_id = "AB4BCFED", name = "Equipe 2 joueur 1", current_state = '{"coordX":600,"coordY":50}', coordX = 600, coordY = 50, team = 2)
-	player22 = position.Position(physic_id = "AP25FECD", name = "Equipe 2 joueur 2", current_state = '{"coordX":600,"coordY":60}', coordX = 600, coordY = 60, team = 2)
-	player23 = position.Position(physic_id = "EBBD5542", name = "Equipe 2 joueur 3", current_state = '{"coordX":600,"coordY":70}', coordX = 600, coordY = 70, team = 2)
-	player24 = position.Position(physic_id = "DFE4E3E8", name = "Equipe 2 joueur 4", current_state = '{"coordX":590,"coordY":60}', coordX = 590, coordY = 60, team = 2)
-	player25 = position.Position(physic_id = "3255DD67", name = "Equipe 2 joueur 5", current_state = '{"coordX":590,"coordY":50}', coordX = 590, coordY = 50, team = 2)
+	player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500, team = 1)
+	player12 = position.Position(physic_id = "BG458ECD", name = "Equipe 1 joueur 2", current_state = {"coordX":60,"coordY":500}, coordX = 60, coordY = 500, team = 1)
+	player13 = position.Position(physic_id = "DE4265DE", name = "Equipe 1 joueur 3", current_state = {"coordX":70,"coordY":500}, coordX = 70, coordY = 500, team = 1)
+	player14 = position.Position(physic_id = "AC3542FE", name = "Equipe 1 joueur 4", current_state = {"coordX":60,"coordY":510}, coordX = 60, coordY = 510, team = 1)
+	player15 = position.Position(physic_id = "FDEE42CD", name = "Equipe 1 joueur 5", current_state = {"coordX":50,"coordY":510}, coordX = 50, coordY = 510, team = 1)
+	player21 = position.Position(physic_id = "AB4BCFED", name = "Equipe 2 joueur 1", current_state = {"coordX":600,"coordY":50}, coordX = 600, coordY = 50, team = 2)
+	player22 = position.Position(physic_id = "AP25FECD", name = "Equipe 2 joueur 2", current_state = {"coordX":600,"coordY":60}, coordX = 600, coordY = 60, team = 2)
+	player23 = position.Position(physic_id = "EBBD5542", name = "Equipe 2 joueur 3", current_state = {"coordX":600,"coordY":70}, coordX = 600, coordY = 70, team = 2)
+	player24 = position.Position(physic_id = "DFE4E3E8", name = "Equipe 2 joueur 4", current_state = {"coordX":590,"coordY":60}, coordX = 590, coordY = 60, team = 2)
+	player25 = position.Position(physic_id = "3255DD67", name = "Equipe 2 joueur 5", current_state = {"coordX":590,"coordY":50}, coordX = 590, coordY = 50, team = 2)
 
 
 	#Adding new sensors or actuators

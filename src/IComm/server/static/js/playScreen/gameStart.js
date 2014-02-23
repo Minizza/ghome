@@ -318,7 +318,7 @@ function GameStart ()
         boutonActiver.textCoord1.draw();
 
         // Dessiner plan
-        context.drawImage(image, 30, 35);
+        //context.drawImage(image, 30, 35);
 
                     
 		for (var i=0 ; i < capteurs.length ; i++) {

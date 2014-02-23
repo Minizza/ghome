@@ -68,6 +68,7 @@ function initData (callback)
                 type:'POST', 
                 async :'false',
                 success : function (data) {
+                    console.log(data);
                     data = JSON.parse(data);
                     for (var i=0; i<data.length; i++)
                     {
@@ -334,6 +335,7 @@ function GamePlayer ()
 			player.y = 545;
 	    }
 		
+
 		for (var i=0 ; i < capteurs.length ; i++) {
 			jaws.collide(player, capteurs[i], function() { 
 				$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
@@ -349,7 +351,7 @@ function GamePlayer ()
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
 
         // Dessiner plan
-        context.drawImage(image, 30, 35);
+        //context.drawImage(image, 30, 35);
                     
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();

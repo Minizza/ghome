@@ -87,7 +87,7 @@
                             var couleurTour = "black";
                             var couleurFond = "#14029D";
                             if(estSelectionne) {
-                                couleur = "red"
+                                couleurTour = "red"
                             }
                             var $circle =
                             $(SVG('circle'))
@@ -130,6 +130,9 @@
                                 data: { physic_id : capteurSelectionne, x : mouseX, y : mouseY },
                                 success: function(data){
                                     var device = JSON.parse(data);
+                                    if(!cerclesCapteurs[device.physic_id]) {
+                                        ajouterCapteurSurPlan(capteurSelectionne, mouseX, mouseY, true); 
+                                    }
                                     cerclesCapteurs[device.physic_id]
                                         .attr('cx', device.x)
                                         .attr('cy', device.y);

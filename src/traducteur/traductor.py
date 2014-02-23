@@ -9,10 +9,7 @@ import sys
 """I want da model"""
 from Model.Device import device
 from Model.Device import sensor 
-from Model.Device import switch
-from Model.Device import temperature
-from Model.Device import actuator
-from Model.Device import historic
+from Model.update import lazzyUpdate
 from traducteur import trame 
 
 """I want da logger"""
@@ -40,42 +37,49 @@ class traductor ():
         self.soc = socket.socket()
         self.stoppedAnalyze=False
         self.trameUsed = ''
-        self.identSet = set()
-        #Load all the device in the base
-        self.updateIdentSet()
-        with self.lock:
-            for lsensor in sensor.Sensor.objects:
-                self.identSet.append(lsensor.physic_id)
-                LOGGER.info(lsensor.physic_id)
+        self.identSet = set([])
+        lazzyUpdate.drop_collection()
+        LOGGER.info("initializing sensors set : ")
+        for lsensor in sensor.Sensor.objects:
+                    self.identSet.add(lsensor.physic_id)
+                    LOGGER.info(lsensor.physic_id)
 
     def connect (self, addr, port) :
         self.soc.connect((addr,port))
+        self.soc.setblocking(0)
         LOGGER.info("Connected to {} : {}".format(addr,port))
     
     def receive (self) :
+        # LOGGER.debug("en attente de trame")
         message = self.soc.recv(1024)
-        LOGGER.debug("trame reçu")
         if message and len(message)==28:
+            LOGGER.debug("trame reçu : {}".format(message))
             self.trameUsed = trame.trame(message)
+        else :
+            return
 
     def launch(self,addr,port):
-        try:
-            self.connect(addr,port)
-        except socket.error,e:
-            raise e
+        self.connect(addr,port)
         dacount=0
+        self.updateIdentSet()
         while 1:
             try:
-                if dacount >10000 : self.updateIdentSet()
-                self.receive()
+                if dacount >10000000 : 
+                    self.updateIdentSet()
+                    dacount=0
+                try:
+                    self.receive()
+                except IOError:
+                    # timeout !
+                    pass
                 if self.trameUsed:
                     self.checkTrame()
                 dacount+=1
+                # LOGGER.debug("tic")
             except KeyboardInterrupt:
                 sys.exit(0)
 
-
-            
+    
 
     def doChecksum(self,trameUsed):
         """
@@ -127,18 +131,36 @@ class traductor ():
                     LOGGER.info("New data {}".format(sensorUsed.current_state))
         self.trameUsed=''
             
+        
+    def sendTrame(self,ident,newState):
+        LOGGER.info("not implemented YET")
 
     def updateIdentSet(self):
         """
             Safely update the identifier set of the traductor
         """
-        with self.lock:
-            #del(self.identSet[:])
-            self.identSet=[]
-            for lsensor in sensor.Sensor.objects:
-                self.identSet.append(lsensor.physic_id)
-                LOGGER.info(lsensor.physic_id)
-            LOGGER.info("Traductor's set of captors updated")
+        for anUpdate in lazzyUpdate.objects:
+            LOGGER.debug("id : {} || state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+            if(anUpdate.idToUpdate==""):
+                with self.lock:
+                    self.identSet=set([])
+                    for lsensor in sensor.Sensor.objects:
+                        self.identSet.add(lsensor.physic_id)
+                        LOGGER.info(lsensor.physic_id)
+                    LOGGER.info("Traductor's set of captors updated")
+            elif(anUpdate.newState==""):
+                with self.lock:
+                    if (anUpdate.idToUpdate in things.physic_id for things in sensor.Sensor.objects):
+                        self.identSet.add(anUpdate.idToUpdate)
+                        LOGGER.info("{} added".format(anUpdate.idToUpdate))
+            else:
+                LOGGER.info("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+                print "un capteur {} doit être updaté".format(anUpdate.idToUpdate)
+                sendTrame(anUpdate.idToUpdate,anUpdate.newState)
+            anUpdate.delete()
+            return 
+        LOGGER.debug("nothing to update")
+
 
 
 

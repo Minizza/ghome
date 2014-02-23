@@ -2,13 +2,17 @@
 import socket
 import thread
 
+
+"""
+Multi threaded echo to everyone
+"""
 clientList=[]
 def handler(clientsock,addr):
        while 1:
             data = clientsock.recv(BUFSIZ)
             if not data: break
             for client in clientList:
-                client.send("echoed:.."+data)
+                client.send(data)
        clientsock.close()
 
 

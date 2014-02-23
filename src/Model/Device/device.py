@@ -2,6 +2,8 @@
 
 from mongoengine import *
 from historic import *
+from functools import wraps
+from Model.update import lazzyUpdate
 
 import datetime
 
@@ -44,7 +46,15 @@ class Device(Document):
         if (self.historic):
             self.historic.delete()
         self.delete()
+        lazzyUpdate.updateAll()
         
     def update(self, stateValue):
         self.addState(datetime.datetime.now(), self.current_state)
         self.setCurrentState(stateValue)
+
+
+    def save(self):
+        # @wraps(super(Device, self).save())
+        lazzyUpdate().updateOne(self.physic_id)
+        super(Device, self).save()
+        

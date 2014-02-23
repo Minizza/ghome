@@ -335,12 +335,23 @@ function GamePlayer ()
 			player.y = 545;
 	    }
 		
-
 		for (var i=0 ; i < capteurs.length ; i++) {
-			jaws.collide(player, capteurs[i], function() { 
-				$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-			});
+			if (jaws.collide(player, capteurs[i]))
+            {
+                console.log('Gogogo !')
+                $.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
+                bddCapteurs[i].active = true;
+            }
+            else
+            {
+                console.log('pas glop !')
+                if (bddCapteurs[i].active)
+                {
+                    $.post( "play/nocaptor", { captor : bddCapteurs[i].ident }, function( data ) {});
+                    bddCapteurs[i].active = false;
 
+                }
+            }
         }
 
         

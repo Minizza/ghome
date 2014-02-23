@@ -8,10 +8,12 @@ import json
 from mongoengine import *
 import Model.Device.device as ghomedevice
 import Model.Device.temperature as ghometemperature
+from Model.Device.position import Position
 
 @app.route('/play')
 def testplayer():
-    return render_template('play.html', plan = CONFIG['nom_plan'])
+    players = Position.objects()
+    return render_template('play.html', plan = CONFIG['nom_plan'], players = players)
 
 @app.route('/play', methods=["POST"])
 def gamePlayerSetQuery():

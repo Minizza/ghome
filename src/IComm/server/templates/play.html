@@ -15,6 +15,11 @@
 {% block menu %}{% endblock %}
 
 {% block content %}
+<select id="playersList" onchange="changePlayer();"> 
+  {% for player in players %}
+   <option value="{{ player.physic_id }}">{{ player.name }}</option> 
+  {% endfor %}
+</select> 
 	<canvas id="gameCanvas" width="800" height="600">
         Votre navigateur n'est pas compatible !
     </canvas>

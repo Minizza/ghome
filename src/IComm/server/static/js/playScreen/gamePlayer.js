@@ -8,12 +8,37 @@ var allies = new Array ();
 var enemies = new Array ();
 var player;
 
+var boolIsAllied = true;
+var selectedPlayerIndex;
+
 // Variable for drawing map
 var context;
 var image;
 
 //basic function needed 
 
+function changePlayer() {
+    var deviceSelected = $("#playersList").val();
+    var trouve = false;
+    for(var i=0; i<bddAllies.length; i++) {
+        if(bddAllies[i].ident == deviceSelected) {
+            selectedPlayerIndex = i;
+            boolIsAllied = true;
+            trouve = true;
+            break;
+        }
+    }
+
+    if(trouve) return;
+
+    for(var i=0; i<bddEnemies.length; i++) {
+        if(bddEnemies[i].ident == deviceSelected) {
+            selectedPlayerIndex = i;
+            boolIsAllied = false;
+            break;
+        }
+    }
+}
 
 function sleep(milliseconds) {
   var start = new Date().getTime();
@@ -28,7 +53,7 @@ function sleep(milliseconds) {
 
 function initData (callback)
 {
-    $.ajax({    
+    $.ajax({
                 dataType: 'json',
                 url:'/play', 
                 type:'POST', 
@@ -191,8 +216,17 @@ function GamePlayer ()
 		
 		player = new jaws.Sprite({ image:"static/medias/player.png" });
 
-		player.x = allies[0].x;
-	    player.y = allies[0].y;
+        changePlayer();
+
+        if(boolIsAllied) {
+            player.x = allies[selectedPlayerIndex].x;
+            player.y = allies[selectedPlayerIndex].y;
+        }
+        else {
+            player.x = enemies[selectedPlayerIndex].x;
+            player.y = enemies[selectedPlayerIndex].y;
+        }
+		
 		
 		function SendCoordinates() {
 			$.post( "play/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
@@ -313,11 +347,20 @@ function GamePlayer ()
         for (var i=0 ; i < actionneurs.length ; i++) {
             actionneurs[i].draw();
         } 
-		for (var i=1 ; i < allies.length ; i++) {
-            allies[i].draw();
-            enemies[i].draw();
+		for (var i=0 ; i < allies.length ; i++) {
+            if(i!=selectedPlayerIndex) {
+                allies[i].draw();
+                enemies[i].draw();
+            } else {
+                if(boolIsAllied) {
+                    enemies[i].draw();
+                } else {
+                    allies[i].draw();
+                }
+            }
+            
         }
-		enemies[0].draw();
+		
 		
 		player.draw();
     }

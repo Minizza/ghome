@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
-from server import app
+from server import app, CONFIG
 from flask import render_template, request
 from server.roles import *
 import json
@@ -11,7 +11,7 @@ import Model.Device.temperature as ghometemperature
 
 @app.route('/play')
 def testplayer():
-    return render_template('play.html')
+    return render_template('play.html', plan = CONFIG['nom_plan'])
 
 @app.route('/play', methods=["POST"])
 def gamePlayerSetQuery():
@@ -33,11 +33,11 @@ def gamePlayerSetQuery():
 def getPosition():
     ab = request.form['abscissa'] #min = 35 max = 610
     ord = request.form['ordinate'] #min = 40 max = 545
-    return render_template('play.html')
+    return render_template('play.html', plan = CONFIG['nom_plan'])
 	
 @app.route('/play/captor', methods=["POST"])
 def getCaptor():
     idCaptor = request.form['captor']
     print idCaptor;
-    return render_template('play.html')
+    return render_template('play.html', plan = CONFIG['nom_plan'])
 

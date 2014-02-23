@@ -1,5 +1,3 @@
-$(function() {
-
 var bddCapteurs = new Array ();
 var bddActionneurs = new Array ();
 var bddAllies = new Array ();
@@ -10,10 +8,38 @@ var allies = new Array ();
 var enemies = new Array ();
 var bddPlayer;
 var player;
-var map;
+
+var boolIsAllied = true;
+var selectedPlayerIndex;
+
+// Variable for drawing map
+var context;
+var image;
 
 //basic function needed 
 
+function changePlayer() {
+    var deviceSelected = $("#playersList").val();
+    var trouve = false;
+    for(var i=0; i<bddAllies.length; i++) {
+        if(bddAllies[i].ident == deviceSelected) {
+            selectedPlayerIndex = i;
+            boolIsAllied = true;
+            trouve = true;
+            break;
+        }
+    }
+
+    if(trouve) return;
+
+    for(var i=0; i<bddEnemies.length; i++) {
+        if(bddEnemies[i].ident == deviceSelected) {
+            selectedPlayerIndex = i;
+            boolIsAllied = false;
+            break;
+        }
+    }
+}
 
 function sleep(milliseconds) {
   var start = new Date().getTime();
@@ -28,7 +54,7 @@ function sleep(milliseconds) {
 
 function initData (callback)
 {
-    $.ajax({    
+    $.ajax({
                 dataType: 'json',
                 url:'/play', 
                 type:'POST', 
@@ -147,8 +173,13 @@ function canvasClicked ()
 }
 
 
-//Fonction d'envoi 
+//Fonction d'envoi de l'information "capteur detecte"
+function Detect ()
+{
+    
+}
 
+//Fonction d'envoi de l'information "capteur ne detecte plus"
 
 function GamePlayer ()
 {
@@ -188,8 +219,17 @@ function GamePlayer ()
 		
 		player = new jaws.Sprite({ image:"static/medias/player.png" });
 
-		player.x = allies[0].x;
-	    player.y = allies[0].y;
+        changePlayer();
+
+        if(boolIsAllied) {
+            player.x = allies[selectedPlayerIndex].x;
+            player.y = allies[selectedPlayerIndex].y;
+        }
+        else {
+            player.x = enemies[selectedPlayerIndex].x;
+            player.y = enemies[selectedPlayerIndex].y;
+        }
+		
 		
         function SendCoordinates() {
         $.post( "play/location", { ident : bddAllies[0].ident, abscissa: player.x, ordinate: player.y }, function( data ) {
@@ -300,6 +340,9 @@ function GamePlayer ()
             
 	this.draw = function() { 
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
+
+        // Dessiner plan
+        context.drawImage(image, 30, 35);
                     
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
@@ -308,19 +351,26 @@ function GamePlayer ()
         for (var i=0 ; i < actionneurs.length ; i++) {
             actionneurs[i].draw();
         } 
-		for (var i=1 ; i < allies.length ; i++) {
-            allies[i].draw();
-            enemies[i].draw();
+		for (var i=0 ; i < allies.length ; i++) {
+            if(i!=selectedPlayerIndex) {
+                allies[i].draw();
+                enemies[i].draw();
+            } else {
+                if(boolIsAllied) {
+                    enemies[i].draw();
+                } else {
+                    allies[i].draw();
+                }
+            }
+            
         }
-		enemies[0].draw();
+		
 		
 		player.draw();
-		
-		//map.draw();
     }
 }
      
-window.onload = function() {
+function loadPlay(mapPath) {
     jaws.assets.add("static/medias/capteur.png");
     jaws.assets.add("static/medias/capteurS1.png");
     jaws.assets.add("static/medias/capteurS2.png");
@@ -329,9 +379,19 @@ window.onload = function() {
     jaws.assets.add("static/medias/allies.png");
     jaws.assets.add("static/medias/enemies.png");
 	jaws.assets.add("static/medias/player.png");
+
+    // Obtenir les infos necessaire pour afficher le plan
+    $(function() {
+        var $canvas = $('#gameCanvas');
+        context = $canvas.get(0).getContext('2d');
+        image = new Image();
+
+        // L'astuce ci dessous genere un timestamp pour l'ajouter 
+        // au nom de l'image pour que le browser ne la mette pas en cache
+        // C'est pourri mais ça MMMMAAAAARRRRCCHE !!!! Owi
+        var timestamp = new Date().getTime();
+        image.src = mapPath + '.svg?' + timestamp;
+    });
 	
-	//jaws.assets.add("../static/medias/map.svg");
     initData(jaws.start(GamePlayer));
 };
-
-});

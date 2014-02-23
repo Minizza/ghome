@@ -1,5 +1,7 @@
 .colonne_devices {
-    
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #new_device_button {

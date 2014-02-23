@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # -*-coding:Utf-8 -*
 
-import time
-
-from server import app
+from server import app, CONFIG
 from flask import render_template, request
 from server.roles import *
 import json
 from mongoengine import *
 import Model.Device.device as ghomedevice
 import Model.Device.temperature as ghometemperature
+from Model.Device.position import Position
 
 @app.route('/play')
 def testplayer():
-    return render_template('play.html')
+    players = Position.objects()
+    return render_template('play.html', plan = CONFIG['nom_plan'], players = players)
 
 @app.route('/play', methods=["POST"])
 def gamePlayerSetQuery():
@@ -45,8 +45,8 @@ def getPosition():
     upDev = ghomedevice.Device.objects(physic_id=ident)[0]
     upDev.moving(int(absc),int(ordo))
     ##################################################
+    return "ok"
 
-    return render_template('play.html')
 	
 @app.route('/play/captor', methods=["POST"])
 def sendActivCaptor():
@@ -54,7 +54,7 @@ def sendActivCaptor():
     #### TEST ##A REMPLACER PAR UN ENVOI DE TRAME#####
     ghomedevice.Device.objects(physic_id=idCaptor)[0].update("open")
     ##################################################
-    return render_template('play.html')
+    return "ok"
 
 @app.route('/play/nocaptor', methods=["POST"])
 def sendNoActivCapt():
@@ -62,5 +62,5 @@ def sendNoActivCapt():
     #### TEST ##A REMPLACER PAR UN ENVOI DE TRAME#####
     ghomedevice.Device.objects(physic_id=idCaptor)[0].update("close")
     ##################################################
-    return render_template('play.html')
+    return "ok"
 

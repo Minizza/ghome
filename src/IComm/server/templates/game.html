@@ -15,15 +15,22 @@
 {% block menu %}{% endblock %}
 
 {% block content %}
-<canvas id="gameCanvas" width="800" height="600" onclick="canvasClicked()">
+    <canvas id="gameCanvas" width="800" height="600" onclick="canvasClicked()">
         Votre navigateur n'est pas compatible !
-      </canvas>
-      
-      <script src="../static/js/jaws.js"></script>
-      <script> function myGame ()
-      			{
-      				return '{{ theGame }}'
-      			}</script>
-      <script src="../static/js/playScreen/gameStart.js"></script>
+    </canvas>
 {% endblock %}
+
+{% block js %}
+    <script src="../static/js/jaws.js"></script>
+    <script> function myGame ()
+        {
+            return '{{ theGame }}';
+        }
+    </script>
+    <script src="../static/js/playScreen/gameStart.js"></script>
+    <script>
+        loadGame('{{ plan }}');
+    </script>
+{% endblock %}
+
 

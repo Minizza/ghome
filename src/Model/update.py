@@ -29,10 +29,11 @@ class lazzyUpdate(Document):
     	self.newState=''
     	self.save()
 
-    def sendTrame(self,ident,newstate):
+    def sendTrame(self,ident,newState):
     	"""
     		Ask the traductor to send a trame with the new state of a captor
     	"""
+    	LOGGER.debug("Lazily updating {} with {}".format(ident,newState))
     	self.idToUpdate=ident
-    	self.newState=newstate
+    	self.newState=newState
     	self.save()

@@ -1,5 +1,3 @@
-$(function() {
-
 var bddCapteurs = new Array ();
 var bddActionneurs = new Array ();
 var bddAllies = new Array ();
@@ -9,7 +7,10 @@ var actionneurs = new Array ();
 var allies = new Array ();
 var enemies = new Array ();
 var player;
-var map;
+
+// Variable for drawing map
+var context;
+var image;
 
 //basic function needed 
 
@@ -301,6 +302,9 @@ function GamePlayer ()
             
 	this.draw = function() { 
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
+
+        // Dessiner plan
+        context.drawImage(image, 30, 35);
                     
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
@@ -316,12 +320,10 @@ function GamePlayer ()
 		enemies[0].draw();
 		
 		player.draw();
-		
-		//map.draw();
     }
 }
      
-window.onload = function() {
+function loadPlay(mapPath) {
     jaws.assets.add("static/medias/capteur.png");
     jaws.assets.add("static/medias/capteurS1.png");
     jaws.assets.add("static/medias/capteurS2.png");
@@ -330,9 +332,19 @@ window.onload = function() {
     jaws.assets.add("static/medias/allies.png");
     jaws.assets.add("static/medias/enemies.png");
 	jaws.assets.add("static/medias/player.png");
+
+    // Obtenir les infos necessaire pour afficher le plan
+    $(function() {
+        var $canvas = $('#gameCanvas');
+        context = $canvas.get(0).getContext('2d');
+        image = new Image();
+
+        // L'astuce ci dessous genere un timestamp pour l'ajouter 
+        // au nom de l'image pour que le browser ne la mette pas en cache
+        // C'est pourri mais ça MMMMAAAAARRRRCCHE !!!! Owi
+        var timestamp = new Date().getTime();
+        image.src = mapPath + '.svg?' + timestamp;
+    });
 	
-	//jaws.assets.add("../static/medias/map.svg");
     initData(jaws.start(GamePlayer));
 };
-
-});

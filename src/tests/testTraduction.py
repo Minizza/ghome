@@ -30,7 +30,7 @@ def send_trameDoor():
     print "Demarrage du fauxServeur"
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('', 1515))    
+    server.bind(('', 1513))    
     server.listen(5)
     c,adrr = server.accept()
     print "         envoie de trame : {}".format(tramounette)
@@ -42,7 +42,7 @@ def send_trameTemp():
     print "Demarrage du fauxServeur"
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('', 1515))    
+    server.bind(('', 1514))    
     server.listen(5)
     c,adrr = server.accept()
     print "         envoie de trame : {}".format(tramounette)
@@ -103,7 +103,7 @@ class ModelTest(unittest2.TestCase):
         for device in Device.objects:
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
         tradMeThis = traductor()
-        tradMeThis.connect('',1515)
+        tradMeThis.connect('',1513)
         tradMeThis.receive()
         tradMeThis.checkTrame()
 
@@ -131,7 +131,7 @@ class ModelTest(unittest2.TestCase):
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
         tradMeThis = traductor()
-        tradMeThis.connect('',1515)
+        tradMeThis.connect('',1514)
         tradMeThis.receive()
         tradMeThis.checkTrame()
 

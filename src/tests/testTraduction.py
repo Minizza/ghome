@@ -4,6 +4,7 @@ import socket
 import thread
 import unittest2
 import colorama
+import time
 
 """I want da model"""
 from Model.Device.device import *
@@ -29,7 +30,7 @@ def send_trameDoor():
     print "Demarrage du fauxServeur"
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('', 1515))    
+    server.bind(('', 1513))    
     server.listen(5)
     c,adrr = server.accept()
     print "         envoie de trame : {}".format(tramounette)
@@ -41,7 +42,7 @@ def send_trameTemp():
     print "Demarrage du fauxServeur"
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('', 1515))    
+    server.bind(('', 1514))    
     server.listen(5)
     c,adrr = server.accept()
     print "         envoie de trame : {}".format(tramounette)
@@ -49,9 +50,25 @@ def send_trameTemp():
     #sensor is supposed to be in da base and send temp equal to 18
     server.close()
 
-def send_tramePosition(player):
-        fakePosition(player).update(610,545)
+def send_tramePosition():
+    print "Demarrage du fauxServeur"
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(('', 1515))    
+    server.listen(5)
+    while 1:
+        client, address = server.accept()
+        data = client.recv(4096)
+        if data:
+            LOGGER.debug("reçu : ".format(data))
+            client.send(data)
+        client.close() 
 
+def waitNStop(trad):
+    print "début attente"
+    time.sleep(8)
+    print "fin attente"
+    trad.stop()
 
 class ModelTest(unittest2.TestCase):
 ########################################################################
@@ -86,7 +103,7 @@ class ModelTest(unittest2.TestCase):
         for device in Device.objects:
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
         tradMeThis = traductor()
-        tradMeThis.connect('',1515)
+        tradMeThis.connect('',1513)
         tradMeThis.receive()
         tradMeThis.checkTrame()
 
@@ -114,7 +131,7 @@ class ModelTest(unittest2.TestCase):
             print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
         tradMeThis = traductor()
-        tradMeThis.connect('',1515)
+        tradMeThis.connect('',1514)
         tradMeThis.receive()
         tradMeThis.checkTrame()
 
@@ -135,7 +152,6 @@ class ModelTest(unittest2.TestCase):
         tradMeThis = traductor()
         self.assertIn("01234567",tradMeThis.identSet,msg="Pas trouvé ")
 
-
         capteur2 = Switch(physic_id = "98765432", name = "INTERRUPTEUR_PLAQUE", current_state = "close")
         capteur2.save()
         
@@ -146,25 +162,30 @@ class ModelTest(unittest2.TestCase):
         self.assertIn("98765432",tradMeThis.identSet,msg="Pas trouvé ")
 
 
-    # def test_position(self):
-    #     print (colorama.Fore.GREEN+"     Test de faux capteur de position"+colorama.Fore.RESET)
-    #     player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500)
-    #     player11.save()
+    def test_position(self):
+        thread.start_new_thread(send_tramePosition,())
+        print (colorama.Fore.GREEN+"     Test de faux capteur de position"+colorama.Fore.RESET)
+        player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500)
+        player11.save()
 
-    #     print (colorama.Fore.MAGENTA + "Base before: "+colorama.Fore.RESET)
-    #     for device in Device.objects:
-    #         print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
+        print (colorama.Fore.MAGENTA + "Base before: "+colorama.Fore.RESET)
+        for device in Device.objects:
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
-    #     mytrad=traductor()
-    #     mytrad.connect('134.214.106.23',5000)
-    #     fakePosition(player11).update(608,545)
-    #     thread.start_new_thread(send_tramePosition,(player11,))
-    #     mytrad.receive()
-    #     mytrad.checkTrame()
+        mytrad=traductor()
+        thread.start_new_thread(waitNStop,(mytrad,))
+        thread.start_new_thread(mytrad.launch,('',1515))
 
-    #     print (colorama.Fore.MAGENTA + "Base after: "+colorama.Fore.RESET)
-    #     for device in Device.objects:
-    #         print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
+        time.sleep(3)
+        player11.moving(610,200)
+        time.sleep(3)
+        print "TIME OUT !"
+        mytrad.checkTrame()
+        mytrad.updateIdentSet()
+
+        print (colorama.Fore.MAGENTA + "Base after: "+colorama.Fore.RESET)
+        for device in Device.objects:
+            print (colorama.Fore.MAGENTA +"{} {}"+colorama.Fore.RESET).format(device.physic_id, device.current_state)
 
         
 ########################################################################

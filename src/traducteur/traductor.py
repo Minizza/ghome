@@ -10,6 +10,7 @@ import sys
 from Model.Device import device
 from Model.Device import sensor 
 from Model.update import lazzyUpdate
+from Model.Device import position
 from traducteur import trame 
 
 """I want da logger"""
@@ -37,6 +38,7 @@ class traductor ():
         self.soc = socket.socket()
         self.stoppedAnalyze=False
         self.trameUsed = ''
+        self.running=True
         self.identSet = set([])
         lazzyUpdate.drop_collection()
         LOGGER.info("initializing sensors set : ")
@@ -62,9 +64,9 @@ class traductor ():
         self.connect(addr,port)
         dacount=0
         self.updateIdentSet()
-        while 1:
+        while self.running:
             try:
-                if dacount >10000000 : 
+                if dacount >500000 : 
                     self.updateIdentSet()
                     dacount=0
                 try:
@@ -78,6 +80,10 @@ class traductor ():
                 # LOGGER.debug("tic")
             except KeyboardInterrupt:
                 sys.exit(0)
+        LOGGER.info("Le traducteur est terminé")
+
+    def stop(self):
+        self.running=False
 
     
 
@@ -102,38 +108,43 @@ class traductor ():
 
 
     def checkTrame(self):
-        LOGGER.info("Trame used : {}".format(self.trameUsed.lessRawView()))
-        if ("A55A" not in self.trameUsed.sep):
-            LOGGER.warn("Wrong separator, rejected")
+        if self.trameUsed:
+            LOGGER.info("Trame used : {}".format(self.trameUsed.lessRawView()))
+            if ("A55A" not in self.trameUsed.sep):
+                LOGGER.warn("Wrong separator, rejected")
 
-        if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
-            #Mauvais checkSum
-            LOGGER.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
+            if (self.doChecksum(self.trameUsed) not in self.trameUsed.checkSum):     
+                #Mauvais checkSum
+                LOGGER.warn("Wrong checksum, expected : {}, rejected".format(self.doChecksum(self.trameUsed)))
 
-        with self.lock:
-            if (self.trameUsed.ident in self.identSet):
-                #Recuperer le capteur en bdd
-                sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]
-                #Identifier le type de trame && Traiter les data de la trame
-                newData = '' #la nouvelle data a entrer en base, type dynamique
-                if (sensorUsed.__class__.__name__=="Switch"):
-                    newData=sensorUsed.translateTrame(self.trameUsed)
-                elif (sensorUsed.__class__.__name__=="Temperature"):
-                    newData = sensorUsed.translateTrame(self.trameUsed)
+            with self.lock:
+                if (self.trameUsed.ident in self.identSet):
+                    #Recuperer le capteur en bdd
+                    sensorUsed = sensor.Sensor.objects(physic_id=self.trameUsed.ident)[0]
+                    newData = '' #la nouvelle data a entrer en base, type dynamique
+                    if (sensorUsed.__class__.__name__=="Switch"):
+                        newData=sensorUsed.translateTrame(self.trameUsed)
+                    elif (sensorUsed.__class__.__name__=="Temperature"):
+                        newData = sensorUsed.translateTrame(self.trameUsed)
 
-                elif (sensorUsed.__class__.__name__=="Position"):
-                    newData = sensorUsed.translateTrame(self.trameUsed)
-                else :
-                    LOGGER.warn("Other Captor (not handle (YET !) )")
-                # Update de la trame au niveau de la base
-                if newData :
-                    sensorUsed.update(newData)
-                    LOGGER.info("New data {}".format(sensorUsed.current_state))
-        self.trameUsed=''
+                    elif (sensorUsed.__class__.__name__=="Position"):
+                        newData = sensorUsed.translateTrame(self.trameUsed)
+                    else :
+                        LOGGER.warn("Other Captor (not handle (YET !) )")
+                    # Update de la trame au niveau de la base
+                    if newData :
+                        sensorUsed.update(newData)
+                        LOGGER.info("New data {}".format(sensorUsed.current_state))
+            self.trameUsed=''
             
         
     def sendTrame(self,ident,newState):
-        LOGGER.info("not implemented YET")
+        with self.lock:
+            sensorUsed=position.Position.objects(physic_id=ident)[0]
+        daTrame=sensorUsed.gimmeTrame(newState).rawView()
+        self.soc.send(daTrame)
+        LOGGER.debug("Trame sended : {}".format(daTrame))
+                
 
     def updateIdentSet(self):
         """
@@ -154,34 +165,24 @@ class traductor ():
                         self.identSet.add(anUpdate.idToUpdate)
                         LOGGER.info("{} added".format(anUpdate.idToUpdate))
             else:
+                #send a trame from a captor with a newState
                 LOGGER.info("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
-                print "un capteur {} doit être updaté".format(anUpdate.idToUpdate)
-                sendTrame(anUpdate.idToUpdate,anUpdate.newState)
+                self.sendTrame(anUpdate.idToUpdate,anUpdate.newState)
             anUpdate.delete()
             return 
         LOGGER.debug("nothing to update")
+        print self.identSet
 
 
 
 
 if __name__ == '__main__':
     connect('test')
-    # soc = socket.socket()
-    # soc.connect(('',1515))
-    # LOGGER.info("Connection")
-    # try:
-    #     while 1 :
-    #         message = soc.recv(1024)
-    #         if message:
-    #             tram2 = trame.trame(message)
-    #             print tram2.lessRawView()
-    # except socket.error:
-    #     LOGGER.info("Déconnection du serveur")
-    #     soc.close()
     try:
         myTrad=traductor()
         myTrad.launch('',1515)
     except socket.error:
         LOGGER.info("Déconnection du serveur")
+        mytrad.soc.close()
     finally:
         pass

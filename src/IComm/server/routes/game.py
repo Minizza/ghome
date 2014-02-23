@@ -39,6 +39,5 @@ def gameSetQuery():
 @app.route('/game/activated', methods=["POST"])
 def actiActiv():
     theIdent = request.form["ident"]
-    
-    print "ok"
+    return "ok"
 

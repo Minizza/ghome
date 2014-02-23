@@ -171,7 +171,6 @@ class traductor ():
             anUpdate.delete()
             return 
         LOGGER.debug("nothing to update")
-        print self.identSet
 
 
 

@@ -39,7 +39,7 @@ class Position(Sensor):
         myTrame=trame.trame(strTrame)
         myTrame.calculateChecksum()
         LOGGER.debug("Trame returned : {}".format(myTrame.rawView()))
-        return myTrame
+        return myTrame.rawView()
 
     def moving(self,newX,newY):
         """

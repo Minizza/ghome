@@ -73,11 +73,11 @@ def device_test():
 	device4 = temperature.Temperature(physic_id = "A23RG45I07", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
 
 	#list of switch sensors
-	device5 = switch.Switch(physic_id = "AJI24MF5", name = "Plaque pression couloir", current_state = "False", coordX = 300, coordY = 400)
-	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "True", coordX = 400, coordY = 300)
-	device7 = switch.Switch(physic_id = "A457GT6D", name = "Détecteur présence bureau", current_state = "False", coordX = 100, coordY = 400)
-	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "False", coordX = 400, coordY = 100)
-	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)
+	device5 = switch.Switch(physic_id = "00053F44", name = "Plaque pression couloir", current_state = "close", coordX = 300, coordY = 400)
+	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "close", coordX = 400, coordY = 300)
+	device7 = switch.Switch(physic_id = "A457GT6D", name = "Détecteur présence bureau", current_state = "open", coordX = 100, coordY = 400)
+	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "open", coordX = 400, coordY = 100)
+	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "open", coordX = 250, coordY = 80)
 
 	#list of players
 		# A player is just represented by a coordonate getting sensor

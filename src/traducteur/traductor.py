@@ -66,7 +66,7 @@ class traductor ():
         self.updateIdentSet()
         while self.running:
             try:
-                if dacount >500000 : 
+                if dacount >50000 : 
                     self.updateIdentSet()
                     dacount=0
                 try:
@@ -134,16 +134,17 @@ class traductor ():
                     # Update de la trame au niveau de la base
                     if newData :
                         sensorUsed.update(newData)
-                        LOGGER.info("New data {}".format(sensorUsed.current_state))
+                        LOGGER.info(" Sensor {} ||New data {}".format(sensorUsed.physic_id, sensorUsed.current_state))
             self.trameUsed=''
             
         
     def sendTrame(self,ident,newState):
         with self.lock:
-            sensorUsed=position.Position.objects(physic_id=ident)[0]
-        daTrame=sensorUsed.gimmeTrame(newState).rawView()
-        self.soc.send(daTrame)
-        LOGGER.debug("Trame sended : {}".format(daTrame))
+            sensorUsed=sensor.Sensor.objects(physic_id=ident)[0]
+        daTrame=sensorUsed.gimmeTrame(newState)
+        if daTrame:
+            self.soc.send(daTrame)
+            LOGGER.debug("Trame sended : {}".format(daTrame))
                 
 
     def updateIdentSet(self):

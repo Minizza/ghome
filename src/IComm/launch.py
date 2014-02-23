@@ -11,24 +11,24 @@ database = CONFIG["database"]
 
 connect(database)
 
+
 def main():
 
 	# Create new threads
-	pClient = Process(target = runserver.main())
-	print "F*ck you too!"
-	pTrad = Process(target = launchMe.main())
-	print "F*ck you!"
+	pClient = Process(target = runserver.main)
+	pTrad = Process(target = launchMe.main)
 
-	# Start new Threads
+	# Process can be launch without the main one
+	pClient.daemon = True
+	pTrad.daemon = True
+
+	# Start new process
 	pClient.start()
-	print "Client lancé"
 	pTrad.start()
-	print "Bite cul chatte"
 
+	# Wainting for both process to end
 	pTrad.join()
-	print "Fin de trad"
 	pClient.join()
-	print "Fin de client"
 
 if __name__ == '__main__':
     main()

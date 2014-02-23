@@ -59,11 +59,11 @@ function initData (callback)
                         else if (data[i].type == "Position")
                         {
 
-                            if (parseInt(data[i].state) == 1)
+                            if (parseInt(data[i].team) == 1)
                             {
                                 bddAllies.push(aDevice);
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else if (parseInt(data[i].team) == 2)
                             {
                                 bddEnemies.push(aDevice);
                             }
@@ -94,29 +94,29 @@ function updateData ()
                         if (data[i].type == "Position")
                         {
 
-                            if (parseInt(data[i].state) == 1)
+                            if (parseInt(data[i].team) == 1)
                             {
                                 for (var j=0; j<bddAllies.length; j++)
                                 {
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
-                                        bddAllies[j].coordX = data[i].coordX;
-                                        bddAllies[j].coordY = data[i].coordY;
-                                        allies[j].x = data[i].coordX;
-                                        allies[j].y = data[i].coordY;
+                                        bddAllies[j].coordX = data[i].state.coordX;
+                                        bddAllies[j].coordY = data[i].state.coordY;
+                                        allies[j].x = data[i].state.coordX;
+                                        allies[j].y = data[i].state.coordY;
                                     }
                                 }
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else if (parseInt(data[i].team) == 2)
                             {
                                 for (var j=0; j<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
-                                        bddEnemies[j].coordX = data[i].coordX;
-                                        bddEnemies[j].coordY = data[i].coordY;
-                                        enemies[j].x = data[i].coordX;
-                                        enemies[j].y = data[i].coordY;
+                                        bddEnemies[j].coordX = data[i].state.coordX;
+                                        bddEnemies[j].coordY = data[i].state.coordY;
+                                        enemies[j].x = data[i].state.coordX;
+                                        enemies[j].y = data[i].state.coordY;
                                     }
                                 }
                             }
@@ -143,14 +143,11 @@ function updateData ()
 //Fonctions de traitement des events
 function canvasClicked ()
 {
-    for (var i=0; i<bddActionneurs.length; i++)
-    {
-        if (actionneurs[i].rect().collidePoint(jaws.mouse_x,jaws.mouse_y))
-        {
-            console.log("Hahaha, bien ouej !");
-        }
-    }
+
 }
+
+
+//Fonction d'envoi 
 
 
 function GamePlayer ()

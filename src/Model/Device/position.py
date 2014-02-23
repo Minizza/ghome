@@ -15,6 +15,9 @@ class Position(Sensor):
     trameStart="A55A4242"
     trameEnd ="FF"
 
+    """New field in order to know the team of the sensor"""
+    team = IntField()
+
 
     def translateTrame(self,inTrame):
         """

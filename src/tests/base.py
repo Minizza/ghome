@@ -69,28 +69,29 @@ def device_test():
 
 
 	#list of temperature sensors
-	device3 = temperature.Temperature(physic_id = "AZ3RT1UI", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
-	device4 = temperature.Temperature(physic_id = "A23F4507", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
+
+	device3 = temperature.Temperature(physic_id = "A23DF1UI09", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
+	device4 = temperature.Temperature(physic_id = "A23FB45I07", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
 
 	#list of switch sensors
-	device5 = switch.Switch(physic_id = "00053F44", name = "Plaque pression couloir", current_state = "close", coordX = 300, coordY = 400)
-	device6 = switch.Switch(physic_id = "ADKE334D", name = "Plaque pression hangar", current_state = "close", coordX = 400, coordY = 300)
-	device7 = switch.Switch(physic_id = "A457GT6D", name = "Détecteur présence bureau", current_state = "open", coordX = 100, coordY = 400)
-	device8 = switch.Switch(physic_id = "ABGB45PL", name = "Détecteur présence salon", current_state = "open", coordX = 400, coordY = 100)
-	device9 = switch.Switch(physic_id = "RT524EDR", name = "Porte chambre", current_state = "open", coordX = 250, coordY = 80)
+	device5 = switch.Switch(physic_id = "ACF24EF5", name = "Plaque pression couloir", current_state = "False", coordX = 300, coordY = 400)
+	device6 = switch.Switch(physic_id = "AD8E334D", name = "Plaque pression hangar", current_state = "True", coordX = 400, coordY = 300)
+	device7 = switch.Switch(physic_id = "A457FE6D", name = "Détecteur présence bureau", current_state = "False", coordX = 100, coordY = 400)
+	device8 = switch.Switch(physic_id = "ABFB454E", name = "Détecteur présence salon", current_state = "False", coordX = 400, coordY = 100)
+	device9 = switch.Switch(physic_id = "DF524ED5", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)
 
 	#list of players
 		# A player is just represented by a coordonate getting sensor
-	player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500, team = 1)
-	player12 = position.Position(physic_id = "BE458ECD", name = "Equipe 1 joueur 2", current_state = {"coordX":60,"coordY":500}, coordX = 60, coordY = 500, team = 1)
-	player13 = position.Position(physic_id = "DE4265DE", name = "Equipe 1 joueur 3", current_state = {"coordX":70,"coordY":500}, coordX = 70, coordY = 500, team = 1)
-	player14 = position.Position(physic_id = "AC3542FE", name = "Equipe 1 joueur 4", current_state = {"coordX":60,"coordY":510}, coordX = 60, coordY = 510, team = 1)
-	player15 = position.Position(physic_id = "FDEE42CD", name = "Equipe 1 joueur 5", current_state = {"coordX":50,"coordY":510}, coordX = 50, coordY = 510, team = 1)
-	player21 = position.Position(physic_id = "AB4BCFED", name = "Equipe 2 joueur 1", current_state = {"coordX":600,"coordY":50}, coordX = 600, coordY = 50, team = 2)
-	player22 = position.Position(physic_id = "AC25FECD", name = "Equipe 2 joueur 2", current_state = {"coordX":600,"coordY":60}, coordX = 600, coordY = 60, team = 2)
-	player23 = position.Position(physic_id = "EBBD5542", name = "Equipe 2 joueur 3", current_state = {"coordX":600,"coordY":70}, coordX = 600, coordY = 70, team = 2)
-	player24 = position.Position(physic_id = "DFE4E3E8", name = "Equipe 2 joueur 4", current_state = {"coordX":590,"coordY":60}, coordX = 590, coordY = 60, team = 2)
-	player25 = position.Position(physic_id = "3255DD67", name = "Equipe 2 joueur 5", current_state = {"coordX":590,"coordY":50}, coordX = 590, coordY = 50, team = 2)
+	player11 = position.Position(physic_id = "AFEFE327", name = "Equipe 1 joueur 1", current_state = 1, coordX = 50, coordY = 500)
+	player12 = position.Position(physic_id = "BF4586CD", name = "Equipe 1 joueur 2", current_state = 1, coordX = 60, coordY = 500)
+	player13 = position.Position(physic_id = "DE42651C", name = "Equipe 1 joueur 3", current_state = 1, coordX = 70, coordY = 500)
+	player14 = position.Position(physic_id = "A13542F5", name = "Equipe 1 joueur 4", current_state = 1, coordX = 60, coordY = 510)
+	player15 = position.Position(physic_id = "FD5E42CD", name = "Equipe 1 joueur 5", current_state = 1, coordX = 50, coordY = 510)
+	player21 = position.Position(physic_id = "AB4FDF5D", name = "Equipe 2 joueur 1", current_state = 2, coordX = 600, coordY = 50)
+	player22 = position.Position(physic_id = "DE25F5CD", name = "Equipe 2 joueur 2", current_state = 2, coordX = 600, coordY = 60)
+	player23 = position.Position(physic_id = "EBB65542", name = "Equipe 2 joueur 3", current_state = 2, coordX = 600, coordY = 70)
+	player24 = position.Position(physic_id = "FDE4E358", name = "Equipe 2 joueur 4", current_state = 2, coordX = 590, coordY = 60)
+	player25 = position.Position(physic_id = "3255G467", name = "Equipe 2 joueur 5", current_state = 2, coordX = 590, coordY = 50)
 
 
 	#Adding new sensors or actuators

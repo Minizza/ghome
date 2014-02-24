@@ -59,7 +59,7 @@ function sleep(milliseconds) {
 }
 
 
-
+//Query : get all devices from BDD
 function initData (callback)
 {
     $.ajax({
@@ -114,7 +114,7 @@ function initData (callback)
     
 }
 
-
+//Updating data from BDD
 function updateData ()
 {
     $.ajax({    
@@ -199,7 +199,7 @@ function GamePlayer ()
         var x;
         var y; 
         
-
+		//Captors objects
         for (var i=0; i<bddCapteurs.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
@@ -208,12 +208,14 @@ function GamePlayer ()
             capteurs[i].y = bddCapteurs[i].coordY;
         }
 
+		//Actuators objects
         for (var i=0 ; i < bddActionneurs.length ; i++) {
             actionneurs[i] = new jaws.Sprite({image:"static/medias/actionneur.png"});
             actionneurs[i].x = bddActionneurs[i].coordX;
             actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
+		//Allies and enemies objects
         for (var i=0 ; i < bddAllies.length ; i++) {
             allies[i] = new jaws.Sprite({image:"static/medias/allies.png"});
             allies[i].x = bddAllies[i].coordX;
@@ -223,22 +225,29 @@ function GamePlayer ()
             enemies[i].y = bddEnemies[i].coordY;
         }
 		
-
+		//Current data
         updateData();
 		
+		//Player object
 		player = new jaws.Sprite({ image:"static/medias/player.png" });
-
+		
+		//Chose player selected in the list
         changePlayer();
 
+		//If current player is former player's allie
         if(boolIsAllied) {
+			//Coordonates taken in the list of allies
             player.x = allies[selectedPlayerIndex].x;
             player.y = allies[selectedPlayerIndex].y;
         }
+		//If current player is former player's enemie
         else {
+			//Coordonates taken in the list of enemies
             player.x = enemies[selectedPlayerIndex].x;
             player.y = enemies[selectedPlayerIndex].y;
         }
 		
+<<<<<<< HEAD
 		
         function SendCoordinates() {
         $.post( "play/location", { ident : selectedPlayerId, abscissa: player.x, ordinate: player.y }, function( data ) {
@@ -246,11 +255,16 @@ function GamePlayer ()
             });
         }  
 
-		SendCoordinates();
+=======
+		//Send current player's coordinates every 2s
+		function SendCoordinates() {
+			$.post( "play/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
+				setTimeout(SendCoordinates, 2000);
+			});
+		}
 		
-		/*map = new jaws.Sprite({ image:"../static/medias/plan.svg" });
-		map.x = 35;
-		map.y = 40;*/
+>>>>>>> icomm
+		SendCoordinates();
                     
     }   
 	
@@ -267,6 +281,7 @@ function GamePlayer ()
             Eoo+=1;
         }
 
+		//Please comment this
         for (var i=0; i<bddCapteurs.length; i++)
         {
             if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
@@ -335,6 +350,7 @@ function GamePlayer ()
 			player.y = 545;
 	    }
 		
+		//Manage if player crushes a captor (for all captors)
 		for (var i=0 ; i < capteurs.length ; i++) {
 			if (jaws.collide(player, capteurs[i]))
             {
@@ -361,16 +377,20 @@ function GamePlayer ()
 	this.draw = function() { 
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
 
-        // Dessiner plan
-        //context.drawImage(image, 30, 35);
+        // Draw map
+        context.drawImage(image, 30, 35);
                     
+		//Draw all captors
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
         }
-                   
+         
+		//Draw all actuators
         for (var i=0 ; i < actionneurs.length ; i++) {
             actionneurs[i].draw();
         } 
+		
+		//Draw all allies and enemies except player
 		for (var i=0 ; i < allies.length ; i++) {
             if(i!=selectedPlayerIndex) {
                 allies[i].draw();
@@ -385,7 +405,7 @@ function GamePlayer ()
             
         }
 		
-		
+		//Draw player
 		player.draw();
     }
 }

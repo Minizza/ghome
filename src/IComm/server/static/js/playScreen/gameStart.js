@@ -265,7 +265,7 @@ function GameStart ()
     
     this.update = function() { 
             
-        if (Eoo===15)
+        if (Eoo===30)
         {
             Eoo =0;
             updateData();
@@ -318,7 +318,7 @@ function GameStart ()
         boutonActiver.textCoord1.draw();
 
         // Dessiner plan
-        context.drawImage(image, 30, 35);
+        // context.drawImage(image, 30, 35);
 
                     
 		for (var i=0 ; i < capteurs.length ; i++) {

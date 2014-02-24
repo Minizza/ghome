@@ -262,7 +262,7 @@ function GamePlayer ()
     
     this.update = function() { 
         
-        if (Eoo===10)
+        if (Eoo===30)
         {
             Eoo =0;
         }

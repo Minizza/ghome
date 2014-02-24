@@ -140,7 +140,7 @@ class traductor ():
         
     def sendTrame(self,ident,newState):
         with self.lock:
-            sensorUsed=sensor.Sensor.objects(physic_id=ident)[0]
+            sensorUsed=sensor.Device.objects(physic_id=ident)[0]
         daTrame=sensorUsed.gimmeTrame(newState)
         if daTrame:
             self.soc.send(daTrame)
@@ -153,7 +153,7 @@ class traductor ():
             Safely update the identifier set of the traductor
         """
         for anUpdate in lazzyUpdate.objects:
-            LOGGER.debug("id : {} || state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+            LOGGER.warn("id : {} || state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
             if(anUpdate.idToUpdate==""):
                 with self.lock:
                     self.identSet=set([])
@@ -168,7 +168,7 @@ class traductor ():
                         LOGGER.info("{} added".format(anUpdate.idToUpdate))
             else:
                 #send a trame from a captor with a newState
-                LOGGER.debug("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+                LOGGER.error("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
                 self.sendTrame(anUpdate.idToUpdate,anUpdate.newState)
             anUpdate.delete()
             LOGGER.warn(" {} update           GROS delete de : {} || {}".format(lazzyUpdate.objects.count(),anUpdate.idToUpdate,anUpdate.newState))

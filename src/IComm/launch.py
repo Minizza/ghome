@@ -14,7 +14,7 @@ connect(database)
 
 def main():
 
-	# Create new threads
+	# Create new process
 	pClient = Process(target = runserver.main)
 	pTrad = Process(target = launchMe.main)
 

@@ -32,8 +32,6 @@ def balBad (c):
     c.send(data)
 
 def balPos(c):
-    trameStart="A55A4242"
-    trameEnd ="FF"
     data = 'A55A424253EE53EEADEDF3E7FF79'
     print "Sending : {}".format(data)
     c.send(data)

@@ -11,7 +11,7 @@ from Model.Device import device
 from Model.Device import sensor 
 from Model.update import lazzyUpdate
 from Model.Device import position
-from traducteur import trame 
+from traducteur import Trame 
 
 """I want da logger"""
 from logger import LOGGER
@@ -56,7 +56,7 @@ class traductor ():
         message = self.soc.recv(1024)
         if message and len(message)==28:
             LOGGER.debug("trame reçu : {}".format(message))
-            self.trameUsed = trame.trame(message)
+            self.trameUsed = Trame.trame(message)
         else :
             return
 
@@ -170,7 +170,6 @@ class traductor ():
                 #send a trame from a captor with a newState
                 LOGGER.debug("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
                 self.sendTrame(anUpdate.idToUpdate,anUpdate.newState)
-                LOGGER.error("BLLLAAAAAAAAAAAAAAAAAa")
             anUpdate.delete()
             LOGGER.warn(" {} update           GROS delete de : {} || {}".format(lazzyUpdate.objects.count(),anUpdate.idToUpdate,anUpdate.newState))
             return 

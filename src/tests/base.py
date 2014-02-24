@@ -69,8 +69,8 @@ def device_test():
 
 
 	#list of temperature sensors
-	device3 = temperature.Temperature(physic_id = "AZ3RT1UI0P", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
-	device4 = temperature.Temperature(physic_id = "A23RG45I07", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
+	device3 = temperature.Temperature(physic_id = "AZ3RT1UI", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
+	device4 = temperature.Temperature(physic_id = "A23F4507", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
 
 	#list of switch sensors
 	device5 = switch.Switch(physic_id = "00053F44", name = "Plaque pression couloir", current_state = "close", coordX = 300, coordY = 400)

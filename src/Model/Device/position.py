@@ -52,6 +52,6 @@ class Position(Sensor):
         """
             convert absolute coordonate to 4 Bytes value
         """
-        rawConvertedX=hex(absX*(16**4-1)/self.maxX).upper()
-        rawConvertedY=hex(absY*(16**4-1)/self.maxY).upper()
-        return {'x':rawConvertedX[2:],'y':rawConvertedY[2:]}      
+        rawConvertedX=hex(absX*(16**4-1)/self.maxX).upper()[2:]
+        rawConvertedY=hex(absY*(16**4-1)/self.maxY).upper()[2:]
+        return {'x':rawConvertedX,'y':rawConvertedY}      

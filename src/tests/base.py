@@ -81,7 +81,8 @@ def device_test():
     device9 = switch.Switch(physic_id = "DF524ED5", name = "Porte chambre", current_state = "False", coordX = 250, coordY = 80)
 
     #list of players
-        # A player is just represented by a coordonate getting sensor player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500, team = 1)
+        # A player is just represented by a coordonate getting sensor 
+    player11 = position.Position(physic_id = "ADEDF3E7", name = "Equipe 1 joueur 1", current_state = {"coordX":50,"coordY":500}, coordX = 50, coordY = 500, team = 1)
     player12 = position.Position(physic_id = "BF458ECD", name = "Equipe 1 joueur 2", current_state = {"coordX":60,"coordY":500}, coordX = 60, coordY = 500, team = 1)
     player12 = position.Position(physic_id = "BE458ECD", name = "Equipe 1 joueur 2", current_state = {"coordX":60,"coordY":500}, coordX = 60, coordY = 500, team = 1)
     player13 = position.Position(physic_id = "DE4265DE", name = "Equipe 1 joueur 3", current_state = {"coordX":70,"coordY":500}, coordX = 70, coordY = 500, team = 1)

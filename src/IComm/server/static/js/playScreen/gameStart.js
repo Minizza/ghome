@@ -318,11 +318,23 @@ function GameStart ()
         boutonActiver.textCoord1.draw();
 
         // Dessiner plan
-        context.drawImage(image, 30, 35);
+        //context.drawImage(image, 30, 35);
 
                     
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
+            if ((bddCapteurs[i].detect > 0)&&(infosParty.team!=0))
+            {
+                for (var j=0 ; j<enemies.length ; j++)
+                {
+                    var dist = Math.sqrt(Math.pow(enemies[j].coordX - capteurs[i].coordX)*
+                        Math.pow(enemies[j].coordY - capteurs[i].coordY))
+                    if (dist < 100)
+                    {
+                        enemies[j].draw();
+                    }
+                }
+            }
         }
                    
         for (var i=0 ; i < actionneurs.length ; i++) {

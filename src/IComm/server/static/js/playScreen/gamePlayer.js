@@ -247,23 +247,13 @@ function GamePlayer ()
             player.y = enemies[selectedPlayerIndex].y;
         }
 		
-<<<<<<< HEAD
-		
+
         function SendCoordinates() {
         $.post( "play/location", { ident : selectedPlayerId, abscissa: player.x, ordinate: player.y }, function( data ) {
                 setTimeout(SendCoordinates, 200);
             });
         }  
 
-=======
-		//Send current player's coordinates every 2s
-		function SendCoordinates() {
-			$.post( "play/location", { abscissa: player.x, ordinate: player.y }, function( data ) {
-				setTimeout(SendCoordinates, 2000);
-			});
-		}
-		
->>>>>>> icomm
 		SendCoordinates();
                     
     }   

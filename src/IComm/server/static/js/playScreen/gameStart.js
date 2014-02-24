@@ -327,9 +327,9 @@ function GameStart ()
             {
                 for (var j=0 ; j<enemies.length ; j++)
                 {
-                    var dist = Math.sqrt(Math.pow(enemies[j].coordX - capteurs[i].coordX)*
-                        Math.pow(enemies[j].coordY - capteurs[i].coordY))
-                    if (dist < 100)
+                    //var dist = Math.sqrt(Math.pow(enemies[j].coordX - capteurs[i].coordX)*
+                        //Math.pow(enemies[j].coordY - capteurs[i].coordY))
+                    if (jaws.collide(capteurs[i],enemies[j]))
                     {
                         enemies[j].draw();
                     }

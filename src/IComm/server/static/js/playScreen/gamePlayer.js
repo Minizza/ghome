@@ -368,7 +368,7 @@ function GamePlayer ()
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
 
         // Draw map
-        context.drawImage(image, 30, 35);
+        // context.drawImage(image, 30, 35);
                     
 		//Draw all captors
 		for (var i=0 ; i < capteurs.length ; i++) {

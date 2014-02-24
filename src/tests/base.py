@@ -62,10 +62,10 @@ def device_test():
     device1 = sensor.Sensor(physic_id = "AB4242CD", name = "Détecteur de fin du monde", coordX = 300, coordY = 400)
 
     #list of actuators
-    device2 = actuator.Actuator(physic_id = "AB2489DC", name = "Actionneur zombie apocalypse", coordX = 65, coordY = 330)
-    actu1 = actuator.Actuator(physic_id = "AE2489DC", name = "Actionneur fumée bureau", coordX = 500, coordY = 330)
-    actu2 = actuator.Actuator(physic_id = "AC2489DC", name = "Actionneur lampe cave", coordX = 350, coordY = 100)
-    actu3 = actuator.Actuator(physic_id = "AD2489DC", name = "Actionneur porte coffre", coordX = 480, coordY = 265)
+    device2 = actuator.Actuator(physic_id = "AB2489DC", name = "Actionneur zombie apocalypse",current_state="off", coordX = 65, coordY = 330)
+    actu1 = actuator.Actuator(physic_id = "AE2489DC", name = "Actionneur fumée bureau", current_state="off",coordX = 500, coordY = 330)
+    actu2 = actuator.Actuator(physic_id = "AC2489DC", name = "Actionneur lampe cave", current_state="off",coordX = 350, coordY = 100)
+    actu3 = actuator.Actuator(physic_id = "AD2489DC", name = "Actionneur porte coffre", current_state="off",coordX = 480, coordY = 265)
 
 
     #list of temperature sensors

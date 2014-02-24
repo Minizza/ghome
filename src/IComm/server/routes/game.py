@@ -6,6 +6,8 @@ from flask import render_template, request
 from server.roles import *
 import json
 import Model.Device.device as ghomedevice
+from Model.update import lazzyUpdate
+from logger import LOGGER
 
 wichGame = []
 
@@ -43,5 +45,7 @@ def gameSetQuery():
 @app.route('/game/activated', methods=["POST"])
 def actiActiv():
     theIdent = request.form["ident"]
+    LOGGER.info(theIdent)
+    lazzyUpdate().sendTrame(theIdent,"toggle")
     return "ok"
 

@@ -24,7 +24,7 @@ class lazzyUpdate(Document):
     	"""
     		Ask for update the sensor with this id
     	"""
-    	LOGGER.error("lazily updating {}".format(ident))
+    	LOGGER.info("lazily updating {}".format(ident))
     	self.idToUpdate=ident
     	self.newState=''
     	self.save()
@@ -33,7 +33,7 @@ class lazzyUpdate(Document):
     	"""
     		Ask the traductor to send a trame with the new state of a captor
     	"""
-    	LOGGER.debug("Lazily updating {} with {}".format(ident,newState))
+    	LOGGER.info("Lazily updating {} with {}".format(ident,newState))
     	self.idToUpdate=ident
     	self.newState=newState
     	self.save()

@@ -16,14 +16,17 @@ class Actuator(Device):
         """
             Return the update trame to be sent
         """
-        if (daNewState=="on"):
-            rawTrame="A55A6B0570000000"+ self.physic_id +"30"
-        elif(daNewState=="off"):
-            rawTrame="A55A6B0550000000"+ self.physic_id +"30"
+        if (str(daNewState)=="toggle"):
+            if self.current_state=="off":
+                #on met à on
+                rawTrame="A55A6B0570000000"+ self.physic_id +"30"
+            elif(self.current_state=="on"):
+                #on met à off
+                rawTrame="A55A6B0550000000"+ self.physic_id +"30"
         else:
             LOGGER.warn("Strange new state : {}. Trram not send".format(daNewState))
             return ""
         myTrame=Trame.trame(rawTrame)
         myTrame.calculateChecksum()
-        LOGGER.info("Trame generated, to be send : {}".format(myTrame.lessRawView()))
+        LOGGER.info("Actuator trame generated, to be send : {}".format(myTrame.lessRawView()))
         return myTrame.rawView()

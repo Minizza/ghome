@@ -43,7 +43,8 @@ def getPosition():
 
     #### TEST ##A REMPLACER PAR UN ENVOI DE TRAME#####
     upDev = ghomedevice.Device.objects(physic_id=ident)[0]
-    upDev.moving(int(absc),int(ordo))
+    upDev.current_state = {"coordX":int(absc),"coordY":int(ordo)}
+    upDev.save()
     ##################################################
     return "ok"
 

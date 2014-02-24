@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import socket
 import thread
+import atexit
 
 
 """
@@ -11,6 +12,7 @@ def handler(clientsock,addr):
        while 1:
             data = clientsock.recv(BUFSIZ)
             if not data: break
+            print "Broadcasted data : {}".format(data)
             for client in clientList:
                 client.send(data)
        clientsock.close()

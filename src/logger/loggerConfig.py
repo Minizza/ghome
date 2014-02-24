@@ -20,7 +20,7 @@ def configure ():
 	# création de l'objet logger qui va nous servir à écrire dans les logs
 	logger = logging.getLogger()
 	# on met le niveau du logger à DEBUG, comme ça il écrit tout
-	logger.setLevel(logging.DEBUG)
+	logger.setLevel(logging.INFO)
 
 
 	###############Ecrit dans un fichier
@@ -54,7 +54,7 @@ def configure ():
 	consolFormat = logging.Formatter('%(levelname)s :: %(message)s')
 	steam_handler.setFormatter(consolFormat)
 	#niveau de début
-	steam_handler.setLevel(logging.DEBUG)
+	steam_handler.setLevel(logging.INFO)
 	logger.addHandler(steam_handler)
 	curframe = inspect.currentframe()
 	calframe = inspect.getouterframes(curframe, 2)

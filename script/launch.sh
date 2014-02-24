@@ -22,7 +22,7 @@ then
 else
 		sed -i "s/\"platforme\":.*/\"platforme\":\"127.0.0.1\",/" $CONFIG_PATH
 		sed -i "s/\"platformePort\":.*/\"platformePort\":1515,/" $CONFIG_PATH
-		if [[ $1 -eq 2 ]]	# If a terminal is precised
+		if [[ $# -eq 1 ]]	# If a terminal is precised
 		then
 		 	$1 -hold -e python $ECHO_PATH &
 		 	$1 -hold -e python $FAKEJ_PATH &

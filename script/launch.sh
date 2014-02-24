@@ -19,17 +19,12 @@ if [ "$1" = "-j" ] # If true Jerome launching
 then
 		sed -i "s/\"platforme\":.*/\"platforme\":\"134.214.106.23\",/" $CONFIG_PATH
 		sed -i "s/\"platformePort\":.*/\"platformePort\":5000,/" $CONFIG_PATH
+		#xterm -hold -e . ./connectToJerome.sh &
 else
 		sed -i "s/\"platforme\":.*/\"platforme\":\"127.0.0.1\",/" $CONFIG_PATH
 		sed -i "s/\"platformePort\":.*/\"platformePort\":1515,/" $CONFIG_PATH
-		if [[ $# -eq 1 ]]	# If a terminal is precised
-		then
-		 	$1 -hold -e python $ECHO_PATH &
-		 	$1 -hold -e python $FAKEJ_PATH &
-		else	# If no terminal is precised, use xterminal
-			xterm -hold -e python $ECHO_PATH &
-			xterm -hold -e python $FAKEJ_PATH &
-	 	fi
+		xterm -hold -e python $ECHO_PATH &
+		xterm -hold -e python $FAKEJ_PATH &
 fi
 
 python $LAUNCH_PATH

@@ -24,7 +24,7 @@ class lazzyUpdate(Document):
     	"""
     		Ask for update the sensor with this id
     	"""
-    	LOGGER.debug("lazily updating {}".format(ident))
+    	LOGGER.error("lazily updating {}".format(ident))
     	self.idToUpdate=ident
     	self.newState=''
     	self.save()

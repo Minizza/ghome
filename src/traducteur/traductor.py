@@ -66,7 +66,7 @@ class traductor ():
         self.updateIdentSet()
         while self.running:
             try:
-                if dacount >50000 : 
+                if dacount >200 : #Fréquence de mise à jour de la base
                     self.updateIdentSet()
                     dacount=0
                 try:
@@ -109,7 +109,7 @@ class traductor ():
 
     def checkTrame(self):
         if self.trameUsed:
-            LOGGER.info("Trame used : {}".format(self.trameUsed.lessRawView()))
+            LOGGER.debug("Trame received : {}".format(self.trameUsed.lessRawView()))
             if ("A55A" not in self.trameUsed.sep):
                 LOGGER.warn("Wrong separator, rejected")
 
@@ -144,7 +144,8 @@ class traductor ():
         daTrame=sensorUsed.gimmeTrame(newState)
         if daTrame:
             self.soc.send(daTrame)
-            LOGGER.debug("Trame sended : {}".format(daTrame))
+            LOGGER.info("Trame sended : {}".format(daTrame))
+            return
                 
 
     def updateIdentSet(self):
@@ -167,9 +168,11 @@ class traductor ():
                         LOGGER.info("{} added".format(anUpdate.idToUpdate))
             else:
                 #send a trame from a captor with a newState
-                LOGGER.info("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+                LOGGER.debug("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
                 self.sendTrame(anUpdate.idToUpdate,anUpdate.newState)
+                LOGGER.error("BLLLAAAAAAAAAAAAAAAAAa")
             anUpdate.delete()
+            LOGGER.warn(" {} update           GROS delete de : {} || {}".format(lazzyUpdate.objects.count(),anUpdate.idToUpdate,anUpdate.newState))
             return 
         LOGGER.debug("nothing to update")
 

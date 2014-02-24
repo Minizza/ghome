@@ -3,13 +3,18 @@ from sensor import *
 from mongoengine import *
 from logger import LOGGER
 from Model.update import lazzyUpdate
-from traducteur import trame
+from traducteur import Trame
 
 
  
 class Position(Sensor):
 
     """Class for position sensor"""
+
+    """
+        current state
+            {"coordX":absolueX,"coordY":absolueY}
+    """
     maxX=610
     maxY=545
     trameStart="A55A4242"
@@ -36,7 +41,7 @@ class Position(Sensor):
         """
         newCoord=self.translateCoord(daNewState.get('coordX'),daNewState.get('coordY'))
         strTrame=self.trameStart+newCoord.get('x')+newCoord.get('y')+self.physic_id+self.trameEnd
-        myTrame=trame.trame(strTrame)
+        myTrame=Trame.trame(strTrame)
         myTrame.calculateChecksum()
         LOGGER.debug("Trame returned : {}".format(myTrame.rawView()))
         return myTrame.rawView()

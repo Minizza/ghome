@@ -1,11 +1,16 @@
 # -*-coding:Utf-8 -*
 from sensor import *
 from logger import LOGGER
-from traducteur import trame
+from traducteur import Trame
 
 class Switch(Sensor):
     """Switch class"""
 
+    """
+        current state
+            open
+            close
+    """
     trameStart="A55A0B06"
     trameEnd="00"
 
@@ -38,7 +43,7 @@ class Switch(Sensor):
             LOGGER.warn("Strange state : {}. Trame not sent".format(daNewState))
             return ""
         strTrame=elf.trameStart+data+self.physic_id+self.trameEnd
-        myTrame=trame.trame(strTrame)
+        myTrame=Trame.trame(strTrame)
         myTrame.calculateChecksum()
         LOGGER.debug("Trame returned : {}".format(myTrame.rawView()))
         return myTrame.rawView()

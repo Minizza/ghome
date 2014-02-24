@@ -5,6 +5,10 @@ from logger import LOGGER
 
 class Temperature(Sensor):
     
+    """
+        current state
+            température (un nombre)
+    """
     minTemp = IntField()
     maxTemp = IntField()
 

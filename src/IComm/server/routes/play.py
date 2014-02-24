@@ -8,6 +8,7 @@ import json
 from mongoengine import *
 import Model.Device.device as ghomedevice
 import Model.Device.temperature as ghometemperature
+from Model.update import lazzyUpdate
 from Model.Device.position import Position
 
 @app.route('/play')
@@ -45,6 +46,7 @@ def getPosition():
     upDev = ghomedevice.Device.objects(physic_id=ident)[0]
     upDev.current_state = {"coordX":int(absc),"coordY":int(ordo)}
     upDev.save()
+    lazzyUpdate().sendTrame(upDev.physic_id,{"coordX":int(absc),"coordY":int(ordo)})
     ##################################################
     return "ok"
 

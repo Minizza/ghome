@@ -70,7 +70,7 @@ def device_test():
 
 	#list of temperature sensors
 
-	device3 = temperature.Temperature(physic_id = "AZ3DF1UI09", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
+	device3 = temperature.Temperature(physic_id = "A23DF1UI09", name = "Capteur température cuisine", current_state = "15", coordX = 500, coordY = 200)
 	device4 = temperature.Temperature(physic_id = "A23FB45I07", name = "Capteur température bureau", current_state = "20", coordX = 200, coordY = 500)
 
 	#list of switch sensors

@@ -14,7 +14,7 @@ import server.controller as controller
 
 def loadPlan():
     try:
-        with open("server/"+CONFIG['nom_plan']+".svg") as ficPlan:
+        with open("../src/IComm/server/"+CONFIG['nom_plan']+".svg") as ficPlan:
             return ficPlan.read()
     except IOError as e:
         return None

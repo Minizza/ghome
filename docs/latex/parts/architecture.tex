@@ -1,2 +1,17 @@
 \section{Architecture de l'application}
 
+Afin de rendre notre idée possible, il a fallu réfléchir à l'architecture de la solution que nous allions proposer. Pour cela, un important temps de réflexion a été entamé durant les séances d'initialisation du projet. Grace à la définition précise des cas d'utilisation, certains choix ont été décidé. Ces derniers vont porter sur les différents modules à prendre en compte ou encore le choix des technologies à utiliser. La description ci-dessous va justifier et décrire ces choix là.
+
+Tout d'abord, intéressons nous aux différents modules utilisés ou bien développés avec la solution. La salle de laser game est le centre de la réflexion. Rappelons nous que la position des joueurs peut être visualisée par le gérant ou encore par l'un des chefs d'équipe. Ces capteurs de position qui envoient constamment des données sont notre premier élément externe appartenant au GHome. A ajouter à ceux ci les actionneurs permettant d'ouvrir une porte ou bien d'activer de la fumée. Ensuite, deux terminaux sont à prendre en compte : la vue du gérant accessible via un ordinateur puis la vue des chefs d'équipe qui s'interfacera à travers une tablette tactile. Afin de stocker les informations des capteurs, nous avons trouver nécessaire d'intégrer une base de données à notre application. Pour analyser les données des capteurs, les entrer en base et permettre la configuration de notre système, un serveur sera développé. Il est le cœur de notre solution applicative.
+
+Si l'on s'intéresse davantage à ce serveur, on peut le découper en deux parties afin de diviser les tâches et de pouvoir servir de manière asynchrone. Le traducteur sera la partie du serveur qui analysera les trames reçues des capteurs, qui les parsera et qui les entrera dans la base de données. Le traducteur aura aussi comme objectif d'envoyer les commandes des actionneurs. A savoir qu'un service de simulation appelé fake Jérôme permettra de simuler l'envoi de données des capteurs. Le traducteur se chargera donc aussi de transiter avec ce dernier.
+
+La deuxième partie du serveur sera plus orientée utilisateur. En effet, le gérant et les chefs d'équipe ayant besoin de configurer l'application via des terminaux mobiles, une interface doit être mise en place. Pour cela nous avons décider que toutes nos interfaces seraient orientées Web afin de centraliser le développement et de pouvoir s'ouvrir à de multiples terminaux sans efforts majeurs supplémentaires. Qui dit application Web dit serveur Web. Cette deuxième partie qui s'intitulera IComm (comme interface de communication) aura donc comme rôle de servir les clients web.
+
+Bien entendu, la partie base de données est commune aux deux modules du serveur présentés ci-dessus et permettra de faire le lien entre ces deux derniers. Le scénario typique pourrait être :
+- Un capteur envoi une donnée
+- Le traducteur la reçoit, la parse et la rentre en base de données
+- Un client lambda requête le serveur web afin d'afficher l'état du capteur depuis sa tablette
+- IComm va chercher l'information correspondante en base de données et la renvoi au client
+
+Avec ce système tout est parfaitement divisé et les deux parties du serveur sont indépendantes l'une de l'autre. Cette division de la solution applicative nous permet aussi de diviser le travail en suivant la même logique. Une partie de l'équipe travaille sur le traducteur pendant qu'une autre travaille sur la partie interface et une dernière sera plus spécialement focalisée sur l'interaction avec la base de données.

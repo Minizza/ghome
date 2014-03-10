@@ -1,7 +1,9 @@
 {
-    "nom_plan": "server/static/medias/map",
-    "host": "127.0.0.1",
+    "nom_plan": "static/medias/map",
+    "host": "localhost",
     "port": 5000,
+    "platforme":"127.0.0.1",
+    "platformePort":1515,
     "debug": true,
-    "database": "test"
+    "database":"test"
 }

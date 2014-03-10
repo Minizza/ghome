@@ -17,13 +17,13 @@ fi
 
 
 # Clone the project
-git clone https://github.com/Minizza/ghome.git
+git clone https://github.com/Minizza/ghome.git -b forInstallOnly
 
 echo "			end git cloning"
 
 # Initialize virtualenv and install dependencies
 virtualenv ghome
 cd ghome
-pip install -r requirement.txt
+pip install -r script/requirement.txt
 mkdir log
 touch log/activity.log

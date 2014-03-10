@@ -6,6 +6,10 @@
  #en-python/ 
 import logging
 import sys
+import inspect
+
+import os
+
 from loggerColor import *
  
 from logging.handlers import RotatingFileHandler 
@@ -16,7 +20,7 @@ def configure ():
 	# création de l'objet logger qui va nous servir à écrire dans les logs
 	logger = logging.getLogger()
 	# on met le niveau du logger à DEBUG, comme ça il écrit tout
-	logger.setLevel(logging.DEBUG)
+	logger.setLevel(logging.INFO)
 
 
 	###############Ecrit dans un fichier
@@ -25,7 +29,10 @@ def configure ():
 	formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
 	# création d'un handler qui va rediriger une écriture du log vers
 	# un fichier en mode 'append', avec 1 backup et une taille max de 1Mo
-	file_handler = RotatingFileHandler('../../log/activity.log', 'a', 1000000, 1)
+	root = os.path.dirname(__file__)
+	path = os.path.abspath(os.path.join(root, "../../log/activity.log"))
+
+	file_handler = RotatingFileHandler(path, 'a', 1000000, 1)
 	# on lui met le niveau sur DEBUG, on lui dit qu'il doit utiliser le formateur
 	# créé précédement et on ajoute ce handler au logger
 	file_handler.setLevel(logging.INFO)
@@ -47,7 +54,9 @@ def configure ():
 	consolFormat = logging.Formatter('%(levelname)s :: %(message)s')
 	steam_handler.setFormatter(consolFormat)
 	#niveau de début
-	steam_handler.setLevel(logging.DEBUG)
+	steam_handler.setLevel(logging.INFO)
 	logger.addHandler(steam_handler)
-
+	curframe = inspect.currentframe()
+	calframe = inspect.getouterframes(curframe, 2)
+	logger.info("A new logger is born from {}".format(calframe[1][3]))
 	return logger

@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{report}
+\documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
@@ -17,10 +17,32 @@
 \fancyhead{}
 \fancyfoot{}
 \fancyhead[L]{GHome}
-\fancyhead[C]{Procédure d'installation}
+\fancyhead[C]{\begin{Large}
+Procédure d'installation
+\end{Large}}
 \fancyhead[R]{Héxanôme H4111}
 
 
 \begin{document}
-lb ldjfklsdjf
+\paragraph{Avertissement : }La procédure d'installation a été écrite et réalisée sous linux/Debian. Vous devez pouvoir obtenir temporairement les droits root pour la réaliser.
+\section{Installation}
+\paragraph{} Pour installer ce projet, copiez le script $install.sh$ dans le répertoire où vous souhaitez l'installer et éxecuter le.
+
+Il va installer les services requis (droits root nécessaires), créer l'arborescence de fichiers nécessaire, récupérer les sources via git, créer un environnement Python isolé du système comprenant toutes les bibliothèques nécessaires.
+
+\section{Configuration}
+Pour pouvoir éxécuter l'application, il faut ajouter la racine des sources du projet au PYTHONPATH. Le script $add\_python\_path.sh$ permet de le faire. Il prend en paramère le fichier de configuration de votre interpreteur de commande ($.bashrc$,$.zshrc$, ...) généralement situé dans votre dossier personnel.
+\paragraph{} Un fichier de configuration $config.json$ est présent dans $racine/src/IComm/server$. Il renseigne  : 
+\begin{itemize}
+\item l'adresse et le port pour le site web
+\item l'adresse et le port de la passerelle (acquisition de données)
+\item le nom de la base de donnée
+\item si l'on souhaite être en mode DEBUG
+\end{itemize}
+\section{\'{E}xécution}
+Pour lancer le projet, éxécutez le script $launch.sh$ avec l'option $-f$ pour se connecter au fakeJérome et $-j$ pour se connecter à la véritable passerelle GHome.
+\paragraph{}
+\begin{small}
+Il peut \^{e}tre nécessaire de modifier les permissions du script via $chmod \ u+x\ launch.sh$
+\end{small}
 \end{document}

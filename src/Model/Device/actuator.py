@@ -26,8 +26,12 @@ class Actuator(Device):
                 #on met à off
                 rawTrame="A55A6B0550000000"+ "FF9F1E0"+"7" +"30"
                 self.current_state="off"
+            else:
+                rawTrame="A55A6B0550000000"+ "FF9F1E0"+"7" +"30"
+                self.current_state="off"
         else:
             LOGGER.warn("Strange new state : {}. Trram not send".format(daNewState))
+
             return ""
         LOGGER.info("State after : {}".format(self.current_state))
         myTrame=Trame.trame(rawTrame)

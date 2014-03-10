@@ -46,7 +46,7 @@ def getPosition():
     upDev = ghomedevice.Device.objects(physic_id=ident)[0]
     upDev.current_state = {"coordX":int(absc),"coordY":int(ordo)}
     upDev.save()
-    # lazzyUpdate().sendTrame(upDev.physic_id,{"coordX":int(absc),"coordY":int(ordo)})
+    lazzyUpdate().sendTrame(upDev.physic_id,{"coordX":int(absc),"coordY":int(ordo)})
     ##################################################
     return "ok"
 

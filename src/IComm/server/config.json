@@ -1,6 +1,6 @@
 {
     "nom_plan": "static/medias/map",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "port": 5000,
     "platforme":"127.0.0.1",
     "platformePort":1515,

@@ -1,0 +1,44 @@
+\section{Tests pour l'application}
+
+Les fichiers de tests sont placés dans le dossier \texttt{src/tests/}. Pour les lancer, il suffit d'utiliser la commande \texttt{python [nom du fichier]}. Les tests seront alors lancés automatiquement.
+
+\subsection{Fichier base.py}
+
+Il contient les tests vérifiant la bonne intégration des objets du modèle dans la base MongoDB. Note : les sorties des fichiers de test ne tiennent pas compte des messages du logger, indépendants des tests.
+
+\begin{itemize}
+	\item \texttt{user\_test()} : test l'intégration des utilisateurs dans la base.\\ 
+	Sortie : \\
+	\texttt{
+	Gerant admin admin\\
+	Joueur1 pass1 player\\
+	Joueur2 pass2 player\\
+	Chef1 passChef1 chief\\
+	Chef2 passChef2 chief\\
+	}
+
+	\item \texttt{device\_test()} : test de l'intégration des capteurs et actionneurs dans la base MongoDB.\\
+	Sortie : \\
+	\texttt{
+	531f1d5cc17e67140d0f2891   AB2489DE   Actionneur zombie apocalypse\\
+	531f1d5cc17e67140d0f28a1   AE2489DB   Actionneur fumée bureau\\
+	531f1d5cc17e67140d0f28a3   AC2489DA   Actionneur lampe cave\\
+	531f1d5cc17e67140d0f28a5   AD2489DC   Actionneur porte coffre\\
+	531f1d5cc17e67140d0f288f   AB4242CD   Détecteur de fin du monde\\
+	531f1d5cc17e67140d0f28a7   ADEDF3E7   Equipe 1 joueur 1\\
+	531f1d5cc17e67140d0f28a9   BF458ECD   Equipe 1 joueur 2\\
+	531f1d5cc17e67140d0f28ab   BE458ECD   Equipe 1 joueur 6\\
+	531f1d5cc17e67140d0f28ad   AB4BCFED   Equipe 2 joueur 1\\
+	531f1d5cc17e67140d0f28af   AB25FECD   Equipe 2 joueur 2\\
+	531f1d5cc17e67140d0f28b1   EBBD5542   Equipe 2 joueur 3\\
+	531f1d5cc17e67140d0f2897   ACF24EF5   Plaque pression couloir\\
+	531f1d5cc17e67140d0f2899   AD8E334D   Plaque pression hangar\\
+	531f1d5cc17e67140d0f289b   A457FE6D   Détecteur présence bureau\\
+	531f1d5cc17e67140d0f289d   ABFB454E   Détecteur présence salon\\
+	531f1d5cc17e67140d0f289f   DF524ED5   Porte chambre\\
+	531f1d5cc17e67140d0f2893   A23DF1UI09   Capteur température cuisine\\
+	531f1d5cc17e67140d0f2895   A23FB45I07   Capteur température bureau\\
+	}
+\end{itemize}
+
+\subsection{Fichier controller.py}

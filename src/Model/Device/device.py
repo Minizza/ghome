@@ -48,7 +48,7 @@ class Device(Document):
         if (self.historic):
             self.historic.delete()
         self.delete()
-        lazzyUpdate.updateAll()
+        lazzyUpdate().updateAll()
         
     def update(self, stateValue):
         self.addState(datetime.datetime.now(), self.current_state)

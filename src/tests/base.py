@@ -49,7 +49,7 @@ def user_test():
     for user in ghomeuser.GHomeUser.objects:
         print user.id, " ", user.name, " ", user.password, " ", user.role
 ########################################################################
-user_test()
+#user_test()
 
 
 ########################################################################
@@ -135,4 +135,4 @@ def device_test():
             ang += 0.001
             player11.save()
 ########################################################################
-device_test()
+#device_test()

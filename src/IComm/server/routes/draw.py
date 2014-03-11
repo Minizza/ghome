@@ -12,7 +12,7 @@ def draw():
 @app.route('/draw', methods=["POST"])
 def save_svg():
     if "svg" in request.form:
-        with open('{}.svg'.format(CONFIG['nom_plan']), 'w') as fichiersvg:
+        with open('../src/IComm/server/{}.svg'.format(CONFIG['nom_plan']), 'w') as fichiersvg:
             fichiersvg.write(request.form['svg'])
     return "OK"
 

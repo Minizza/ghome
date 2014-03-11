@@ -1,5 +1,3 @@
-$(function() {
-
 var bddCapteurs = new Array ();
 var bddActionneurs = new Array ();
 var bddAllies = new Array ();
@@ -10,10 +8,46 @@ var allies = new Array ();
 var enemies = new Array ();
 var bddPlayer;
 var player;
-var map;
+
+var boolIsAllied = true;
+var selectedPlayerId;
+var selectedPlayerIndex;
+
+// Variable for drawing map
+var context;
+var image;
 
 //basic function needed 
 
+function changePlayer() {
+    selectedPlayerId = $("#playersList").val();
+    var trouve = false;
+    for(var i=0; i<bddAllies.length; i++) {
+        if(bddAllies[i].ident == selectedPlayerId) {
+            selectedPlayerIndex = i;
+            boolIsAllied = true;
+            if (player)
+            {
+                player.x = allies[i].x;
+                player.y = allies[i].y;
+            }
+            return;
+        }
+    }
+
+    for(var i=0; i<bddEnemies.length; i++) {
+        if(bddEnemies[i].ident == selectedPlayerId) {
+            selectedPlayerIndex = i;
+            boolIsAllied = false;
+            if (player)
+            {
+                player.x = enemies[i].x;
+                player.y = enemies[i].y;
+            }
+            return;
+        }
+    }
+}
 
 function sleep(milliseconds) {
   var start = new Date().getTime();
@@ -25,15 +59,16 @@ function sleep(milliseconds) {
 }
 
 
-
+//Query : get all devices from BDD
 function initData (callback)
 {
-    $.ajax({    
+    $.ajax({
                 dataType: 'json',
                 url:'/play', 
                 type:'POST', 
                 async :'false',
                 success : function (data) {
+                    console.log(data);
                     data = JSON.parse(data);
                     for (var i=0; i<data.length; i++)
                     {
@@ -59,11 +94,11 @@ function initData (callback)
                         else if (data[i].type == "Position")
                         {
 
-                            if (parseInt(data[i].state) == 1)
+                            if (parseInt(data[i].team) == 1)
                             {
                                 bddAllies.push(aDevice);
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else if (parseInt(data[i].team) == 2)
                             {
                                 bddEnemies.push(aDevice);
                             }
@@ -79,7 +114,7 @@ function initData (callback)
     
 }
 
-
+//Updating data from BDD
 function updateData ()
 {
     $.ajax({    
@@ -94,29 +129,29 @@ function updateData ()
                         if (data[i].type == "Position")
                         {
 
-                            if (parseInt(data[i].state) == 1)
+                            if (parseInt(data[i].team) == 1)
                             {
                                 for (var j=0; j<bddAllies.length; j++)
                                 {
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
-                                        bddAllies[j].coordX = data[i].coordX;
-                                        bddAllies[j].coordY = data[i].coordY;
-                                        allies[j].x = data[i].coordX;
-                                        allies[j].y = data[i].coordY;
+                                        bddAllies[j].coordX = data[i].state.coordX;
+                                        bddAllies[j].coordY = data[i].state.coordY;
+                                        allies[j].x = data[i].state.coordX;
+                                        allies[j].y = data[i].state.coordY;
                                     }
                                 }
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else if (parseInt(data[i].team) == 2)
                             {
                                 for (var j=0; j<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
-                                        bddEnemies[j].coordX = data[i].coordX;
-                                        bddEnemies[j].coordY = data[i].coordY;
-                                        enemies[j].x = data[i].coordX;
-                                        enemies[j].y = data[i].coordY;
+                                        bddEnemies[j].coordX = data[i].state.coordX;
+                                        bddEnemies[j].coordY = data[i].state.coordY;
+                                        enemies[j].x = data[i].state.coordX;
+                                        enemies[j].y = data[i].state.coordY;
                                     }
                                 }
                             }
@@ -143,15 +178,17 @@ function updateData ()
 //Fonctions de traitement des events
 function canvasClicked ()
 {
-    for (var i=0; i<bddActionneurs.length; i++)
-    {
-        if (actionneurs[i].rect().collidePoint(jaws.mouse_x,jaws.mouse_y))
-        {
-            console.log("Hahaha, bien ouej !");
-        }
-    }
+
 }
 
+
+//Fonction d'envoi de l'information "capteur detecte"
+function Detect ()
+{
+
+}
+
+//Fonction d'envoi de l'information "capteur ne detecte plus"
 
 function GamePlayer ()
 {
@@ -162,7 +199,7 @@ function GamePlayer ()
         var x;
         var y; 
         
-
+		//Captors objects
         for (var i=0; i<bddCapteurs.length; i++) {
             x = Math.floor((Math.random()*(610-35))+35);
             y = Math.floor((Math.random()*(545-40))+40);
@@ -171,12 +208,14 @@ function GamePlayer ()
             capteurs[i].y = bddCapteurs[i].coordY;
         }
 
+		//Actuators objects
         for (var i=0 ; i < bddActionneurs.length ; i++) {
             actionneurs[i] = new jaws.Sprite({image:"static/medias/actionneur.png"});
             actionneurs[i].x = bddActionneurs[i].coordX;
             actionneurs[i].y = bddActionneurs[i].coordY;
         }
 
+		//Allies and enemies objects
         for (var i=0 ; i < bddAllies.length ; i++) {
             allies[i] = new jaws.Sprite({image:"static/medias/allies.png"});
             allies[i].x = bddAllies[i].coordX;
@@ -186,25 +225,36 @@ function GamePlayer ()
             enemies[i].y = bddEnemies[i].coordY;
         }
 		
-
+		//Current data
         updateData();
 		
+		//Player object
 		player = new jaws.Sprite({ image:"static/medias/player.png" });
-
-		player.x = allies[0].x;
-	    player.y = allies[0].y;
 		
+		//Chose player selected in the list
+        changePlayer();
+
+		//If current player is former player's allie
+        if(boolIsAllied) {
+			//Coordonates taken in the list of allies
+            player.x = allies[selectedPlayerIndex].x;
+            player.y = allies[selectedPlayerIndex].y;
+        }
+		//If current player is former player's enemie
+        else {
+			//Coordonates taken in the list of enemies
+            player.x = enemies[selectedPlayerIndex].x;
+            player.y = enemies[selectedPlayerIndex].y;
+        }
+		
+
         function SendCoordinates() {
-        $.post( "play/location", { ident : bddAllies[0].ident, abscissa: player.x, ordinate: player.y }, function( data ) {
+        $.post( "play/location", { ident : selectedPlayerId, abscissa: player.x, ordinate: player.y }, function( data ) {
                 setTimeout(SendCoordinates, 200);
             });
         }  
 
 		SendCoordinates();
-		
-		/*map = new jaws.Sprite({ image:"../static/medias/plan.svg" });
-		map.x = 35;
-		map.y = 40;*/
                     
     }   
 	
@@ -212,7 +262,7 @@ function GamePlayer ()
     
     this.update = function() { 
         
-        if (Eoo===10)
+        if (Eoo===30)
         {
             Eoo =0;
         }
@@ -221,6 +271,7 @@ function GamePlayer ()
             Eoo+=1;
         }
 
+		//Please comment this
         for (var i=0; i<bddCapteurs.length; i++)
         {
             if ((bddCapteurs[i].state == "open")||(bddCapteurs[i].detect>0))
@@ -259,6 +310,17 @@ function GamePlayer ()
 	      player.y += 3;
 	    }
 		
+        if (boolIsAllied)
+        {
+            allies[selectedPlayerIndex].x = player.x;
+            allies[selectedPlayerIndex].y = player.y;
+        }
+        else 
+        {
+            enemies[selectedPlayerIndex].x = player.x;
+            enemies[selectedPlayerIndex].y = player.y;
+        }
+
 		//Player can't leave square
 		if (player.x < 35)
 	    {
@@ -278,23 +340,24 @@ function GamePlayer ()
 			player.y = 545;
 	    }
 		
+		//Manage if player crushes a captor (for all captors)
 		for (var i=0 ; i < capteurs.length ; i++) {
-			jaws.collide(player, capteurs[i], function() { 
-				$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-			});
-			
-			for (var j=1 ; j < allies.lenght ; j++) {
-				jaws.collide(allies[j], capteurs[i], function() { 
-					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-				});
-				jaws.collide(enemies[j], capteurs[i], function() { 
-					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-				});
-			}
-			
-			jaws.collide(enemies[0], capteurs[i], function() { 
-					$.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
-			});
+			if (jaws.collide(player, capteurs[i]))
+            {
+                console.log('Gogogo !')
+                $.post( "play/captor", { captor : bddCapteurs[i].ident }, function( data ) {});
+                bddCapteurs[i].active = true;
+            }
+            else
+            {
+                console.log('pas glop !')
+                if (bddCapteurs[i].active)
+                {
+                    $.post( "play/nocaptor", { captor : bddCapteurs[i].ident }, function( data ) {});
+                    bddCapteurs[i].active = false;
+
+                }
+            }
         }
 
         
@@ -303,27 +366,41 @@ function GamePlayer ()
             
 	this.draw = function() { 
         jaws.context.clearRect(0, 0, jaws.width, jaws.height);
+
+        // Draw map
+        // context.drawImage(image, 30, 35);
                     
+		//Draw all captors
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
         }
-                   
+         
+		//Draw all actuators
         for (var i=0 ; i < actionneurs.length ; i++) {
             actionneurs[i].draw();
         } 
-		for (var i=1 ; i < allies.length ; i++) {
-            allies[i].draw();
-            enemies[i].draw();
+		
+		//Draw all allies and enemies except player
+		for (var i=0 ; i < allies.length ; i++) {
+            if(i!=selectedPlayerIndex) {
+                allies[i].draw();
+                enemies[i].draw();
+            } else {
+                if(boolIsAllied) {
+                    enemies[i].draw();
+                } else {
+                    allies[i].draw();
+                }
+            }
+            
         }
-		enemies[0].draw();
 		
+		//Draw player
 		player.draw();
-		
-		//map.draw();
     }
 }
      
-window.onload = function() {
+function loadPlay(mapPath) {
     jaws.assets.add("static/medias/capteur.png");
     jaws.assets.add("static/medias/capteurS1.png");
     jaws.assets.add("static/medias/capteurS2.png");
@@ -332,9 +409,19 @@ window.onload = function() {
     jaws.assets.add("static/medias/allies.png");
     jaws.assets.add("static/medias/enemies.png");
 	jaws.assets.add("static/medias/player.png");
+
+    // Obtenir les infos necessaire pour afficher le plan
+    $(function() {
+        var $canvas = $('#gameCanvas');
+        context = $canvas.get(0).getContext('2d');
+        image = new Image();
+
+        // L'astuce ci dessous genere un timestamp pour l'ajouter 
+        // au nom de l'image pour que le browser ne la mette pas en cache
+        // C'est pourri mais ça MMMMAAAAARRRRCCHE !!!! Owi
+        var timestamp = new Date().getTime();
+        image.src = mapPath + '.svg?' + timestamp;
+    });
 	
-	//jaws.assets.add("../static/medias/map.svg");
     initData(jaws.start(GamePlayer));
 };
-
-});

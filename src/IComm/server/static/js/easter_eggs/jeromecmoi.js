@@ -6,9 +6,6 @@ function lancerJerome() {
 }
 
 function traitement(touche) {
-	console.log(touche.which);
-	console.log(patternJerome.charCodeAt(nbLettresJerome));
-		console.log(touche.which == patternJerome.charCodeAt(nbLettresJerome));
 	if (touche.which != patternJerome.charCodeAt(nbLettresJerome++)) {
 		nbLettresJerome = 0;
 	}

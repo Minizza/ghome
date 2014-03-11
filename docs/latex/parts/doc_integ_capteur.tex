@@ -1,0 +1,30 @@
+\section{Documentation du nouveau capteur}
+
+L'application GHome telle que nous l'avons concue demande l'intégration d'un nouveau type de capteur : le capteur de position, lié à chaque joueur.\\
+
+Dans un premier temps, nous pensions intégrer cette fonctionnalité au sein d'une application que chaque joueur pourrait lancer sur un terminal mobile, utilisant alors le système GPS de ce dernier afin d'avoir la position de tout participant.\\
+Nous avons très vite réalisé que ce système comporterait des défauts, qui contrediraient des besoins fonctionnels exprimés : 
+\begin{itemize}
+ \item Le GPS d'un appareil mobile ne serait pas assez précis pour la situation sur laquelle nous devons concevoir le système. Les joueurs doivent être repérés sur un espace restreint, et donc avec une précision accrue.
+ \item Comme la plupart des arènes de Lasergame se situe à l'intérieur de bâtiments, voir souvent en sous-sol, il parait compliqué de pouvoir utiliser la technologie GPS afin de repérer des joueurs.
+\end{itemize}
+
+\paragraph{}
+La position de chaque joueur sera détectée par un système de triangulation mis en place dans l'arène de jeu.\\
+\begin{center}
+ \includegraphics[scale=0.5]{image/triang}
+\end{center}
+
+\paragraph{}
+Le capteur est utilisé grâce au format 4BS classique, dont les trames comportent les informations suivantes : 
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Rorg&\multicolumn{2}{|c|}{Data}&Id&Status&CheckSum\\
+\hline
+4242&CoordX&CoordY&Ident.Capt&FF&Calculé\\
+\hline
+\end{tabular}
+\end{center}
+ 

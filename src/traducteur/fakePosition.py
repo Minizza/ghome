@@ -1,7 +1,7 @@
 # -*-coding:Utf-8 -*
 
 from mongoengine import *
-import trame
+import Trame
 from Model.Device import position
 from logger import LOGGER
 
@@ -20,7 +20,7 @@ class fakePosition():
     def update(self,absX,absY):
         newCoord=self.translateCoord(absX,absY)
         strTrame=self.start+newCoord.get('x')+newCoord.get('y')+self.ident+self.end
-        myTrame=trame.trame(strTrame)
+        myTrame=Trame.trame(strTrame)
         myTrame.calculateChecksum()
         LOGGER.debug("Frame to be send : {}".format(myTrame.lessRawView()))
 

@@ -11,7 +11,7 @@ from Model.Device import device
 from Model.Device import sensor 
 from Model.update import lazzyUpdate
 from Model.Device import position
-from traducteur import trame 
+from traducteur import Trame 
 
 """I want da logger"""
 from logger import LOGGER
@@ -56,7 +56,7 @@ class traductor ():
         message = self.soc.recv(1024)
         if message and len(message)==28:
             LOGGER.debug("trame reçu : {}".format(message))
-            self.trameUsed = trame.trame(message)
+            self.trameUsed = Trame.trame(message)
         else :
             return
 
@@ -66,7 +66,7 @@ class traductor ():
         self.updateIdentSet()
         while self.running:
             try:
-                if dacount >500000 : 
+                if dacount >200 : #Fréquence de mise à jour de la base
                     self.updateIdentSet()
                     dacount=0
                 try:
@@ -109,7 +109,7 @@ class traductor ():
 
     def checkTrame(self):
         if self.trameUsed:
-            LOGGER.info("Trame used : {}".format(self.trameUsed.lessRawView()))
+            LOGGER.debug("Trame received : {}".format(self.trameUsed.lessRawView()))
             if ("A55A" not in self.trameUsed.sep):
                 LOGGER.warn("Wrong separator, rejected")
 
@@ -134,16 +134,18 @@ class traductor ():
                     # Update de la trame au niveau de la base
                     if newData :
                         sensorUsed.update(newData)
-                        LOGGER.info("New data {}".format(sensorUsed.current_state))
+                        LOGGER.info(" Sensor {} ||New data {}".format(sensorUsed.physic_id, sensorUsed.current_state))
             self.trameUsed=''
             
         
     def sendTrame(self,ident,newState):
         with self.lock:
-            sensorUsed=position.Position.objects(physic_id=ident)[0]
-        daTrame=sensorUsed.gimmeTrame(newState).rawView()
-        self.soc.send(daTrame)
-        LOGGER.debug("Trame sended : {}".format(daTrame))
+            sensorUsed=sensor.Device.objects(physic_id=ident)[0]
+        daTrame=sensorUsed.gimmeTrame(newState)
+        if daTrame:
+            self.soc.send(daTrame)
+            LOGGER.info("Trame sended : {}".format(daTrame))
+            return
                 
 
     def updateIdentSet(self):
@@ -151,7 +153,7 @@ class traductor ():
             Safely update the identifier set of the traductor
         """
         for anUpdate in lazzyUpdate.objects:
-            LOGGER.debug("id : {} || state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+            LOGGER.warn("id : {} || state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
             if(anUpdate.idToUpdate==""):
                 with self.lock:
                     self.identSet=set([])
@@ -166,12 +168,12 @@ class traductor ():
                         LOGGER.info("{} added".format(anUpdate.idToUpdate))
             else:
                 #send a trame from a captor with a newState
-                LOGGER.info("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
+                LOGGER.error("Sensor to update : {} ||new state : {}".format(anUpdate.idToUpdate,anUpdate.newState))
                 self.sendTrame(anUpdate.idToUpdate,anUpdate.newState)
             anUpdate.delete()
+            LOGGER.warn(" {} update           GROS delete de : {} || {}".format(lazzyUpdate.objects.count(),anUpdate.idToUpdate,anUpdate.newState))
             return 
         LOGGER.debug("nothing to update")
-        print self.identSet
 
 
 

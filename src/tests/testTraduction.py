@@ -95,7 +95,7 @@ class ModelTest(unittest2.TestCase):
         
         capteur1.save()
 
-        tram = trame.trame('A55A0B06000000080001B25E002A')
+        tram = Trame.trame('A55A0B06000000080001B25E002A')
         capteur2 = Switch(physic_id = tram.ident, name = "INTERRUPTEUR_PLAQUE", current_state = "close")
         capteur2.save()
 

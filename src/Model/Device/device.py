@@ -16,6 +16,8 @@ class Device(Document):
         
     meta = {'allow_inheritance': True} #Autorise l'héritage de cette classe
         
+    UNDEFINED_COORDINATE = -1;
+
     id = ObjectIdField(required = True)
     physic_id = StringField(required = True, unique = True)
     name = StringField(required = True, unique = True)

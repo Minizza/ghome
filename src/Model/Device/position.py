@@ -3,17 +3,25 @@ from sensor import *
 from mongoengine import *
 from logger import LOGGER
 from Model.update import lazzyUpdate
-from traducteur import trame
+from traducteur import Trame
 
 
  
 class Position(Sensor):
 
     """Class for position sensor"""
+
+    """
+        current state
+            {"coordX":absolueX,"coordY":absolueY}
+    """
     maxX=610
     maxY=545
     trameStart="A55A4242"
     trameEnd ="FF"
+
+    """New field in order to know the team of the sensor"""
+    team = IntField()
 
 
     def translateTrame(self,inTrame):
@@ -33,10 +41,10 @@ class Position(Sensor):
         """
         newCoord=self.translateCoord(daNewState.get('coordX'),daNewState.get('coordY'))
         strTrame=self.trameStart+newCoord.get('x')+newCoord.get('y')+self.physic_id+self.trameEnd
-        myTrame=trame.trame(strTrame)
+        myTrame=Trame.trame(strTrame)
         myTrame.calculateChecksum()
-        LOGGER.debug("Trame returned : {}".format(myTrame.rawView()))
-        return myTrame
+        LOGGER.debug("Position trame returned : {}".format(myTrame.rawView()))
+        return myTrame.rawView()
 
     def moving(self,newX,newY):
         """
@@ -49,6 +57,6 @@ class Position(Sensor):
         """
             convert absolute coordonate to 4 Bytes value
         """
-        rawConvertedX=hex(absX*(16**4-1)/self.maxX).upper()
-        rawConvertedY=hex(absY*(16**4-1)/self.maxY).upper()
-        return {'x':rawConvertedX[2:],'y':rawConvertedY[2:]}      
+        rawConvertedX=hex(absX*(16**4-1)/self.maxX).upper()[2:]
+        rawConvertedY=hex(absY*(16**4-1)/self.maxY).upper()[2:]
+        return {'x':rawConvertedX,'y':rawConvertedY}      

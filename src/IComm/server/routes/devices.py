@@ -8,12 +8,13 @@ from mongoengine import *
 import Model.Device.device as ghomedevice
 import Model.Device.DeviceFactory as factories
 import server.forms.NewDeviceForm as forms
+import json
 
 import server.controller as controller
 
 def loadPlan():
     try:
-        with open(CONFIG['nom_plan']+".svg") as ficPlan:
+        with open("../src/IComm/server/"+CONFIG['nom_plan']+".svg") as ficPlan:
             return ficPlan.read()
     except IOError as e:
         return None
@@ -44,3 +45,22 @@ def remove_device():
     #Vérification si objet existant ?
     device.delete()
     return redirect('/devices')
+
+@app.route('/devices/addDeviceToPlan', methods=["POST"])
+@requires_roles('admin')
+def add_device_to_plan():
+    physic_id = request.form["physic_id"]
+    x = request.form["x"]
+    y = request.form["y"]
+    print x
+    devicePlace = ghomedevice.Device.objects(physic_id=physic_id)[0]
+    devicePlace.coordX = x
+    devicePlace.coordY = y
+    devicePlace.save()
+    devices = ghomedevice.Device.objects
+    data='{'
+    data+='"physic_id" : '+'"'+devicePlace.physic_id+'"'+','
+    data+='"x" : '+'"'+str(devicePlace.coordX)+'"'+','
+    data+='"y" : '+'"'+str(devicePlace.coordY)+'"'
+    data+='}'
+    return json.dumps(data)

@@ -11,6 +11,10 @@ var infosActuator = new Object ();
 var infosParty = new Object ();
 var pingSound;
 
+// Variable for drawing map
+var context;
+var image;
+
 infosParty.team = parseInt(myGame());
 
 //basic function needed 
@@ -60,7 +64,7 @@ function initData (callback)
                         {
                             if (infosParty.team == 0)
                             {
-                                if (parseInt(data[i].state) == 1)
+                                if (parseInt(data[i].team) == 1)
                                 {
                                     bddAllies.push(aDevice);
                                 }
@@ -71,7 +75,7 @@ function initData (callback)
                             }
                             else
                             {
-                                if (parseInt(data[i].state) == infosParty.team)
+                                if (parseInt(data[i].team) == infosParty.team)
                                 {
                                     bddAllies.push(aDevice);
                                 }
@@ -105,29 +109,29 @@ function updateData ()
                         if (data[i].type == "Position")
                         {
 
-                            if (parseInt(data[i].state) == 1)
+                            if (parseInt(data[i].team) == 1)
                             {
                                 for (var j=0; j<bddAllies.length; j++)
                                 {
                                     if (data[i].ident == bddAllies[j].ident)
                                     {
-                                        bddAllies[j].coordX = data[i].coordX;
-                                        bddAllies[j].coordY = data[i].coordY;
-                                        allies[j].x = data[i].coordX;
-                                        allies[j].y = data[i].coordY;
+                                        bddAllies[j].coordX = data[i].state.coordX;
+                                        bddAllies[j].coordY = data[i].state.coordY;
+                                        allies[j].x = data[i].state.coordX;
+                                        allies[j].y = data[i].state.coordY;
                                     }
                                 }
                             }
-                            else if (parseInt(data[i].state) == 2)
+                            else if (parseInt(data[i].team) == 2)
                             {
                                 for (var j=0; j<bddEnemies.length; j++)
                                 {
                                     if (data[i].ident == bddEnemies[j].ident)
                                     {
-                                        bddEnemies[j].coordX = data[i].coordX;
-                                        bddEnemies[j].coordY = data[i].coordY;
-                                        enemies[j].x = data[i].coordX;
-                                        enemies[j].y = data[i].coordY;
+                                        bddEnemies[j].coordX = data[i].state.coordX;
+                                        bddEnemies[j].coordY = data[i].state.coordY;
+                                        enemies[j].x = data[i].state.coordX;
+                                        enemies[j].y = data[i].state.coordY;
                                     }
                                 }
                             }
@@ -205,7 +209,7 @@ function canvasClicked ()
 function GameStart ()
 {
         
-    var Eoo = 0;        
+    var Eoo = 0;
 
     this.setup = function() { 
         var x;
@@ -261,7 +265,7 @@ function GameStart ()
     
     this.update = function() { 
             
-        if (Eoo===15)
+        if (Eoo===30)
         {
             Eoo =0;
             updateData();
@@ -312,9 +316,25 @@ function GameStart ()
         boutonActiver.textId1.draw();
         boutonActiver.textState1.draw();
         boutonActiver.textCoord1.draw();
+
+        // Dessiner plan
+        context.drawImage(image, 30, 35);
+
                     
 		for (var i=0 ; i < capteurs.length ; i++) {
             capteurs[i].draw();
+            if ((bddCapteurs[i].detect > 0)&&(infosParty.team!=0))
+            {
+                for (var j=0 ; j<enemies.length ; j++)
+                {
+                    //var dist = Math.sqrt(Math.pow(enemies[j].coordX - capteurs[i].coordX)*
+                        //Math.pow(enemies[j].coordY - capteurs[i].coordY))
+                    if (jaws.collide(capteurs[i],enemies[j]))
+                    {
+                        enemies[j].draw();
+                    }
+                }
+            }
         }
                    
         for (var i=0 ; i < actionneurs.length ; i++) {
@@ -338,7 +358,7 @@ function GameStart ()
     }
 }
      
-window.onload = function() {
+function loadGame(mapPath) {
     jaws.assets.add("../static/medias/capteur.png");
     jaws.assets.add("../static/medias/capteurS1.png");
     jaws.assets.add("../static/medias/capteurS2.png");
@@ -348,5 +368,20 @@ window.onload = function() {
     jaws.assets.add("../static/medias/allies.png");
     jaws.assets.add("../static/medias/enemies.png");
     jaws.assets.add("../static/medias/butActiver.png");
+
+    // Obtenir les infos necessaire pour afficher le plan
+    $(function() {
+        var $canvas = $('#gameCanvas');
+        context = $canvas.get(0).getContext('2d');
+        image = new Image();
+
+        // L'astuce ci dessous genere un timestamp pour l'ajouter 
+        // au nom de l'image pour que le browser ne la mette pas en cache
+        // C'est pourri mais ça MMMMAAAAARRRRCCHE !!!! Owi
+        var timestamp = new Date().getTime();
+        image.src = mapPath + '.svg?' + timestamp;
+    });
+
     initData(jaws.start(GameStart));
 };
+

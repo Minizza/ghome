@@ -41,4 +41,38 @@ Il contient les tests vérifiant la bonne intégration des objets du modèle dan
 	}
 \end{itemize}
 
-\subsection{Fichier controller.py}
+\subsection{Fichier model.py}
+
+Il permet de tester le bon fonctionnement des différents objets du modèle.
+
+\begin{itemize}
+	\item \texttt{test\_user()} : test du fonctionnement de la classe GHomeUser.
+	\item \texttt{test\_device()} : test du fonctionnement des classes du package Device.
+	\item \texttt{test\_place()} : test du fonctionnement des classes Place et Draw.
+	\item Sortie globale du fichier :\\
+	\texttt{...}\\
+	\texttt{----------------------------------------------------------------------}\\
+	\texttt{Ran 3 tests in 0.079s}\\
+	\newline{}
+	\texttt{OK}\\
+	Note : le nombre de secondes est évidemment variable.
+\end{itemize}
+
+\subsection{Fichier testTraduction.py}
+Il test les fonctionnalité du traducteur de trames.
+
+\begin{itemize}
+	\item \texttt{test\_fakeJerome()} : test le faux serveur GHome (utilisé pour tester l'application sans GHome).
+	\item \texttt{test\_temp()} : test le traducteur pour un capteur de température.
+	\item \texttt{test\_UpdateTradsensorSet()} : test le traducteur pour des capteurs et actionneurs après mise à jour.
+	\item \texttt{test\_position()} : test l'envoie de trames de position.
+	\item Sortie globale du fichier :\\
+	\texttt{...}\\
+	\texttt{----------------------------------------------------------------------}\\
+	\texttt{Ran 4 tests in 6.357s}\\
+	\newline{}
+	\texttt{OK}\\
+	Note : le nombre de secondes est évidemment variable.
+\end{itemize}
+
+

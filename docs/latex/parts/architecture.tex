@@ -1,17 +1,55 @@
 \section{Architecture de l'application}
 
+\paragraph{}
 Afin de rendre notre idée possible, il a fallu réfléchir à l'architecture de la solution que nous allions proposer. Pour cela, un important temps de réflexion a été entamé durant les séances d'initialisation du projet. Grace à la définition précise des cas d'utilisation, certains choix ont été décidé. Ces derniers vont porter sur les différents modules à prendre en compte ou encore le choix des technologies à utiliser. La description ci-dessous va justifier et décrire ces choix là.
 
-Tout d'abord, intéressons nous aux différents modules utilisés ou bien développés avec la solution. La salle de laser game est le centre de la réflexion. Rappelons nous que la position des joueurs peut être visualisée par le gérant ou encore par l'un des chefs d'équipe. Ces capteurs de position qui envoient constamment des données sont notre premier élément externe appartenant au GHome. A ajouter à ceux ci les actionneurs permettant d'ouvrir une porte ou bien d'activer de la fumée. Ensuite, deux terminaux sont à prendre en compte : la vue du gérant accessible via un ordinateur puis la vue des chefs d'équipe qui s'interfacera à travers une tablette tactile. Afin de stocker les informations des capteurs, nous avons trouver nécessaire d'intégrer une base de données à notre application. Pour analyser les données des capteurs, les entrer en base et permettre la configuration de notre système, un serveur sera développé. Il est le cœur de notre solution applicative.
+\subsection{Architecture matérielle et division du projet en modules}
 
-Si l'on s'intéresse davantage à ce serveur, on peut le découper en deux parties afin de diviser les tâches et de pouvoir servir de manière asynchrone. Le traducteur sera la partie du serveur qui analysera les trames reçues des capteurs, qui les parsera et qui les entrera dans la base de données. Le traducteur aura aussi comme objectif d'envoyer les commandes des actionneurs. A savoir qu'un service de simulation appelé fake Jérôme permettra de simuler l'envoi de données des capteurs. Le traducteur se chargera donc aussi de transiter avec ce dernier.
+\paragraph{}
+Tout d'abord, intéressons nous aux différents modules utilisés ou bien développés avec la solution. La salle de laser game est le centre de la réflexion. Rappelons nous que la position des joueurs peut être visualisée par le gérant ou encore par l'un des chefs d'équipe. Ces capteurs de position qui envoient constamment des données sont notre premier élément externe appartenant au GHome. A ajouter à ceux ci les actionneurs permettant d'ouvrir une porte ou bien d'activer de la fumée. Ensuite, deux vues sont à prendre en compte : celle du gérant accessible via un ordinateur puis celle des chefs d'équipe qui se visualisera à l'aide d'une tablette tactile. Afin de stocker les informations des capteurs, nous avons trouver nécessaire d'intégrer une base de données à notre application. Pour analyser les données des capteurs, les entrer en base et permettre la configuration de notre système, un serveur sera développé. Il est le cœur de notre solution applicative.
 
-La deuxième partie du serveur sera plus orientée utilisateur. En effet, le gérant et les chefs d'équipe ayant besoin de configurer l'application via des terminaux mobiles, une interface doit être mise en place. Pour cela nous avons décider que toutes nos interfaces seraient orientées Web afin de centraliser le développement et de pouvoir s'ouvrir à de multiples terminaux sans efforts majeurs supplémentaires. Qui dit application Web dit serveur Web. Cette deuxième partie qui s'intitulera IComm (comme interface de communication) aura donc comme rôle de servir les clients web.
+\paragraph{}
+En s'intéressant davantage à ce serveur, on a pu le découper en deux parties afin de diviser les tâches et de pouvoir fonctionner de manière asynchrone. Le traducteur est la partie du serveur qui analyse les trames reçues des capteurs, qui les parse et qui les entre dans la base de données. Le traducteur a aussi comme objectif d'envoyer les commandes des actionneurs. A savoir qu'un service de simulation appelé fake Jérôme permet de simuler l'envoi de données des capteurs. Le traducteur se charge donc aussi de transiter avec ce dernier.
 
-Bien entendu, la partie base de données est commune aux deux modules du serveur présentés ci-dessus et permettra de faire le lien entre ces deux derniers. Le scénario typique pourrait être :
+\paragraph{}
+La deuxième partie du serveur est plus orientée utilisateur. En effet, le gérant et les chefs d'équipe ayant besoin de configurer l'application via des terminaux mobiles, une interface a du être mise en place. Pour cela nous avions décidé que toutes nos interfaces seraient orientées Web afin de centraliser le développement et de pouvoir s'ouvrir à de multiples terminaux sans efforts majeurs supplémentaires. Qui dit application Web dit serveur Web. Cette deuxième partie du serveur qui s'intitule IComm (comme interface de communication) a donc pour rôle de servir les clients web.
+
+\paragraph{}
+Bien entendu, la partie base de données est commune aux deux modules du serveur présentés ci-dessus et permet de faire le lien entre ces deux derniers. Le scénario typique pourrait être :
 - Un capteur envoi une donnée
 - Le traducteur la reçoit, la parse et la rentre en base de données
 - Un client lambda requête le serveur web afin d'afficher l'état du capteur depuis sa tablette
 - IComm va chercher l'information correspondante en base de données et la renvoi au client
 
-Avec ce système tout est parfaitement divisé et les deux parties du serveur sont indépendantes l'une de l'autre. Cette division de la solution applicative nous permet aussi de diviser le travail en suivant la même logique. Une partie de l'équipe travaille sur le traducteur pendant qu'une autre travaille sur la partie interface et une dernière sera plus spécialement focalisée sur l'interaction avec la base de données.
+\paragraph{}
+Avec ce système tout est parfaitement divisé et les deux parties du serveur sont indépendantes l'une de l'autre. Cette division de la solution applicative nous permet aussi de diviser le travail en suivant la même logique. Une partie de l'équipe travaille sur le traducteur pendant qu'une autre travaille sur la partie interface et une dernière sera plus spécialement focalisée sur l'interaction avec la base de données. Pour synthétiser, le schéma ci-dessous résume plutôt bien la description qui vient d'être faite (la partie serveur contenant les deux modules expliqué précédemment).
+
+\includegraphics[scale=0.3]{image/architecture_materielle}
+
+\subsection{Architecture logicielle et technologies utilisées}
+
+\paragraph{}
+Maintenant que la partie matérielle de la solution a été clairement définie, nous allons nous attaquer plus particulièrement aux aspects logiciels. Chaque composant physique comporte ses propres caractéristiques logicielles. On va donc détailler chacune d'entre elles afin d'observer les technologies utilisées et on verra pourquoi ces choix ont-ils été faits.
+
+\paragraph{}
+Premièrement, il est important d'expliquer que le capteur de position est simulé. On ne s'intéresse donc pas à sa technologie durant ce projet mais une description un peu détaillée sera quand même présente par la suite.
+
+\paragraph{}
+Le langage de programmation qui a été choisi pour développer le serveur est Python. Ceci est valide pour le serveur Web IComm et pour le traducteur gérant l'interface de communication avec GHome. Ce langage de programmation à la force d'être simple d'apprentissage. En fait les instructions se rapprochent d'un langage naturel et la séparation des blocs se fait via un système d'indentation. De plus la communauté autour de Python est très active et un grand nombre de librairies ont été développées et ajoutées à des dépôts facilement accessibles ce qui en fait sa force. Nous allons détailler ces quelques compléments à Python que nous avons décidé d'utiliser.
+
+\paragraph{}
+La partie traducteur est un partie qui utilise du Python brut. En effet le module de Socket du langage est bien implémenté et simple d'utilisation ce qui permet au traducteur de dialoguer simplement avec un équipement externe comme nos capteurs ou actionneurs. 
+
+\paragraph{}
+Ensuite le serveur web IComm est développé grace a Flask qui est un Framework Python simple à mettre en place pour un site de petite ampleur comme le notre. Le principe est qu'une URL est routée vers une fonction de notre code Python, des actions sont exécutées puis une page HTML est générée à l'aide du moteur de rendu Jinja2 inclu avec Flask. Bien entendu les clients Web qui se connectent à ce serveur Web peuvent être de n'importe quelle nature (téléphone, ordinateur, tablette) du moment qu'ils intègrent un navigateur internet compatible. Le côté Frontend est donc entièrement conçu avec les technologies web phares comme HTML5, Javascript ou encore CSS3. A savoir encore que pour éviter un travail de design long, fastidieux et d'un intérêt minimal dans ce projet, le framework Twitter Bootstrap a été utilisé. Le style des pages est donc responsive et adapté selon le type de terminal.
+
+\paragraph{}
+Afin de simuler la position d'un joueur ou bien de l'afficher en direct sur une carte, il a été nécessaire d'intégrer une technologie pouvant gérer des interruptions clavier et dessiner une interface dynamique en temps réel. Pour cela, JawsJS a fait l'affaire. Il s'agit d'un moteur de jeu JavaScript encore une fois assez simple d'utilisation qui est capable dessiner tout ce dont on a pu avoir besoin (de la position d'un joueur jusqu'à celle des actionneurs en passant par la carte du laser game).
+
+\paragraph{}
+Un dernier module reste à spécifier : la base de données. Étant donné que l'intégralité du serveur a été codée avec Python, on a continuer a chercher un un système de gestion de base de données qui soit bien supporté par Python. On a choisi MongoDB. Ce dernier est orienté Document et la libraire MongoEngine de Python permet directement de convertir un objet Python en Document pour MongoDB. Grace a ce couple, enregistrer des données de manière persistante a été quasiment un jeu d'enfants et n'a pas demandé de connaissances d'un langage de requétage comme SQL par exemple.
+
+\paragraph{}
+Encore une fois le schéma ci-dessous permet de résumer la description des choix logiciels.
+
+\includegraphics[scale=0.3]{image/architecture_logicielle}

@@ -6,6 +6,7 @@ import sys
 import datetime
 import math
 import thread
+from IComm.server import CONFIG
 import Model.Device.device as ghomedevice
 import Model.Device.sensor as sensor
 import Model.Device.actuator as actuator
@@ -18,7 +19,7 @@ import Model.Draw.draw as draw
 import Model.Place.place as place
 import Model.Place.ghomeuser as ghomeuser
 
-connect('test')
+connect(CONFIG['database'])
 
 
 ########################################################################

@@ -5,7 +5,7 @@ SERVICE=mongodb
 
 # Install virtualenv
 # You probably need to be root to do this.
-sudo apt-get install python-virtualenv mongodb
+sudo apt-get install xterm python-virtualenv mongodb
 echo "			end install with apt-get"
 if ps ax | grep -v grep | grep $SERVICE > /dev/null
 then

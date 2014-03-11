@@ -24,6 +24,4 @@ echo "			end git cloning"
 # Initialize virtualenv and install dependencies
 virtualenv ghome
 cd ghome
-pip install -r script/requirement.txt
-mkdir log
-touch log/activity.log
+sudo pip install -r script/requirement.txt

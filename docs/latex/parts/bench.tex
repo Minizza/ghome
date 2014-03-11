@@ -1,0 +1,6 @@
+\section{Benchmarking}
+\paragraph{} La partie serveur du projet supporte assez bien la charge : la mise à jour d'une dizaine de capteur de position s'effectue avec une occupation CPU de 40\% environ.\\
+La partie visualisation utilisant javascript est beaucoup plus lourde. Du fait de l'utilisation de technologie asynchrone, elle exige un polling fréquent de l'état des capteurs dans la base ce qui est très couteux.\\ 
+La visualisation n'est pas fluide, le processeur est limitant (occupation proche des 100\%).\\
+
+L'utilisation de websocket aurait permis d'améliorer grandement les performance à ce niveau au prix d'un plus gros travail.

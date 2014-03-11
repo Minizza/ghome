@@ -5,7 +5,7 @@ SERVICE=mongodb
 
 # Install virtualenv
 # You probably need to be root to do this.
-sudo apt-get install python-virtualenv mongodb
+sudo apt-get install xterm python-virtualenv mongodb
 echo "			end install with apt-get"
 if ps ax | grep -v grep | grep $SERVICE > /dev/null
 then
@@ -24,6 +24,4 @@ echo "			end git cloning"
 # Initialize virtualenv and install dependencies
 virtualenv ghome
 cd ghome
-pip install -r script/requirement.txt
-mkdir log
-touch log/activity.log
+sudo pip install -r script/requirement.txt
